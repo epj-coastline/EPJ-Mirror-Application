@@ -4,4 +4,8 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\CoastlineServer.DAL\CoastlineServer.DAL.csproj"/>
+    </ItemGroup>
+
 </Project>

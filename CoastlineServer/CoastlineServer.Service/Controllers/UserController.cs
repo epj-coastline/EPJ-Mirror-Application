@@ -8,13 +8,14 @@ using CoastlineServer.Service.Models;
 
 namespace CoastlineServer.Service.Controllers
 {
-    [ApiController, Route("api/users")]
-    public class UsersController : ControllerBase
+    [ApiController]
+    [Route("[controller]")]
+    public class UserController : ControllerBase
     {
         private readonly UserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(UserRepository userRepository, IMapper mapper)
+        public UserController(UserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

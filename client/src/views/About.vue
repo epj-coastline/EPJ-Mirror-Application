@@ -4,12 +4,14 @@
       <md-button v-on:click="loadList" class="md-raised md-primary">Load list</md-button>
     </div>
     <md-list class="md-triple-line">
-      <div v-for="item in testList" :key="item.firstName">
+      <div v-for="item in testList" :key="item.firstname">
         <md-list-item >
-          <md-avatar class="md-avatar-icon md-primary">{{ item.firstName.toString().slice(0,1) + item.lastName.toString().slice(0,1) }}</md-avatar>
+          <md-avatar class="md-avatar-icon md-primary">{{ item.firstname.toString().slice(0,1) + item.lastname.toString().slice(0,1) }}</md-avatar>
 
           <div class="md-list-item-text">
-            <span>{{ item.firstName + ' ' + item.lastName }}</span>
+            <span>{{ item.firstname + ' ' + item.lastname }}</span>
+            <span>{{ item.degreeprogram  }}</span>
+            <span>{{ item.startdate  }}</span>
           </div>
         </md-list-item>
         <md-divider class="md-inset"></md-divider>

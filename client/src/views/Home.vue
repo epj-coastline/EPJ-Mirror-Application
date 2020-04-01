@@ -27,34 +27,55 @@
             </div>
           </div>
 
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('gender')">
-                <label for="gender">Gender</label>
-                <md-select name="gender" id="gender" v-model="form.gender" md-dense :disabled="sending">
-                  <md-option></md-option>
-                  <md-option value="M">M</md-option>
-                  <md-option value="F">F</md-option>
-                </md-select>
-                <span class="md-error">The gender is required</span>
-              </md-field>
-            </div>
-
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('age')">
-                <label for="age">Age</label>
-                <md-input type="number" id="age" name="age" autocomplete="age" v-model="form.age" :disabled="sending" />
-                <span class="md-error" v-if="!$v.form.age.required">The age is required</span>
-                <span class="md-error" v-else-if="!$v.form.age.maxlength">Invalid age</span>
-              </md-field>
-            </div>
-          </div>
-
           <md-field :class="getValidationClass('email')">
             <label for="email">Email</label>
             <md-input type="email" name="email" id="email" autocomplete="email" v-model="form.email" :disabled="sending" />
             <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
             <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
+          </md-field>
+
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('degreeprogram')">
+                <label for="degreeprogram">Studiengang</label>
+                <md-select name="degreeprogram" id="degreeprogram" v-model="form.degreeprogram" md-dense :disabled="sending">
+                  <md-option></md-option>
+                  <md-option value="Bauingenieurwesen">Bauingenieurwesen</md-option>
+                  <md-option value="Elektrotechnik">Elektrotechnik</md-option>
+                  <md-option value="Erneuerbare Energien und Umwelttechnik">Erneuerbare Energien und Umwelttechnik</md-option>
+                  <md-option value="Informatik">Informatik</md-option>
+                  <md-option value="Landschaftsarchitektur">Landschaftsarchitektur</md-option>
+                  <md-option value="Maschinentechnik | Innovation">Maschinentechnik | Innovation</md-option>
+                  <md-option value="Stadt-, Verkehrs- und Raumplanung">Stadt-, Verkehrs- und Raumplanung</md-option>
+                  <md-option value="Wirtschaftsingenieurwesen">Wirtschaftsingenieurwesen</md-option>
+                </md-select>
+                <span class="md-error">The degree program is required</span>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('startdate')">
+                <label for="startdate">Start</label>
+                <md-select name="startdate" id="startdate" v-model="form.startdate" md-dense :disabled="sending">
+                  <md-option></md-option>
+                  <md-option value="FS2016">FS2016</md-option>
+                  <md-option value="HS2016">HS2016</md-option>
+                  <md-option value="FS2017">FS2017</md-option>
+                  <md-option value="HS2017">HS2017</md-option>
+                  <md-option value="FS2018">FS2018</md-option>
+                  <md-option value="HS2018">HS2018</md-option>
+                  <md-option value="FS2019">FS2019</md-option>
+                  <md-option value="HS2019">HS2019</md-option>
+                  <md-option value="FS2020">FS2020</md-option>
+                </md-select>
+                <span class="md-error">The start date is required</span>
+              </md-field>
+            </div>
+          </div>
+          <md-field>
+            <label>Bio</label>
+            <md-textarea v-model="form.biography" maxlength="140"></md-textarea>
           </md-field>
         </md-card-content>
 
@@ -86,9 +107,10 @@ export default {
     form: {
       firstName: null,
       lastName: null,
-      gender: null,
-      age: null,
       email: null,
+      degreeprogram: null,
+      startdate: null,
+      biography: null,
     },
     userSaved: false,
     sending: false,
@@ -104,12 +126,14 @@ export default {
         required,
         minLength: minLength(3),
       },
-      age: {
+      startdate: {
         required,
-        maxLength: maxLength(3),
       },
-      gender: {
+      degreeprogram: {
         required,
+      },
+      biography: {
+        maxLength: maxLength(140),
       },
       email: {
         required,
@@ -132,18 +156,20 @@ export default {
       this.$v.$reset();
       this.form.firstName = null;
       this.form.lastName = null;
-      this.form.age = null;
-      this.form.gender = null;
       this.form.email = null;
+      this.form.biography = null;
+      this.form.degreeprogram = null;
+      this.form.startdate = null;
     },
     saveUser() {
       this.sending = true;
       const dataObject = {
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
-        age: this.form.age,
-        gender: this.form.gender,
+        firstname: this.form.firstName,
+        lastname: this.form.lastName,
         email: this.form.email,
+        biography: this.form.biography,
+        degreeprogram: this.form.degreeprogram,
+        startdate: this.form.startdate,
       };
       // TODO: use API URL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       fetch('https://yoloo.free.beeceptor.com', {

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -19,6 +22,7 @@ namespace CoastlineServer.Service.Testing
         {
             var server = new TestServer(new WebHostBuilder()
                 .UseEnvironment("Development")
+                .UseConfiguration(new ConfigurationBuilder().AddJsonFile("F:\\HSR\\04_Sem\\99_EPJ\\06_Application\\application\\CoastlineServer\\CoastlineServer.Service\\appsettings.Development.json").Build())
                 .UseStartup<Startup>());
             _client = server.CreateClient();
         }

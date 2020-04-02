@@ -44,11 +44,12 @@ namespace CoastlineServer.Service.Controllers
         public ActionResult<UserDto> CreateUser(UserDto userDto)
         {
             var userEntity = _mapper.Map<User>(userDto);
-            _userRepository.Insert(userEntity);
+            var newUser = _userRepository.Insert(userEntity);
+            var returnUser = _mapper.Map<UserDto>(newUser);
             return CreatedAtRoute("GetUser", new
             {
-                userId = userDto.Id
-            }, userDto);
+                userId = returnUser.Id
+            }, returnUser);
         }
 
         [HttpDelete("{userId}")]

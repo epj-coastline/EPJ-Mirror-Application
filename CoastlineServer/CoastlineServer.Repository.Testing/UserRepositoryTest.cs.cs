@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
 using Microsoft.Data.Sqlite;
@@ -23,15 +22,7 @@ namespace CoastlineServer.Repository.Testing
                 var options = new DbContextOptionsBuilder<CoastlineContext>()
                     .UseSqlite(connection)
                     .Options;
-                var newUser = new User
-                {
-                    FirstName = "Markus",
-                    LastName = "Christen",
-                    Email = "markus.christen@hsr.ch",
-                    Biography = "this is a test",
-                    DegreeProgram = "Testing",
-                    StartDate = "HS2020"
-                };
+
                 using (var context = new CoastlineContext(options))
                 {
                     context.Database.EnsureCreated();
@@ -39,8 +30,22 @@ namespace CoastlineServer.Repository.Testing
 
                 using (var context = new CoastlineContext(options))
                 {
+                    // arrange
+                    var newUser = new User
+                    {
+                        FirstName = "Markus",
+                        LastName = "Christen",
+                        Email = "markus.christen@hsr.ch",
+                        Biography = "this is a test",
+                        DegreeProgram = "Testing",
+                        StartDate = "HS2020"
+                    };
                     UserRepository = new UserRepository(context);
+
+                    // act
                     User = UserRepository.Insert(newUser);
+
+                    // assert
                     Assert.Equal(User.FirstName, newUser.FirstName);
                 }
             }
@@ -68,8 +73,13 @@ namespace CoastlineServer.Repository.Testing
 
                 using (var context = new CoastlineContext(options))
                 {
+                    // arrange
                     UserRepository = new UserRepository(context);
+
+                    // act
                     User = UserRepository.Get(-1);
+
+                    // assert
                     Assert.Equal("David", User.FirstName);
                 }
             }
@@ -97,10 +107,15 @@ namespace CoastlineServer.Repository.Testing
 
                 using (var context = new CoastlineContext(options))
                 {
+                    // arrange
                     UserRepository = new UserRepository(context);
+
+                    // act
                     var users = UserRepository.GetAll();
+
+                    // assert
                     Assert.Equal(4, users.Count);
-                    Assert.Equal(-4, users.ElementAt(0).Id);
+                    Assert.Contains(users, u => u.Id == -1);
                 }
             }
             finally
@@ -127,11 +142,16 @@ namespace CoastlineServer.Repository.Testing
 
                 using (var context = new CoastlineContext(options))
                 {
+                    // arrange
                     UserRepository = new UserRepository(context);
                     User = UserRepository.Get(-1);
                     User.Biography = "This is a test";
+
+                    // act
                     UserRepository.Update(User);
                     var updatedUser = UserRepository.Get(-1);
+
+                    // assert
                     Assert.Equal(User.Biography, updatedUser.Biography);
                 }
             }
@@ -140,6 +160,7 @@ namespace CoastlineServer.Repository.Testing
                 connection.Close();
             }
         }
+
         [Fact]
         public void DeleteTest()
         {
@@ -158,8 +179,15 @@ namespace CoastlineServer.Repository.Testing
 
                 using (var context = new CoastlineContext(options))
                 {
+                    // arrange
                     UserRepository = new UserRepository(context);
-                    var ex = Assert.Throws<NullReferenceException>(() =>
+                    User = UserRepository.Get(-2);
+
+                    // act
+                    UserRepository.Delete(User);
+
+                    // assert
+                    var ex = Assert.Throws<InvalidOperationException>(() =>
                         UserRepository.Get(User.Id));
                 }
             }

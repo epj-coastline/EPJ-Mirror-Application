@@ -28,7 +28,7 @@ namespace CoastlineServer.Service.Controllers
             return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
         }
 
-        [HttpGet("{userId}", Name = "GetUser")]
+        [HttpGet("{userId:int}", Name = "GetUser")]
         public ActionResult<UserDto> GetUser(int userId)
         {
             var user = _userRepository.Get(userId);

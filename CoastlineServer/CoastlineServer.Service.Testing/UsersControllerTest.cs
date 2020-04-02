@@ -52,13 +52,10 @@ namespace CoastlineServer.Service.Testing
             Assert.Equal(userId, userDto.Id);
         }
 
-        [Theory]
-        [InlineData("POST")]
-        public async Task PostUserTest(string method)
+        [Fact]
+        public async Task PostAndDeleteUserTest()
         {
             // arrange
-            var request = new HttpRequestMessage(new HttpMethod(method), "/users/");
-
             var newUser = new UserDto
             {
                 FirstName = "Markus",
@@ -69,12 +66,23 @@ namespace CoastlineServer.Service.Testing
                 StartDate = "HS2020"
             };
             var content = new StringContent(JsonConvert.SerializeObject(newUser), Encoding.UTF8, "application/json");
+            
             // act
-            var response = await _client.PostAsync("/users/", content);
-            response.EnsureSuccessStatusCode();
+            var postResponse = await _client.PostAsync("/users/", content);
+            postResponse.EnsureSuccessStatusCode();
+            
+            // arrange
+            Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+            
+            // act
+            var query = postResponse.Headers.Location.PathAndQuery;
+            
+            // act
+            var deleteResponse = await _client.DeleteAsync(query);
+            postResponse.EnsureSuccessStatusCode();
 
             // assert
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
         }
     }
 }

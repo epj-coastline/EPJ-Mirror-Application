@@ -26,7 +26,9 @@ dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
 
 * Insert seed data by running statements in DataGrip/pgAdmin or run file with psql. View data in pgAdmin/DataGrip
 
+## Test Projects
 
+For testing open the Testing folder, hit right-click on test project and run tests.
 
 
 

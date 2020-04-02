@@ -56,7 +56,7 @@ namespace CoastlineServer.Service.Testing
         public async Task PostAndDeleteUserTest()
         {
             // arrange
-            var newUser = new UserDto
+            var userDto = new UserDto
             {
                 FirstName = "Markus",
                 LastName = "Christen",
@@ -65,15 +65,18 @@ namespace CoastlineServer.Service.Testing
                 DegreeProgram = "Testing",
                 StartDate = "HS2020"
             };
-            var content = new StringContent(JsonConvert.SerializeObject(newUser), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8, "application/json");
             
             // act
             var postResponse = await _client.PostAsync("/users/", content);
             postResponse.EnsureSuccessStatusCode();
-            
+            var stringResponse = await postResponse.Content.ReadAsStringAsync();
+            var responseDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
+
             // arrange
             Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
-            
+            Assert.Equal(userDto.FirstName, responseDto.FirstName);
+
             // act
             var query = postResponse.Headers.Location.PathAndQuery;
             

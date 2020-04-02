@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using CoastlineServer.Service.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -20,41 +16,33 @@ namespace CoastlineServer.Service.Testing
 
         public UsersControllerTest()
         {
-            var server = new TestServer(new WebHostBuilder()
-                .UseEnvironment("Development")
-                .UseConfiguration(new ConfigurationBuilder().AddJsonFile("F:\\HSR\\04_Sem\\99_EPJ\\06_Application\\application\\CoastlineServer\\CoastlineServer.Service\\appsettings.Development.json").Build())
-                .UseStartup<Startup>());
-            _client = server.CreateClient();
+            var appFactory = new WebApplicationFactory<Startup>();
+            _client = appFactory.CreateClient();
         }
 
-        [Theory]
-        [InlineData("GET")]
-        public async Task GetAllUsersTest(string method)
+        [Fact]
+        public async Task GetAllUsersTest()
         {
-            // arrange
-            var request = new HttpRequestMessage(new HttpMethod(method), "/users/");
-
-            // act
-            var response = await _client.SendAsync(request);
+            // arrange & act
+            var response = await _client.GetAsync("/users/");
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
-            
+
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(userDtos, u => u.Id == -1);
         }
 
 
-        [Theory]
-        [InlineData("GET", -1)]
-        public async Task GetUserTest(string method, int? userId = null)
+        [Fact]
+        public async Task GetUserTest()
         {
             // arrange
-            var request = new HttpRequestMessage(new HttpMethod(method), $"/users/{userId}");
+            var userId = -1;
 
             // act
-            var response = await _client.SendAsync(request);
+            var response = await _client.GetAsync($"/users/{userId}");
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
@@ -62,6 +50,31 @@ namespace CoastlineServer.Service.Testing
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(userId, userDto.Id);
+        }
+
+        [Theory]
+        [InlineData("POST")]
+        public async Task PostUserTest(string method)
+        {
+            // arrange
+            var request = new HttpRequestMessage(new HttpMethod(method), "/users/");
+
+            var newUser = new UserDto
+            {
+                FirstName = "Markus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS2020"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(newUser), Encoding.UTF8, "application/json");
+            // act
+            var response = await _client.PostAsync("/users/", content);
+            response.EnsureSuccessStatusCode();
+
+            // assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace CoastlineServer.DAL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserTypeConfig());
         }
     }

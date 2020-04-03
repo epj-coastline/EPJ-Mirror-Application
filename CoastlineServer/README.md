@@ -8,7 +8,7 @@ Prerequisites: PostgreSQL, C# IDE
 * [ ] Dependencies are loaded automatically if not rebuild solution (Rider-user download Nuget Package Microsoft.EntityFrameworkCore.Tools.DotNet in service project)
 * [ ] Startup project: ServerPrototype.Service (already default but check if non set)
 * [ ] Update ConnectionString in Context-Class with own username & password
-* [ ] Tables are created by inserting data from migration to database with the seed data
+* [ ] Tables are created by inserting data from migration to database
 *  VS user open Package Manager Console and set DAL-project as default
 * Update database for creating first schema with following command:
   
@@ -24,9 +24,11 @@ dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
 ```
 
 
-* Tables are now filled with seed data. View data in pgAdmin/DataGrip
+* Insert seed data by running statements in DataGrip/pgAdmin or run file with psql. View data in pgAdmin/DataGrip
 
+## Test Projects
 
+For testing open the Testing folder, hit right-click on test project and run tests.
 
 
 

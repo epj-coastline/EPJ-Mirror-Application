@@ -28,7 +28,7 @@ namespace CoastlineServer.Service.Controllers
             return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
         }
 
-        [HttpGet("{userId}", Name = "GetUser")]
+        [HttpGet("{userId:int}", Name = "GetUser")]
         public ActionResult<UserDto> GetUser(int userId)
         {
             var user = _userRepository.Get(userId);
@@ -44,11 +44,12 @@ namespace CoastlineServer.Service.Controllers
         public ActionResult<UserDto> CreateUser(UserDto userDto)
         {
             var userEntity = _mapper.Map<User>(userDto);
-            _userRepository.Insert(userEntity);
+            var newUser = _userRepository.Insert(userEntity);
+            var returnUser = _mapper.Map<UserDto>(newUser);
             return CreatedAtRoute("GetUser", new
             {
-                userId = userDto.Id
-            }, userDto);
+                userId = returnUser.Id
+            }, returnUser);
         }
 
         [HttpDelete("{userId}")]

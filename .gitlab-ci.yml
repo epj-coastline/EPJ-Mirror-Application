@@ -59,7 +59,7 @@ variables:
   #Google Cloud SQL (same for dev and prod)
   CLOUD_SQL_INSTANCE_NAME: coastline-postgresql
   CLOUD_SQL_IP_DEV: 10.20.0.3
-  CLOUD_SQL_IP_PROD: #TODO
+  # TODO: CLOUD_SQL_IP_PROD:
 
   # Connection Strings
   CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"

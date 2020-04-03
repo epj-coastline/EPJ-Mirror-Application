@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: gitlab.dev.ifs.hsr.ch:45023/epj/2020/coastline/ci-cd-setup/client
+  repository: gitlab.dev.ifs.hsr.ch:45023/epj/2020/coastline/application/client
   tag: "1-0-0"
   pull_secret: gitlab-registry-coastline-application
 config:

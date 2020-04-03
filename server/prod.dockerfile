@@ -2,7 +2,6 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-stage
 WORKDIR /src
 COPY *.sln ./
 COPY ["CoastlineServer.Service/CoastlineServer.Service.csproj", "CoastlineServer.Service/"]
-# TODO: Add CoastlineServer.Service.Testing
 COPY ["CoastlineServer.Repository/CoastlineServer.Repository.csproj", "CoastlineServer.Repository/"]
 COPY ["CoastlineServer.Repository.Testing/CoastlineServer.Repository.Testing.csproj", "CoastlineServer.Repository.Testing/"]
 COPY ["CoastlineServer.DAL/CoastlineServer.DAL.csproj", "CoastlineServer.DAL/"]
@@ -20,6 +19,3 @@ EXPOSE 80
 EXPOSE 443
 COPY --from=publish-stage /app/publish .
 ENTRYPOINT ["dotnet", "CoastlineServer.Service.dll"]
-
-#TODO: Add readme
-#TODO: set AllowedHosts as environment variable

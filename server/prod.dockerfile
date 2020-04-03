@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-stage
 WORKDIR /src
 COPY *.sln ./
 COPY ["CoastlineServer.Service/CoastlineServer.Service.csproj", "CoastlineServer.Service/"]
+COPY ["CoastlineServer.Service.Testing/CoastlineServer.Service.Testing.csproj", "CoastlineServer.Service.Testing/"]
 COPY ["CoastlineServer.Repository/CoastlineServer.Repository.csproj", "CoastlineServer.Repository/"]
 COPY ["CoastlineServer.Repository.Testing/CoastlineServer.Repository.Testing.csproj", "CoastlineServer.Repository.Testing/"]
 COPY ["CoastlineServer.DAL/CoastlineServer.DAL.csproj", "CoastlineServer.DAL/"]

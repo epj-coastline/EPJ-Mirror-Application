@@ -31,6 +31,20 @@ dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
 For testing open the Testing folder, hit right-click on test project and run tests.
 
 
+## Run in Docker 
 
+**Coastline Server and Database**
+```
+docker-compose up
+```
 
+**Build Coastline Server Image**
 
+```
+docker build -t coastline-server -f prod.dockerfile .
+```
+
+**Build Coastline Server Image**
+```
+docker run -it --rm -p 80:80 --name aspnetcore_sample coastline-server
+```

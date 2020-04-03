@@ -24,26 +24,27 @@ namespace CoastlineServer.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<UserRepository>();
-            services.AddDbContext<CoastlineContext>(options =>
-            {
-                options.UseNpgsql(Configuration["ConnectionStringCoastline"]);
-            });
+            // TODO: Comment in
+            // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            // services.AddScoped<UserRepository>();
+            // services.AddDbContext<CoastlineContext>(options =>
+            // {
+            //     options.UseNpgsql(Configuration["ConnectionStringCoastline"]);
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CoastlineContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) //, CoastlineContext context) TODO: Comment in
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            if (Configuration["DatabaseMigrations"] == "automatic")
-            {
-                context.Database.Migrate();
-            }
+            // TODO: Comment in
+            // if (Configuration["DatabaseMigrations"] == "automatic")
+            // {
+            //     context.Database.Migrate();
+            // }
 
             app.UseHttpsRedirection();
 

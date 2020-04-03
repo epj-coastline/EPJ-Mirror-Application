@@ -25,12 +25,12 @@ workflow:
 
 variables:
   # The following variables must be defined as environment variables:
-  # - SERVICE_ACCOUNT_GKE
-  # - SERVICE_ACCOUNT_CLOUD_SQL
-  # - SERVICE_ACCOUNT_GKE_PRODUCTION
-  # - SERVICE_ACCOUNT_CLOUD_SQL_PRODUCTION
-  # - COASTLINE_DATABASE_URI
-  # - COASTLINE_DATABASE_URI_PRODUCTION
+  # - SERVICE_ACCOUNT_GKE_DEV
+  # - SERVICE_ACCOUNT_GKE_PROD
+  # - SERVICE_ACCOUNT_CLOUD_SQL_DEV
+  # - SERVICE_ACCOUNT_CLOUD_SQL_PROD
+  # - COASTLINE_DATABASE_URI_DEV
+  # - COASTLINE_DATABASE_URI_PROD
 
   # Docker registry repositories
   CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
@@ -45,11 +45,11 @@ variables:
   SERVER_DOCKER_FILE: $SERVER_CONTEXT/prod.dockerfile
 
   # Google Cloud Platform Projects
-  GCP_PROJECT: epj-coastline
+  GCP_PROJECT_DEV: epj-coastline-development
   # TODO: Add project for production
 
   # Google Kubernetes Engine
-  GKE_CLUSTER_NAME: coastline
+  GKE_CLUSTER_NAME: coastline-gke
   # TODO: Add cluster for production
 
   # All clusters are in the same zone.
@@ -140,7 +140,7 @@ server_unit_tests:
 ########################################################################################################################
 # Stage: Review
 ########################################################################################################################
-#      --set server.secret.coastline_database_uri="$COASTLINE_DATABASE_URI"
+
 deploy_review:
   stage: review
   image: google/cloud-sdk:286.0.0-alpine
@@ -148,12 +148,12 @@ deploy_review:
     - docker
   script:
     # Create database (delete if it already exists)
-    - gCloudConnectCloudSql $GCP_PROJECT $SERVICE_ACCOUNT_CLOUD_SQL
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $SERVICE_ACCOUNT_CLOUD_SQL_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
     # Deploy application
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT $SERVICE_ACCOUNT_GKE $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
@@ -194,10 +194,10 @@ stop_review:
   script:
     # Uninstall application
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT $SERVICE_ACCOUNT_GKE $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
     - helm uninstall $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     # Delete database
-    - gCloudConnectCloudSql $GCP_PROJECT $SERVICE_ACCOUNT_CLOUD_SQL
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $SERVICE_ACCOUNT_CLOUD_SQL_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
   allow_failure: true
   rules:
@@ -218,7 +218,7 @@ deploy_staging:
     - docker
   script:
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT $SERVICE_ACCOUNT_GKE $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set web.name="$CI_PROJECT_NAME-staging"

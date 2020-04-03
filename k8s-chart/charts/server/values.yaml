@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: gitlab.dev.ifs.hsr.ch:45023/epj/2020/coastline/ci-cd-setup/server
   tag: "1-0-0"
-  pull_secret: gitlab-registry-ci-cd-test
+  pull_secret: gitlab-registry-coastline-application
 secret:
   coastline_database_uri: U2VydmVyPTEyNy4wLjAuMTtQb3J0PTcwMDA7RGF0YWJhc2U9Y29hc3RsaW5lO1VzZXIgSWQ9cG9zdGdyZXM7UGFzc3dvcmQ9bXlzZWNyZXRwYXNzd29yZDs=
 config:

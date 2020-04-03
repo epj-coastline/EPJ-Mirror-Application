@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-config
 data:
-  database-migrations: {{ .Values.config.database_migrations }}
+  database-migrations: {{ .Values.config.database_migrations | b64enc }}
   allowed-hosts: "{{ .Values.config.allowed_hosts }}"

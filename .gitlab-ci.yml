@@ -29,8 +29,8 @@ variables:
   # - SERVICE_ACCOUNT_GKE_PROD
   # - SERVICE_ACCOUNT_CLOUD_SQL_DEV
   # - SERVICE_ACCOUNT_CLOUD_SQL_PROD
-  # - COASTLINE_DATABASE_URI_DEV
-  # - COASTLINE_DATABASE_URI_PROD
+  # - COASTLINE_DATABASE_PASSWORD_DEV
+  # - COASTLINE_DATABASE_PASSWORD_PROD
 
   # Docker registry repositories
   CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
@@ -44,19 +44,25 @@ variables:
   SERVER_CONTEXT: ./server
   SERVER_DOCKER_FILE: $SERVER_CONTEXT/prod.dockerfile
 
-  # Google Cloud Platform Projects
-  GCP_PROJECT_DEV: epj-coastline-development
-  # TODO: Add project for production
+  # Google Cloud Platform
 
-  # Google Kubernetes Engine
-  GKE_CLUSTER_NAME: coastline-gke
-  # TODO: Add cluster for production
-
-  # All clusters are in the same zone.
+  # All clusters, databases, networks are in the same zone.
   GKE_ZONE: europe-west6-a
 
-  #Google Cloud SQL
+  # Projects
+  GCP_PROJECT_DEV: epj-coastline-development
+  GCP_PROJECT_PROD: epj-coastline-production
+
+  # Google Kubernetes Engine (same for dev and prod)
+  GKE_CLUSTER_NAME: coastline-gke
+
+  #Google Cloud SQL (same for dev and prod)
   CLOUD_SQL_INSTANCE_NAME: coastline-postgresql
+  CLOUD_SQL_IP_DEV: 10.20.0.3
+  CLOUD_SQL_IP_PROD: #TODO
+
+  # Connection Strings
+  CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
 
   #URLs
   DOMAIN: coastline.app
@@ -162,7 +168,7 @@ deploy_review:
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"
-      --set server.secret.coastline_database_uri="$COASTLINE_DATABASE_URI"
+      --set server.secret.coastline_database_uri="$CONNECTION_STRING_REVIEW"
       --wait
       --force
       --recreate-pods

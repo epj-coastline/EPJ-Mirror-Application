@@ -4,6 +4,7 @@
       <md-button v-on:click="loadList" class="md-raised md-primary">Load list</md-button>
     </div>
     <md-list class="md-triple-line">
+      <md-subheader>{{ `Running on Host: ${this.backendHost}` }}</md-subheader>
       <div v-for="item in testList" :key="item.firstname">
         <md-list-item >
           <md-avatar class="md-avatar-icon md-primary">{{ item.firstname.toString().slice(0,1) + item.lastname.toString().slice(0,1) }}</md-avatar>
@@ -21,11 +22,14 @@
 </template>
 
 <script>
+import Configuration from '../Configuration';
+
 export default {
   name: 'TripleLine',
   data() {
     return {
       testList: [],
+      backendHost: Configuration.CONFIG.backendHost,
     };
   },
   created() {
@@ -40,8 +44,12 @@ export default {
   methods: {
     loadList() {
       // TODO: use API URL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      fetch('https://yoloo.free.beeceptor.com', {
+      fetch(`${this.backendHost}/users`, {
         method: 'GET',
+        mode: 'cors',
+        headers: {
+          Accept: 'application/json',
+        },
       })
         .then((response) => response.json())
         .then((result) => { this.testList = result; });

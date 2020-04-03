@@ -163,6 +163,7 @@ export default {
     },
     saveUser() {
       this.sending = true;
+      /*
       const dataObject = {
         firstname: this.form.firstName,
         lastname: this.form.lastName,
@@ -179,6 +180,7 @@ export default {
         },
         body: JSON.stringify(dataObject),
       });
+      */
       // Instead of this timeout, here you can call your API
       window.setTimeout(() => {
         this.lastUser = `${this.form.firstName} ${this.form.lastName}`;

@@ -33,12 +33,14 @@ namespace CoastlineServer.Service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CoastlineContext context)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            //TODO: find a way to automaticall trigger migrations
+            context.Database.Migrate();
 
             app.UseHttpsRedirection();
 

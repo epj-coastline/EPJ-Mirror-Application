@@ -7,194 +7,98 @@ using Xunit;
 
 namespace CoastlineServer.Repository.Testing
 {
-    public class UserRepositoryTest
+    public class UserRepositoryTest : IDisposable
     {
-        public UserRepository UserRepository { get; set; }
-        public User User { get; set; }
+        private SqliteConnection Connection { get; set; }
+        private UserRepository UserRepository { get; set; }
+        private User User { get; set; }
+
+        public UserRepositoryTest()
+        {
+            Connection = new SqliteConnection("DataSource=:memory:");
+            Connection.Open();
+            var options = new DbContextOptionsBuilder<CoastlineContext>()
+                .UseSqlite(Connection)
+                .Options;
+            var context = new CoastlineContext(options);
+            context.Database.EnsureCreated();
+            UserRepository = new UserRepository(context);
+        }
+
+        public void Dispose()
+        {
+            Connection.Close();
+        }
 
         [Fact]
         public void InsertTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            try
+            // arrange
+            var newUser = new User
             {
-                var options = new DbContextOptionsBuilder<CoastlineContext>()
-                    .UseSqlite(connection)
-                    .Options;
+                FirstName = "Markus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "This is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS2020"
+            };
 
-                using (var context = new CoastlineContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
+            // act
+            User = UserRepository.Insert(newUser);
 
-                using (var context = new CoastlineContext(options))
-                {
-                    // arrange
-                    var newUser = new User
-                    {
-                        FirstName = "Markus",
-                        LastName = "Christen",
-                        Email = "markus.christen@hsr.ch",
-                        Biography = "this is a test",
-                        DegreeProgram = "Testing",
-                        StartDate = "HS2020"
-                    };
-                    UserRepository = new UserRepository(context);
-
-                    // act
-                    User = UserRepository.Insert(newUser);
-
-                    // assert
-                    Assert.Equal(User.FirstName, newUser.FirstName);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            // assert
+            Assert.Equal(User.FirstName, newUser.FirstName);
         }
 
         [Fact]
         public void GetTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            try
-            {
-                var options = new DbContextOptionsBuilder<CoastlineContext>()
-                    .UseSqlite(connection)
-                    .Options;
+            // act
+            User = UserRepository.Get(-1);
 
-                using (var context = new CoastlineContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
-
-                using (var context = new CoastlineContext(options))
-                {
-                    // arrange
-                    UserRepository = new UserRepository(context);
-
-                    // act
-                    User = UserRepository.Get(-1);
-
-                    // assert
-                    Assert.Equal("David", User.FirstName);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            // assert
+            Assert.Equal("David", User.FirstName);
         }
 
         [Fact]
         public void GetAllTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            try
-            {
-                var options = new DbContextOptionsBuilder<CoastlineContext>()
-                    .UseSqlite(connection)
-                    .Options;
+            // act
+            var users = UserRepository.GetAll();
 
-                using (var context = new CoastlineContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
-
-                using (var context = new CoastlineContext(options))
-                {
-                    // arrange
-                    UserRepository = new UserRepository(context);
-
-                    // act
-                    var users = UserRepository.GetAll();
-
-                    // assert
-                    Assert.Equal(4, users.Count);
-                    Assert.Contains(users, u => u.Id == -1);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            // assert
+            Assert.Equal(4, users.Count);
+            Assert.Contains(users, u => u.Id == -1);
         }
 
         [Fact]
         public void UpdateTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            try
-            {
-                var options = new DbContextOptionsBuilder<CoastlineContext>()
-                    .UseSqlite(connection)
-                    .Options;
+            // arrange
+            User = UserRepository.Get(-1);
+            User.Biography = "This is a test";
 
-                using (var context = new CoastlineContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
+            // act
+            UserRepository.Update(User);
+            var updatedUser = UserRepository.Get(-1);
 
-                using (var context = new CoastlineContext(options))
-                {
-                    // arrange
-                    UserRepository = new UserRepository(context);
-                    User = UserRepository.Get(-1);
-                    User.Biography = "This is a test";
-
-                    // act
-                    UserRepository.Update(User);
-                    var updatedUser = UserRepository.Get(-1);
-
-                    // assert
-                    Assert.Equal(User.Biography, updatedUser.Biography);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            // assert
+            Assert.Equal(User.Biography, updatedUser.Biography);
         }
 
         [Fact]
         public void DeleteTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            try
-            {
-                var options = new DbContextOptionsBuilder<CoastlineContext>()
-                    .UseSqlite(connection)
-                    .Options;
+            // arrange
+            User = UserRepository.Get(-2);
 
-                using (var context = new CoastlineContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
+            // act
+            UserRepository.Delete(User);
 
-                using (var context = new CoastlineContext(options))
-                {
-                    // arrange
-                    UserRepository = new UserRepository(context);
-                    User = UserRepository.Get(-2);
-
-                    // act
-                    UserRepository.Delete(User);
-
-                    // assert
-                    var ex = Assert.Throws<InvalidOperationException>(() =>
-                        UserRepository.Get(User.Id));
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            // assert
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                UserRepository.Get(User.Id));
         }
     }
 }

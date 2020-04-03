@@ -82,7 +82,7 @@ namespace CoastlineServer.Service.Testing
             
             // act
             var deleteResponse = await _client.DeleteAsync(query);
-            postResponse.EnsureSuccessStatusCode();
+            deleteResponse.EnsureSuccessStatusCode();
 
             // assert
             Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);

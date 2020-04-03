@@ -63,6 +63,7 @@ namespace CoastlineServer.Service
             {
                 using (var client = new TcpClient(hostUri, portNumber))
                 {
+                    Console.WriteLine("_____________ Access________________");
                     return true;
                 }
             }

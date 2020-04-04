@@ -40,6 +40,6 @@ spec:
                   key: coastline-database-uri
           resources:
             requests:
-              cpu: "50m"
+              cpu: {{ .Values.resources.requests.cpu }}
             limits:
-              cpu: "50m"
+              cpu: {{ .Values.resources.limits.cpu }}

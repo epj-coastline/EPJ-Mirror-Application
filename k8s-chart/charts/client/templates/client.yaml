@@ -30,6 +30,6 @@ spec:
                   key: coastline-api-uri
           resources:
             requests:
-              cpu: "10m"
+              cpu: {{ .Values.resources.requests.cpu }}
             limits:
-              cpu: "10m"
+              cpu: {{ .Values.resources.limits.cpu }}

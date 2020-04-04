@@ -9,3 +9,8 @@ service:
   port: 80
 ingress:
   host: coastline.app
+resources:
+  requests:
+    cpu: "10m"
+  limits:
+    cpu: "10m"

@@ -12,3 +12,8 @@ service:
   port: 80
 ingress:
   host: api.coastline.app
+resources:
+  requests:
+    cpu: "50m"
+  limits:
+    cpu: "50m"

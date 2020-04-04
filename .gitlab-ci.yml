@@ -1,0 +1,360 @@
+########################################################################################################################
+# Coastline CI CD Pipeline
+########################################################################################################################
+
+stages:
+  - build
+  - test
+  - review
+  - staging
+  - production
+
+workflow:
+  rules:
+    # Avoid duplicate pipeline for open merge requests
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+#     Avoid pipeline for release branches as the tag creation execute the pipeline anyway
+#   - if: $CI_COMMIT_BRANCH =~ /release-.+/
+#     when: never
+    # In all other cases run pipeline
+    - when: always
+
+variables:
+  # The following variables must be defined as secret environment variables:
+  # - GCP_SA_DEV
+  # - GCP_SA_PROD
+  # - COASTLINE_DATABASE_PASSWORD_DEV
+  # - COASTLINE_DATABASE_PASSWORD_PROD
+
+  # Docker registry repositories
+  CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
+  CLIENT_REPOSITORY: $CI_REGISTRY_IMAGE/client
+  SERVER_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/server-builder
+  SERVER_REPOSITORY: $CI_REGISTRY_IMAGE/server
+
+  #  Docker files
+  CLIENT_CONTEXT: ./client
+  CLIENT_DOCKER_FILE: $CLIENT_CONTEXT/prod.dockerfile
+  SERVER_CONTEXT: ./server
+  SERVER_DOCKER_FILE: $SERVER_CONTEXT/prod.dockerfile
+
+  # Environment identifiers are user for database name and helm release name
+  ENVIRONMENT_ID_STAGING: coastline-staging
+  ENVIRONMENT_ID_PRODUCTION: coastline-production
+  ENVIRONMENT_ID_REVIEW: coastline
+
+  # Google Cloud Platform
+  # All clusters, databases, networks are in the same zone.
+  GKE_ZONE: europe-west6-a
+
+  # Projects
+  GCP_PROJECT_DEV: epj-coastline-development
+  GCP_PROJECT_PROD: epj-coastline-production
+
+  # Google Kubernetes Engine
+  GKE_CLUSTER_NAME: coastline-gke # same for dev and prod
+
+  #Google Cloud SQL
+  CLOUD_SQL_INSTANCE_NAME: coastline-postgresql # same for dev and prod
+  CLOUD_SQL_IP_DEV: 10.20.0.3
+  CLOUD_SQL_IP_PROD: 10.20.0.3
+
+  # Connection Strings
+  CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
+  CONNECTION_STRING_STAGING: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$ENVIRONMENT_ID_STAGING;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
+  CONNECTION_STRING_PROD: "Server=$CLOUD_SQL_IP_PROD;Port=5432;Database=$ENVIROMENT_ID_PRODUCTION;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_PROD;"
+
+  #URLs
+  DOMAIN: coastline.app
+  # Production
+  APP_URL_PRODUCTION: $DOMAIN
+  API_URL_PRODUCTION: api.$DOMAIN
+  # Staging
+  APP_URL_STAGING: staging.$DOMAIN
+  API_URL_STAGING: api.staging.$DOMAIN
+  # Review
+  # deploy_review.environments.deploy needs to be changed manually if domain changes.
+  APP_URL_REVIEW: $CI_COMMIT_REF_SLUG.review.$DOMAIN
+  API_URL_REVIEW: api.$CI_COMMIT_REF_SLUG.review.$DOMAIN
+
+# Defines changes that triggers client pipeline
+.client_changes:
+  rules:
+    - changes:
+        - client/**/*
+        - k8s-chart/**/*
+        - .gitlab-ci.yml
+
+# Defines changes that triggers server pipeline
+.server_changes:
+  rules:
+    - changes:
+        - server/**/*
+        - k8s-chart/**/*
+        - .gitlab-ci.yml
+
+########################################################################################################################
+# Stage: Build
+########################################################################################################################
+
+build_client:
+  stage: build
+  image: docker:19
+  tags:
+    - docker
+  script:
+    - buildClientImage
+  extends: .client_changes
+
+build_server:
+  stage: build
+  image: docker:19
+  tags:
+    - docker
+  script:
+    - buildServerImage
+  extends: .server_changes
+
+########################################################################################################################
+# Stage: Test
+########################################################################################################################
+
+client_unit_tests:
+  stage: test
+  image: $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /app
+    - npm run test:unit
+  extends: .client_changes
+  needs:
+    - build_client
+
+server_unit_tests:
+  stage: test
+  image: $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /src
+    - dotnet test
+  extends: .server_changes
+  needs:
+    - build_server
+
+########################################################################################################################
+# Stage: Review
+########################################################################################################################
+
+deploy_review:
+  stage: review
+  image: google/cloud-sdk:286.0.0-alpine
+  tags:
+    - docker
+  script:
+    # Create database (delete if it already exists)
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
+    - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
+    - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
+    # Deploy application
+    - setupHelmClient
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
+    - helm upgrade
+      --install
+      --set client.image.tag="$CI_COMMIT_REF_SLUG"
+      --set client.ingress.host="$APP_URL_REVIEW"
+      --set client.config.coastline_api_uri="$API_URL_REVIEW"
+      --set server.image.tag="$CI_COMMIT_REF_SLUG"
+      --set server.ingress.host="$API_URL_REVIEW"
+      --set server.config.database_migrations="automatic"
+      --set server.secret.coastline_database_uri="$CONNECTION_STRING_REVIEW"
+      --wait
+      --force
+      --recreate-pods
+      $ENVIRONMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
+      ./k8s-chart
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    # The URL for dynamic environments can only consist of predefined variables and strings.
+    # Predefined variables: https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+    # Therefore one can not simply use the variable $APP_URL_REVIEW,
+    url: https://$CI_COMMIT_REF_SLUG.review.coastline.app
+    on_stop: stop_review
+  allow_failure: true
+  rules:
+    # Execute job for all branches except master
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      when: manual
+    - when: never
+
+stop_review:
+  stage: review
+  image: google/cloud-sdk:286.0.0-alpine
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - docker
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
+  script:
+    # Uninstall application
+    - setupHelmClient
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
+    - helm uninstall $ENVIRONMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
+    # Delete database
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
+    - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
+  allow_failure: true
+  rules:
+    # Execute job for all branches except master
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      when: manual
+    - when: never
+
+########################################################################################################################
+# Stage: Staging
+########################################################################################################################
+
+deploy_staging:
+  stage: staging
+  image: google/cloud-sdk:286.0.0-alpine
+  tags:
+    - docker
+  script:
+    - setupHelmClient
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
+    # Deploy application
+    - helm upgrade
+      --install
+      --set client.image.tag="master"
+      --set client.ingress.host="$APP_URL_STAGING"
+      --set client.config.coastline_api_uri="$API_URL_STAGING"
+      --set server.image.tag="master"
+      --set server.ingress.host="$API_URL_STAGING"
+      --set server.config.database_migrations="automatic"
+      --set server.secret.coastline_database_uri="$CONNECTION_STRING_STAGING"
+      --wait
+      --force
+      --recreate-pods
+      $ENVIRONMENT_ID_STAGING
+      ./k8s-chart
+  environment:
+    name: staging
+    url: https://staging.coastline.app
+  rules:
+    # Only execute for master
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+########################################################################################################################
+# Stage Production
+########################################################################################################################
+
+deploy_production:
+  stage: production
+  image: google/cloud-sdk:286.0.0-alpine
+  tags:
+    - docker
+  script:
+    - setupHelmClient
+    - gCloudConnectKubernetes $GCP_PROJECT_PROD $GCP_SA_PROD $GKE_CLUSTER_NAME
+    # Deploy application
+    - helm upgrade
+      --install
+      --set client.image.tag="$CI_COMMIT_REF_SLUG"
+      --set client.ingress.host="$APP_URL_PRODUCTION"
+      --set client.config.coastline_api_uri="$API_URL_PRODUCTION"
+      --set server.image.tag="$CI_COMMIT_REF_SLUG"
+      --set server.ingress.host="$API_URL_PRODUCTION"
+      --set server.config.database_migrations="automatic"
+      --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
+      --wait
+      --force
+      --recreate-pods
+      $ENVIRONMENT_ID_PRODUCTION
+      ./k8s-chart
+  environment:
+    name: production
+    url: https://coastline.app
+  rules:
+    # Only execute job if tag matches Semantic Versioning https://semver.org/
+    - if: $CI_COMMIT_TAG =~ /v([0-9]+)(\.([0-9]+))(\.([0-9]+))/
+      when: manual
+    - when: never
+
+########################################################################################################################
+# Helper Function
+########################################################################################################################
+
+.functions: &functions |
+
+  function buildClientImage() {
+    docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+    docker pull $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG || docker pull $CLIENT_BUILDER_REPOSITORY:$CI_DEFAULT_BRANCH || true
+    docker pull $CLIENT_REPOSITORY:$CI_COMMIT_REF_SLUG || docker pull $CLIENT_REPOSITORY:$CI_DEFAULT_BRANCH || true
+
+    docker build --pull \
+      --cache-from $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      --cache-from $CLIENT_BUILDER_REPOSITORY:$CI_DEFAULT_BRANCH \
+      --target build-stage \
+      -t $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -f $CLIENT_DOCKER_FILE $CLIENT_CONTEXT \
+
+    docker build --pull \
+      --cache-from $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      --cache-from $CLIENT_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -t $CLIENT_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -f $CLIENT_DOCKER_FILE $CLIENT_CONTEXT \
+
+    docker push $CLIENT_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
+    docker push $CLIENT_REPOSITORY:$CI_COMMIT_REF_SLUG
+  }
+
+  function buildServerImage() {
+    docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+    docker pull $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG || docker pull $SERVER_BUILDER_REPOSITORY:$CI_DEFAULT_BRANCH || true
+    docker pull $SERVER_REPOSITORY:$CI_COMMIT_REF_SLUG || docker pull $SERVER_REPOSITORY:$CI_DEFAULT_BRANCH || true
+
+    docker build --pull \
+      --cache-from $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      --cache-from $SERVER_BUILDER_REPOSITORY:$CI_DEFAULT_BRANCH \
+      --target build-stage \
+      -t $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -f $SERVER_DOCKER_FILE $SERVER_CONTEXT \
+
+    docker build --pull \
+      --cache-from $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      --cache-from $SERVER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -t $SERVER_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -f $SERVER_DOCKER_FILE $SERVER_CONTEXT \
+
+    docker push $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
+    docker push $SERVER_REPOSITORY:$CI_COMMIT_REF_SLUG
+  }
+
+  function gCloudConnectKubernetes() {
+    FILE_NAME="./${1}-sa-gke.json"
+    echo $2 | base64 -d > $FILE_NAME
+    gcloud auth activate-service-account --key-file $FILE_NAME --project=$1
+    gcloud container clusters get-credentials $3 --zone $GKE_ZONE
+  }
+
+  function gCloudConnectCloudSql(){
+    FILE_NAME="./${1}-sa-cloud-sql.json"
+    echo $2 | base64 -d > $FILE_NAME
+    gcloud auth activate-service-account --key-file $FILE_NAME --project=$1
+  }
+
+  function setupHelmClient() {
+    apk add curl openssl ca-certificates
+    curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+    helm version
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+  }
+
+before_script:
+  - *functions

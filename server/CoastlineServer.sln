@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoastlineServer.Service", "CoastlineServer.Service\CoastlineServer.Service.csproj", "{8359EF71-2EA6-4320-86EF-92AC48E1B089}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoastlineServer.Repository", "CoastlineServer.Repository\CoastlineServer.Repository.csproj", "{07AE03E2-B3AA-43A5-BF43-1E18383A18F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoastlineServer.DAL", "CoastlineServer.DAL\CoastlineServer.DAL.csproj", "{9743A938-CC5A-4882-9043-042C9A778580}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoastlineServer.Repository.Testing", "CoastlineServer.Repository.Testing\CoastlineServer.Repository.Testing.csproj", "{7FC04B82-50AE-4D09-8520-BCA3E250EE61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoastlineServer.Service.Testing", "CoastlineServer.Service.Testing\CoastlineServer.Service.Testing.csproj", "{77B095B0-A270-40D6-832A-123002235740}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{30657AC7-C17A-45BB-9A1C-D59E9F25033E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8359EF71-2EA6-4320-86EF-92AC48E1B089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8359EF71-2EA6-4320-86EF-92AC48E1B089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8359EF71-2EA6-4320-86EF-92AC48E1B089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8359EF71-2EA6-4320-86EF-92AC48E1B089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07AE03E2-B3AA-43A5-BF43-1E18383A18F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07AE03E2-B3AA-43A5-BF43-1E18383A18F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07AE03E2-B3AA-43A5-BF43-1E18383A18F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07AE03E2-B3AA-43A5-BF43-1E18383A18F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9743A938-CC5A-4882-9043-042C9A778580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9743A938-CC5A-4882-9043-042C9A778580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9743A938-CC5A-4882-9043-042C9A778580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9743A938-CC5A-4882-9043-042C9A778580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC04B82-50AE-4D09-8520-BCA3E250EE61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC04B82-50AE-4D09-8520-BCA3E250EE61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC04B82-50AE-4D09-8520-BCA3E250EE61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC04B82-50AE-4D09-8520-BCA3E250EE61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B095B0-A270-40D6-832A-123002235740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B095B0-A270-40D6-832A-123002235740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77B095B0-A270-40D6-832A-123002235740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77B095B0-A270-40D6-832A-123002235740}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7FC04B82-50AE-4D09-8520-BCA3E250EE61} = {30657AC7-C17A-45BB-9A1C-D59E9F25033E}
+		{77B095B0-A270-40D6-832A-123002235740} = {30657AC7-C17A-45BB-9A1C-D59E9F25033E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {751BE870-A22B-4E8F-A691-D4833809F390}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,18 @@
+version: '2.0'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: prod.dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStringCoastline=Server=db;Port=5432;Database=coastline;User Id=postgres;Password=mysecretpassword;
+      - DatabaseMigrations="automatic"
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword

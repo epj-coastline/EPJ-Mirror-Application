@@ -1,7 +1,7 @@
 FROM node:12 as build-stage
 WORKDIR /app
 COPY package*.json ./
-RUN npm  ci
+RUN npm ci
 COPY ./ .
 RUN npm run build
 

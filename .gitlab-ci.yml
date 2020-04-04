@@ -11,18 +11,19 @@ stages:
 
 workflow:
   rules:
-    # Avoid duplicate pipeline for open merge requests.
+    # Avoid duplicate pipeline for open merge requests
     - if: $CI_MERGE_REQUEST_ID
       when: never
-    # TODO: Find out why this rule is needed. ??
-    - if: $CI_COMMIT_BRANCH =~ /release.+/
+    # Avoid pipeline for release branches as the tag creation execute the pipeline anyway
+    - if: $CI_COMMIT_BRANCH =~ /release-.+/
       when: never
+    # In all other cases run pipeline
     - when: always
 
 variables:
-  # The following variables must be defined as environment variables:
+  # The following variables must be defined as secret environment variables:
   # - GCP_SA_DEV
-  # - TODO: GCP_SA_PROD
+  # - GCP_SA_PROD
   # - COASTLINE_DATABASE_PASSWORD_DEV
   # - COASTLINE_DATABASE_PASSWORD_PROD
 
@@ -57,12 +58,12 @@ variables:
   #Google Cloud SQL
   CLOUD_SQL_INSTANCE_NAME: coastline-postgresql # same for dev and prod
   CLOUD_SQL_IP_DEV: 10.20.0.3
-  # TODO: CLOUD_SQL_IP_PROD:
+  CLOUD_SQL_IP_PROD: 10.20.0.3
 
   # Connection Strings
   CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
   CONNECTION_STRING_STAGING: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$ENVIRONMENT_ID_STAGING;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
-  # TODO: CONNECTION_STRING_PROD:
+  CONNECTION_STRING_PROD: "Server=$CLOUD_SQL_IP_PROD;Port=5432;Database=$ENVIROMENT_ID_PRODUCTION;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_PROD;"
 
   #URLs
   DOMAIN: coastline.app
@@ -183,6 +184,7 @@ deploy_review:
     on_stop: stop_review
   allow_failure: true
   rules:
+    # Execute job for all branches except master
     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
       when: manual
     - when: never
@@ -207,6 +209,7 @@ stop_review:
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
   allow_failure: true
   rules:
+    # Execute job for all branches except master
     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
       when: manual
     - when: never
@@ -214,7 +217,7 @@ stop_review:
 ########################################################################################################################
 # Stage: Staging
 ########################################################################################################################
-# TODO: Change database_migrations to manuel after first deployment
+
 deploy_staging:
   stage: staging
   image: google/cloud-sdk:286.0.0-alpine
@@ -223,6 +226,7 @@ deploy_staging:
   script:
     - setupHelmClient
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
+    # Deploy application
     - helm upgrade
       --install
       --set client.image.tag="master"
@@ -241,23 +245,41 @@ deploy_staging:
     name: staging
     url: https://staging.coastline.app
   rules:
+    # Only execute for master
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ########################################################################################################################
 # Stage Production
 ########################################################################################################################
-# TODO: Add complete production stage
+
 deploy_production:
   stage: production
   image: google/cloud-sdk:286.0.0-alpine
   tags:
     - docker
   script:
-    - echo "deploy to production"
+    - setupHelmClient
+    - gCloudConnectKubernetes $GCP_PROJECT_PROD $GCP_SA_PROD $GKE_CLUSTER_NAME
+    # Deploy application
+    - helm upgrade
+      --install
+      --set client.image.tag="$CI_COMMIT_REF_SLUG"
+      --set client.ingress.host="$APP_URL"
+      --set client.config.coastline_api_uri="$API_URL"
+      --set server.image.tag="$CI_COMMIT_REF_SLUG"
+      --set server.ingress.host="$API_URL"
+      --set server.config.database_migrations="automatic"
+      --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
+      --wait
+      --force
+      --recreate-pods
+      $ENVIRONMENT_ID_PRODUCTION
+      ./k8s-chart
   environment:
     name: production
-    url: https://coastline.com
+    url: https://coastline.app
   rules:
+    # Only execute job if tag matches Semantic Versioning https://semver.org/
     - if: $CI_COMMIT_TAG =~ /v([0-9]+)(\.([0-9]+))?(\.([0-9]+))?/
       when: manual
     - when: never

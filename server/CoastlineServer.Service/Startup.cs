@@ -34,17 +34,17 @@ namespace CoastlineServer.Service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CoastlineContext context)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // if (Configuration["DatabaseMigrations"] == "automatic")
-            // {
-            //     context.Database.Migrate();
-            // }
+            if (Configuration["DatabaseMigrations"] == "automatic")
+            {
+                context.Database.Migrate();
+            }
 
             app.UseHttpsRedirection();
 
@@ -55,21 +55,21 @@ namespace CoastlineServer.Service
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             PingHost("10.20.0.3", 5432);
+            PingHost("10.20.0.3", 7000);
         }
 
-        public static bool PingHost(string hostUri, int portNumber)
+        public static void PingHost(string hostUri, int portNumber)
         {
             try
             {
                 using (var client = new TcpClient(hostUri, portNumber))
                 {
                     Console.WriteLine("_____________ Access________________");
-                    return true;
                 }
             }
             catch (SocketException ex)
             {
-                throw new Exception("Error pinging host:'" + hostUri + ":" + portNumber.ToString() + "'");
+                Console.WriteLine("Error pinging host:'" + hostUri + ":" + portNumber.ToString() + "'");
             }
         }
     }

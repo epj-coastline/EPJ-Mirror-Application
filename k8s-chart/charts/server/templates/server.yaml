@@ -40,6 +40,6 @@ spec:
                   key: coastline-database-uri
           resources:
             requests:
-              cpu: "10m"
+              cpu: "50m"
             limits:
-              cpu: "10m"
+              cpu: "50m"

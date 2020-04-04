@@ -264,10 +264,10 @@ deploy_production:
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
-      --set client.ingress.host="$APP_URL"
-      --set client.config.coastline_api_uri="$API_URL"
+      --set client.ingress.host="$APP_URL_PRODUCTION"
+      --set client.config.coastline_api_uri="$API_URL_PRODUCTION"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
-      --set server.ingress.host="$API_URL"
+      --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
       --wait

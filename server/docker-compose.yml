@@ -10,7 +10,8 @@ services:
     depends_on:
       - db
     environment:
-      - ConnectionStrings:CoastlineDatabase=Server=db;Port=5432;Database=coastline;User Id=postgres;Password=mysecretpassword;
+      - ConnectionStringCoastline=Server=db;Port=5432;Database=coastline;User Id=postgres;Password=mysecretpassword;
+      - DatabaseMigrations="automatic"
   db:
     image: postgres
     environment:

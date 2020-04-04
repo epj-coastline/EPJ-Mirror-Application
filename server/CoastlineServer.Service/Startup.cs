@@ -28,7 +28,7 @@ namespace CoastlineServer.Service
             services.AddScoped<UserRepository>();
             services.AddDbContext<CoastlineContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("CoastlineDatabase"));
+                options.UseNpgsql(Configuration["ConnectionStringCoastline"]);
             });
         }
 
@@ -39,8 +39,11 @@ namespace CoastlineServer.Service
             {
                 app.UseDeveloperExceptionPage();
             }
-            //TODO: find a way to automaticall trigger migrations
-            context.Database.Migrate();
+
+            if (Configuration["DatabaseMigrations"] == "automatic")
+            {
+                context.Database.Migrate();
+            }
 
             app.UseHttpsRedirection();
 

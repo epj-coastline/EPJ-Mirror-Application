@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+data:
+  database-migrations: {{ .Values.config.database_migrations }}
+  allowed-hosts: "{{ .Values.config.allowed_hosts }}"

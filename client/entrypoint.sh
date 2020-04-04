@@ -11,7 +11,7 @@ do
     cp $file $file.tmpl.js
   fi
 
-  envsubst '$API_URL' < $file.tmpl.js > $file
+  envsubst '$COASTLINE_API_URI' < $file.tmpl.js > $file
 done
 
 echo "Starting Nginx"

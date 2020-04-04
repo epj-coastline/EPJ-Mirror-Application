@@ -5,7 +5,7 @@ dotenv.config();
 export default class Configuration {
   static get CONFIG() {
     return {
-      backendHost: '$API_URL',
+      backendHost: '$COASTLINE_API_URI',
     };
   }
 }

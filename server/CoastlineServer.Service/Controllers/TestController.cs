@@ -20,8 +20,8 @@ namespace CoastlineServer.Service.Controllers
         [HttpGet]
         public String GetTest()
         {
-            return _configuration["ConnectionStringCoastline"] + " DatabaseMigrations: " +
-                   _configuration["DatabaseMigrations"] + "; AllowedHosts: " + _configuration["AllowedHosts"] + ";";
+            return " DatabaseMigrations: " + _configuration["DatabaseMigrations"] + "; AllowedHosts: " +
+                   _configuration["AllowedHosts"] + ";";
         }
     }
 }

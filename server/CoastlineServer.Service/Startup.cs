@@ -1,5 +1,4 @@
 using System;
-using System.Net.Sockets;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,24 +52,6 @@ namespace CoastlineServer.Service
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-            PingHost("10.20.0.3", 5432);
-            PingHost("10.20.0.3", 7000);
-        }
-
-        public static void PingHost(string hostUri, int portNumber)
-        {
-            try
-            {
-                using (var client = new TcpClient(hostUri, portNumber))
-                {
-                    Console.WriteLine("_____________ Access________________");
-                }
-            }
-            catch (SocketException ex)
-            {
-                Console.WriteLine("Error pinging host:'" + hostUri + ":" + portNumber.ToString() + "'");
-            }
         }
     }
 }

@@ -12,9 +12,11 @@ stages:
 workflow:
   rules:
     # Avoid duplicate pipeline for open merge requests
-    - if: $CI_MERGE_REQUEST_ID && $CI_COMMIT_BRANCH !~ /release-.+/
+    - if: $CI_MERGE_REQUEST_ID
       when: never
     # Avoid pipeline for release branches as the tag creation execute the pipeline anyway
+#   - if: $CI_COMMIT_BRANCH =~ /release-.+/
+#     when: never
     # In all other cases run pipeline
     - when: always
 

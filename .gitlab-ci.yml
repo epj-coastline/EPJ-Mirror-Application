@@ -214,7 +214,7 @@ stop_review:
 ########################################################################################################################
 # Stage: Staging
 ########################################################################################################################
-
+# TODO: Change database_migrations to manuel after first deployment
 deploy_staging:
   stage: staging
   image: google/cloud-sdk:286.0.0-alpine
@@ -230,7 +230,7 @@ deploy_staging:
       --set client.config.coastline_api_uri="$API_URL_STAGING"
       --set server.image.tag="master"
       --set server.ingress.host="$API_URL_STAGING"
-      --set server.config.database_migrations="automatic" # TODO: Change to manuel after first deployment
+      --set server.config.database_migrations="automatic"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_STAGING"
       --wait
       --force

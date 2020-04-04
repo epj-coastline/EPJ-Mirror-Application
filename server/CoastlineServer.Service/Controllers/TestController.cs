@@ -1,7 +1,5 @@
 ﻿using System;
-using CoastlineServer.DAL.Context;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CoastlineServer.Service.Controllers

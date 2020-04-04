@@ -12,7 +12,7 @@ stages:
 workflow:
   rules:
     # Force pipelines for release branch merge requests
-    - if: && $CI_MERGE_REQUEST_ID  && $CI_COMMIT_BRANCH =~ /release-.+/
+    - if: $CI_MERGE_REQUEST_ID  && $CI_COMMIT_BRANCH =~ /release-.+/
       when: always
     # Avoid duplicate pipeline for open merge requests
     - if: $CI_MERGE_REQUEST_ID

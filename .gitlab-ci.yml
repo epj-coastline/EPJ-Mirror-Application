@@ -14,9 +14,9 @@ workflow:
     # Avoid duplicate pipeline for open merge requests
     - if: $CI_MERGE_REQUEST_ID
       when: never
-    # Avoid pipeline for release branches as the tag creation execute the pipeline anyway
-    - if: $CI_COMMIT_BRANCH =~ /release-.+/
-      when: never
+#     Avoid pipeline for release branches as the tag creation execute the pipeline anyway
+#   - if: $CI_COMMIT_BRANCH =~ /release-.+/
+#     when: never
     # In all other cases run pipeline
     - when: always
 
@@ -41,8 +41,8 @@ variables:
 
   # Environment identifiers are user for database name and helm release name
   ENVIRONMENT_ID_STAGING: coastline-staging
-  ENVIROMENT_ID_PRODUCTION: coastline-production
-  ENVIROMENT_ID_REVIEW: coastline
+  ENVIRONMENT_ID_PRODUCTION: coastline-production
+  ENVIRONMENT_ID_REVIEW: coastline
 
   # Google Cloud Platform
   # All clusters, databases, networks are in the same zone.
@@ -173,7 +173,7 @@ deploy_review:
       --wait
       --force
       --recreate-pods
-      $ENVIROMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
+      $ENVIRONMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
       ./k8s-chart
   environment:
     name: review/$CI_COMMIT_REF_SLUG
@@ -203,7 +203,7 @@ stop_review:
     # Uninstall application
     - setupHelmClient
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
-    - helm uninstall $ENVIROMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
+    - helm uninstall $ENVIRONMENT_ID_REVIEW-$CI_COMMIT_REF_SLUG
     # Delete database
     - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
@@ -264,10 +264,10 @@ deploy_production:
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
-      --set client.ingress.host="$APP_URL"
-      --set client.config.coastline_api_uri="$API_URL"
+      --set client.ingress.host="$APP_URL_PRODUCTION"
+      --set client.config.coastline_api_uri="$API_URL_PRODUCTION"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
-      --set server.ingress.host="$API_URL"
+      --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
       --wait
@@ -280,7 +280,7 @@ deploy_production:
     url: https://coastline.app
   rules:
     # Only execute job if tag matches Semantic Versioning https://semver.org/
-    - if: $CI_COMMIT_TAG =~ /v([0-9]+)(\.([0-9]+))?(\.([0-9]+))?/
+    - if: $CI_COMMIT_TAG =~ /v([0-9]+)(\.([0-9]+))(\.([0-9]+))/
       when: manual
     - when: never
 

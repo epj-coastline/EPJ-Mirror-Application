@@ -9,10 +9,6 @@ stages:
   - staging
   - production
 
-########################################################################################################################
-# Configurations
-########################################################################################################################
-
 workflow:
   rules:
     # Avoid duplicate pipeline for open merge requests.
@@ -25,10 +21,8 @@ workflow:
 
 variables:
   # The following variables must be defined as environment variables:
-  # - SERVICE_ACCOUNT_GKE_DEV
-  # - SERVICE_ACCOUNT_GKE_PROD
-  # - SERVICE_ACCOUNT_CLOUD_SQL_DEV
-  # - SERVICE_ACCOUNT_CLOUD_SQL_PROD
+  # - GCP_SA_DEV
+  # - TODO: GCP_SA_PROD
   # - COASTLINE_DATABASE_PASSWORD_DEV
   # - COASTLINE_DATABASE_PASSWORD_PROD
 
@@ -45,7 +39,6 @@ variables:
   SERVER_DOCKER_FILE: $SERVER_CONTEXT/prod.dockerfile
 
   # Google Cloud Platform
-
   # All clusters, databases, networks are in the same zone.
   GKE_ZONE: europe-west6-a
 
@@ -53,16 +46,17 @@ variables:
   GCP_PROJECT_DEV: epj-coastline-development
   GCP_PROJECT_PROD: epj-coastline-production
 
-  # Google Kubernetes Engine (same for dev and prod)
-  GKE_CLUSTER_NAME: coastline-gke
+  # Google Kubernetes Engine
+  GKE_CLUSTER_NAME: coastline-gke # same for dev and prod
 
-  #Google Cloud SQL (same for dev and prod)
-  CLOUD_SQL_INSTANCE_NAME: coastline-postgresql
+  #Google Cloud SQL
+  CLOUD_SQL_INSTANCE_NAME: coastline-postgresql # same for dev and prod
   CLOUD_SQL_IP_DEV: 10.20.0.3
   # TODO: CLOUD_SQL_IP_PROD:
 
   # Connection Strings
   CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
+  # TODO: CONNECTION_STRING_PROD:
 
   #URLs
   DOMAIN: coastline.app
@@ -154,12 +148,12 @@ deploy_review:
     - docker
   script:
     # Create database (delete if it already exists)
-    - gCloudConnectCloudSql $GCP_PROJECT_DEV $SERVICE_ACCOUNT_CLOUD_SQL_DEV
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
     # Deploy application
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
@@ -200,10 +194,10 @@ stop_review:
   script:
     # Uninstall application
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm uninstall $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     # Delete database
-    - gCloudConnectCloudSql $GCP_PROJECT_DEV $SERVICE_ACCOUNT_CLOUD_SQL_DEV
+    - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
   allow_failure: true
   rules:
@@ -218,13 +212,11 @@ stop_review:
 deploy_staging:
   stage: staging
   image: google/cloud-sdk:286.0.0-alpine
-  variables:
-    GIT_STRATEGY: none
   tags:
     - docker
   script:
     - setupHelmClient
-    - gCloudConnectKubernetes $GCP_PROJECT_DEV $SERVICE_ACCOUNT_GKE_DEV $GKE_CLUSTER_NAME
+    - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set web.name="$CI_PROJECT_NAME-staging"
@@ -248,8 +240,6 @@ deploy_staging:
 deploy_production:
   stage: production
   image: google/cloud-sdk:286.0.0-alpine
-  variables:
-    GIT_STRATEGY: none
   tags:
     - docker
   script:

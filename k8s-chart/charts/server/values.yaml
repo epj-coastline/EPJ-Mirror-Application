@@ -8,6 +8,7 @@ secret:
 config:
   database_migrations: manuel
   allowed_hosts: "*"
+  allowed_origin: coastline.app
 service:
   port: 80
 ingress:

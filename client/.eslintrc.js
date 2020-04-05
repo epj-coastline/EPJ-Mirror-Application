@@ -20,7 +20,11 @@ module.exports = {
       files: [
         '**/__tests__/*.{j,t}s?(x)',
         '**/tests/unit/**/*.spec.{j,t}s?(x)',
+        '*.vue',
       ],
+      rules: {
+        'max-len': 'off', // disables line length check
+      },
       env: {
         mocha: true,
       },

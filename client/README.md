@@ -1,4 +1,4 @@
-# client
+# Coastline Client
 
 ## Project setup
 ```

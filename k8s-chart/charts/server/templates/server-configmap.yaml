@@ -5,3 +5,4 @@ metadata:
 data:
   database-migrations: {{ .Values.config.database_migrations }}
   allowed-hosts: "{{ .Values.config.allowed_hosts }}"
+  allowed-origin: "{{ .Values.config.allowed_origin }}"

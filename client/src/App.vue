@@ -1,32 +1,45 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div class="coastline-app">
+    <Header/>
+    <main>
+      <router-view/>
+    </main>
+    <BottomNavigation/>
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  // Import the theme engine
+  @import "~vue-material/dist/theme/engine";
 
-#nav {
-  padding: 30px;
+  // Define primary and secondary color
+  @include md-register-theme("default", (
+    primary: md-get-palette-color(indigo, 600),
+    accent: md-get-palette-color(indigo, 600)
+  ));
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  // Apply the theme
+  @import "~vue-material/dist/theme/all";
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  body {
+    background-color: white;
   }
-}
+
+  main {
+    background-color: white;
+    padding-top: 80px;
+    padding-bottom:  56px;
+  }
 </style>
+
+<script>
+import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+import Header from '@/components/layout/Header.vue';
+
+export default {
+  components: {
+    BottomNavigation,
+    Header,
+  },
+};
+</script>

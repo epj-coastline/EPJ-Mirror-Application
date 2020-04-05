@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import UserService from '../services/userService';
 import Configuration from '../Configuration';
 
 export default {
@@ -42,17 +43,8 @@ export default {
     $route: 'loadList',
   },
   methods: {
-    loadList() {
-      // TODO: use API URL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      fetch(`${this.backendHost}/users`, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => { this.testList = result; });
+    async loadList() {
+      this.testList = await UserService.loadList();
     },
   },
 };

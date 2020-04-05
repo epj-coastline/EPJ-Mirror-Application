@@ -40,7 +40,7 @@ spec:
                   key: coastline-database-uri
             - name: AllowedOrigin
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: {{ .Release.Name }}-{{ .Chart.Name }}-config
                     key: allowed-origin
           resources:

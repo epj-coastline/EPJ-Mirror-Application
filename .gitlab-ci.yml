@@ -170,6 +170,7 @@ deploy_review:
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_REVIEW"
+      --set server.config.allowed_origin="http://$APP_URL_REVIEW"
       --wait
       --force
       --recreate-pods
@@ -235,6 +236,7 @@ deploy_staging:
       --set server.image.tag="master"
       --set server.ingress.host="$API_URL_STAGING"
       --set server.config.database_migrations="automatic"
+      --set server.config.allowed_origin="http://$APP_URL_STAGING"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_STAGING"
       --wait
       --force
@@ -269,6 +271,7 @@ deploy_production:
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"
+      --set server.config.allowed_origin="http://$APP_URL_PRODUCTION"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
       --wait
       --force

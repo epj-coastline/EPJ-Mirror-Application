@@ -38,6 +38,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-{{ .Chart.Name }}-secret
                   key: coastline-database-uri
+            - name: AllowedOrigin
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                    key: allowed-origin
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}

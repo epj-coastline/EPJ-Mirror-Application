@@ -33,16 +33,16 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-{{ .Chart.Name }}-config
                   key: allowed-hosts
+            - name: AllowedOrigin
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: allowed-origin
             - name: ConnectionStringCoastline
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-{{ .Chart.Name }}-secret
                   key: coastline-database-uri
-            - name: AllowedOrigin
-                valueFrom:
-                  configMapKeyRef:
-                    name: {{ .Release.Name }}-{{ .Chart.Name }}-config
-                    key: allowed-origin
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}

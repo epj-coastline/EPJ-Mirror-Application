@@ -45,9 +45,15 @@ namespace CoastlineServer.Service
                 context.Database.Migrate();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+            
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins(Configuration["AllowedOrigin"])
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
 
             app.UseAuthorization();
 

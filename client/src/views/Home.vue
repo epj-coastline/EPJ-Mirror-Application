@@ -36,9 +36,9 @@
 
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('degreeprogram')">
-                <label for="degreeprogram">Studiengang</label>
-                <md-select name="degreeprogram" id="degreeprogram" v-model="form.degreeprogram" md-dense :disabled="sending">
+              <md-field :class="getValidationClass('degreeProgram')">
+                <label for="degreeProgram">Studiengang</label>
+                <md-select name="degreeProgram" id="degreeProgram" v-model="form.degreeProgram" md-dense :disabled="sending">
                   <md-option></md-option>
                   <md-option value="Bauingenieurwesen">Bauingenieurwesen</md-option>
                   <md-option value="Elektrotechnik">Elektrotechnik</md-option>
@@ -55,9 +55,9 @@
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('startdate')">
-                <label for="startdate">Start</label>
-                <md-select name="startdate" id="startdate" v-model="form.startdate" md-dense :disabled="sending">
+              <md-field :class="getValidationClass('startDate')">
+                <label for="startDate">Start</label>
+                <md-select name="startDate" id="startDate" v-model="form.startDate" md-dense :disabled="sending">
                   <md-option></md-option>
                   <md-option value="FS2016">FS2016</md-option>
                   <md-option value="HS2016">HS2016</md-option>
@@ -99,6 +99,7 @@ import {
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators';
+import Configuration from '../Configuration';
 
 export default {
   name: 'FormValidation',
@@ -108,8 +109,8 @@ export default {
       firstName: null,
       lastName: null,
       email: null,
-      degreeprogram: null,
-      startdate: null,
+      degreeProgram: null,
+      startDate: null,
       biography: null,
     },
     userSaved: false,
@@ -126,10 +127,10 @@ export default {
         required,
         minLength: minLength(3),
       },
-      startdate: {
+      startDate: {
         required,
       },
-      degreeprogram: {
+      degreeProgram: {
         required,
       },
       biography: {
@@ -158,29 +159,28 @@ export default {
       this.form.lastName = null;
       this.form.email = null;
       this.form.biography = null;
-      this.form.degreeprogram = null;
-      this.form.startdate = null;
+      this.form.degreeProgram = null;
+      this.form.startDate = null;
     },
     saveUser() {
       this.sending = true;
-      /*
+
       const dataObject = {
-        firstname: this.form.firstName,
-        lastname: this.form.lastName,
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
         email: this.form.email,
         biography: this.form.biography,
-        degreeprogram: this.form.degreeprogram,
-        startdate: this.form.startdate,
+        degreeProgram: this.form.degreeProgram,
+        startDate: this.form.startDate,
       };
-      // TODO: use API URL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      fetch('https://yoloo.free.beeceptor.com', {
+      fetch(`${Configuration.CONFIG.backendHost}/users`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
         },
         body: JSON.stringify(dataObject),
       });
-      */
+
       // Instead of this timeout, here you can call your API
       window.setTimeout(() => {
         this.lastUser = `${this.form.firstName} ${this.form.lastName}`;

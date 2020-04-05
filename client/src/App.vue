@@ -21,20 +21,20 @@
   // Apply the theme
   @import "~vue-material/dist/theme/all";
 
-  .coastline-app {
-    height: calc(100vh - 56px);
+  body {
+    background-color: white;
   }
 
   main {
     background-color: white;
-    min-height: 100%;
-    padding: 16px;
+    padding-top: 80px;
+    padding-bottom:  56px;
   }
 </style>
 
 <script>
-import BottomNavigation from '@/components/BottomNavigation.vue';
-import Header from '@/components/Header.vue';
+import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+import Header from '@/components/layout/Header.vue';
 
 export default {
   components: {

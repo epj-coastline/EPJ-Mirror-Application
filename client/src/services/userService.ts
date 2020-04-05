@@ -1,15 +1,13 @@
 import Configuration from '../Configuration';
 
 class UserService {
-  static loadList() {
+  static getAll() {
     return fetch(`${Configuration.CONFIG.backendHost}/users`, {
       method: 'GET',
-      mode: 'cors',
       headers: {
         Accept: 'application/json',
       },
-    })
-      .then((response) => response.json())
+    }).then((response) => response.json())
       .then((result) => result);
   }
 }

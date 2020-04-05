@@ -1,41 +1,45 @@
 <template>
-  <div id="app">
-    <div class="page-container">
-      <md-app md-waterfall md-mode="fixed">
-        <md-app-toolbar class="md-primary" >
-          <span class="md-title">Coastline Demo</span>
-        </md-app-toolbar>
-        <md-app-content>
-          <router-view/>
-        </md-app-content>
-      </md-app>
-    </div>
-    <md-bottom-bar md-sync-route>
-      <md-bottom-bar-item to="/" exact md-label="Home" md-icon="home"></md-bottom-bar-item>
-      <md-bottom-bar-item to="/about" md-label="People" md-icon="people"></md-bottom-bar-item>
-    </md-bottom-bar>
+  <div class="coastline-app">
+    <Header/>
+    <main>
+      <router-view/>
+    </main>
+    <BottomNavigation/>
   </div>
 </template>
 
 <style lang="scss">
-  #app {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  // Import the theme engine
+  @import "~vue-material/dist/theme/engine";
 
-  .md-app {
-    border: 1px solid rgba(#000, .12);
+  // Define primary and secondary color
+  @include md-register-theme("default", (
+    primary: md-get-palette-color(indigo, 600),
+    accent: md-get-palette-color(indigo, 600)
+  ));
+
+  // Apply the theme
+  @import "~vue-material/dist/theme/all";
+
+  .coastline-app {
     height: calc(100vh - 56px);
   }
 
-  .md-bottom-bar {
-    position: fixed;
-    bottom: 0;
+  main {
+    background-color: white;
+    min-height: 100%;
+    padding: 16px;
   }
 </style>
 
 <script>
+import BottomNavigation from '@/components/BottomNavigation.vue';
+import Header from '@/components/Header.vue';
+
 export default {
-  name: 'AppBody',
+  components: {
+    BottomNavigation,
+    Header,
+  },
 };
 </script>

@@ -88,6 +88,7 @@
 
       <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
     </form>
+    <p>{{ api }}</p>
   </div>
 </template>
 
@@ -116,6 +117,7 @@ export default {
     userSaved: false,
     sending: false,
     lastUser: null,
+    api: Configuration.CONFIG.backendHost,
   }),
   validations: {
     form: {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
@@ -22,29 +23,31 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var users = _userRepository.GetAll();
+            var users = await _userRepository.GetAll();
             return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
         }
 
         [HttpGet("{userId:int}", Name = "GetUser")]
-        public ActionResult<UserDto> GetUser(int userId)
+        public async Task<ActionResult<UserDto>> GetUser(int userId)
         {
-            var user = _userRepository.Get(userId);
-            if (user == null)
+            try
+            {
+                var user = await _userRepository.Get(userId);
+                return Ok(_mapper.Map<UserDto>(user));
+            }
+            catch (KeyNotFoundException ex)
             {
                 return NotFound();
             }
-
-            return Ok(_mapper.Map<UserDto>(user));
         }
 
         [HttpPost]
-        public ActionResult<UserDto> CreateUser(UserDto userDto)
+        public async Task<ActionResult<UserDto>> CreateUser(UserDto userDto)
         {
             var userEntity = _mapper.Map<User>(userDto);
-            var newUser = _userRepository.Insert(userEntity);
+            var newUser = await _userRepository.Insert(userEntity);
             var returnUser = _mapper.Map<UserDto>(newUser);
             return CreatedAtRoute("GetUser", new
             {
@@ -53,16 +56,18 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult DeleteUser(int userId)
+        public async Task<IActionResult> DeleteUser(int userId)
         {
-            var user = _userRepository.Get(userId);
-            if (user == null)
+            try
+            {
+                var user = await _userRepository.Get(userId);
+                await _userRepository.Delete(user);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
             {
                 return NotFound();
             }
-
-            _userRepository.Delete(user);
-            return NoContent();
         }
 
         [HttpOptions]

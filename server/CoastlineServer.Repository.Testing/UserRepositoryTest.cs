@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
 using Microsoft.Data.Sqlite;
@@ -31,7 +33,7 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public void InsertTest()
+        public async Task Insert_SingleUser_ReturnsCreatedUser()
         {
             // arrange
             var newUser = new User
@@ -45,27 +47,27 @@ namespace CoastlineServer.Repository.Testing
             };
 
             // act
-            User = UserRepository.Insert(newUser);
+            User = await UserRepository.Insert(newUser);
 
             // assert
             Assert.Equal(User.FirstName, newUser.FirstName);
         }
 
         [Fact]
-        public void GetTest()
+        public async Task Get_SingleUserById_ReturnsUser()
         {
             // act
-            User = UserRepository.Get(-1);
+            User = await UserRepository.Get(-1);
 
             // assert
             Assert.Equal("David", User.FirstName);
         }
 
         [Fact]
-        public void GetAllTest()
+        public async Task GetAll_ReturnsAllUser()
         {
             // act
-            var users = UserRepository.GetAll();
+            var users = await UserRepository.GetAll();
 
             // assert
             Assert.Equal(4, users.Count);
@@ -73,32 +75,43 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public void UpdateTest()
+        public async Task Update_SingleUser_ReturnsUpdatedUser()
         {
             // arrange
-            User = UserRepository.Get(-1);
+            User = await UserRepository.Get(-1);
             User.Biography = "This is a test";
 
             // act
-            UserRepository.Update(User);
-            var updatedUser = UserRepository.Get(-1);
+            await UserRepository.Update(User);
+            var updatedUser = await UserRepository.Get(-1);
 
             // assert
             Assert.Equal(User.Biography, updatedUser.Biography);
         }
 
         [Fact]
-        public void DeleteTest()
+        public async Task Delete_SingleUser_ThrowsException()
         {
             // arrange
-            User = UserRepository.Get(-2);
+            User = await UserRepository.Get(-2);
 
             // act
-            UserRepository.Delete(User);
+            await UserRepository.Delete(User);
 
             // assert
-            var ex = Assert.Throws<InvalidOperationException>(() =>
-                UserRepository.Get(User.Id));
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await UserRepository.Get(User.Id));
+        }
+
+        [Fact]
+        public async Task Get_SingleUserById_ThrowsException()
+        {
+            // arrange
+            var invalidUserId = -500;
+
+            // act & assert
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await UserRepository.Get(invalidUserId));
         }
     }
 }

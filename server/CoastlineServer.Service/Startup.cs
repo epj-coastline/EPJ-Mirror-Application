@@ -25,7 +25,7 @@ namespace CoastlineServer.Service
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<UserRepository>();
+            services.AddScoped<_userRepository>();
             services.AddDbContext<CoastlineContext>(options =>
             {
                 options.UseNpgsql(Configuration["ConnectionStringCoastline"]);
@@ -46,7 +46,7 @@ namespace CoastlineServer.Service
             }
 
             app.UseRouting();
-            
+
             app.UseCors(builder =>
             {
                 builder.WithOrigins(Configuration["AllowedOrigin"])

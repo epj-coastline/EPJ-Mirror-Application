@@ -13,10 +13,10 @@ namespace CoastlineServer.Service.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserRepository _userRepository;
+        private readonly _userRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(UserRepository userRepository, IMapper mapper)
+        public UsersController(_userRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

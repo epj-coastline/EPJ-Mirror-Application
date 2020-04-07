@@ -12,7 +12,7 @@ namespace CoastlineServer.Repository.Testing
     public class UserRepositoryTest : IDisposable
     {
         private SqliteConnection Connection { get; set; }
-        private UserRepository UserRepository { get; set; }
+        private readonly _userRepository _userRepository;
         private User User { get; set; }
 
         public UserRepositoryTest()
@@ -24,7 +24,7 @@ namespace CoastlineServer.Repository.Testing
                 .Options;
             var context = new CoastlineContext(options);
             context.Database.EnsureCreated();
-            UserRepository = new UserRepository(context);
+            _userRepository = new _userRepository(context);
         }
 
         public void Dispose()
@@ -47,7 +47,7 @@ namespace CoastlineServer.Repository.Testing
             };
 
             // act
-            User = await UserRepository.Insert(newUser);
+            User = await _userRepository.Insert(newUser);
 
             // assert
             Assert.Equal(User.FirstName, newUser.FirstName);
@@ -57,7 +57,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Get_SingleUserById_ReturnsUser()
         {
             // act
-            User = await UserRepository.Get(-1);
+            User = await _userRepository.Get(-1);
 
             // assert
             Assert.Equal("David", User.FirstName);
@@ -67,7 +67,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task GetAll_ReturnsAllUser()
         {
             // act
-            var users = await UserRepository.GetAll();
+            var users = await _userRepository.GetAll();
 
             // assert
             Assert.Equal(4, users.Count);
@@ -78,12 +78,12 @@ namespace CoastlineServer.Repository.Testing
         public async Task Update_SingleUser_ReturnsUpdatedUser()
         {
             // arrange
-            User = await UserRepository.Get(-1);
+            User = await _userRepository.Get(-1);
             User.Biography = "This is a test";
 
             // act
-            await UserRepository.Update(User);
-            var updatedUser = await UserRepository.Get(-1);
+            await _userRepository.Update(User);
+            var updatedUser = await _userRepository.Get(-1);
 
             // assert
             Assert.Equal(User.Biography, updatedUser.Biography);
@@ -93,25 +93,41 @@ namespace CoastlineServer.Repository.Testing
         public async Task Delete_SingleUser_ThrowsException()
         {
             // arrange
-            User = await UserRepository.Get(-2);
+            User = await _userRepository.Get(-2);
 
             // act
-            await UserRepository.Delete(User);
+            await _userRepository.Delete(User);
 
             // assert
-            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
-                await UserRepository.Get(User.Id));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _userRepository.Get(User.Id));
         }
 
         [Fact]
-        public async Task Get_SingleUserById_ThrowsException()
+        public async Task Get_SingleUserByInvalidId_ThrowsException()
         {
             // arrange
             var invalidUserId = -500;
 
             // act & assert
-            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
-                await UserRepository.Get(invalidUserId));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _userRepository.Get(invalidUserId));
+        }
+
+        [Fact]
+        public async Task Delete_SingleInvalidUser_ThrowsException()
+        {
+            // arrange
+            User = new User
+            {
+                Id = 500,
+                FirstName = "Invalid",
+                LastName = "Invalid"
+            };
+
+            // act & assert
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+                await _userRepository.Delete(User));
         }
     }
 }

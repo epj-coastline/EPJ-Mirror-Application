@@ -9,11 +9,11 @@ using CoastlineServer.Repository.Exceptions;
 
 namespace CoastlineServer.Repository
 {
-    public class UserRepository : RepositoryBase
+    public class _userRepository : RepositoryBase
     {
         private readonly CoastlineContext _context;
 
-        public UserRepository(CoastlineContext context)
+        public _userRepository(CoastlineContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

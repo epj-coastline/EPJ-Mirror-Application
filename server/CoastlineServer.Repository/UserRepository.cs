@@ -9,11 +9,11 @@ using CoastlineServer.Repository.Exceptions;
 
 namespace CoastlineServer.Repository
 {
-    public class _userRepository : RepositoryBase
+    public class UserRepository : RepositoryBase
     {
         private readonly CoastlineContext _context;
 
-        public _userRepository(CoastlineContext context)
+        public UserRepository(CoastlineContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -50,7 +50,7 @@ namespace CoastlineServer.Repository
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw CreateOptimisticConcurrencyException(_context, user);
             }

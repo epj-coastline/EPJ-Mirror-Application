@@ -13,10 +13,10 @@ namespace CoastlineServer.Service.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly _userRepository _userRepository;
+        private readonly UserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(_userRepository userRepository, IMapper mapper)
+        public UsersController(UserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -37,25 +37,25 @@ namespace CoastlineServer.Service.Controllers
                 var user = await _userRepository.Get(userId);
                 return Ok(_mapper.Map<UserDto>(user));
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser(UserDto userDto)
+        public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
-            var userEntity = _mapper.Map<User>(userDto);
-            var newUser = await _userRepository.Insert(userEntity);
-            var returnUser = _mapper.Map<UserDto>(newUser);
+            var user = _mapper.Map<User>(userForCreationDto);
+            var userEntity = await _userRepository.Insert(user);
+            var userDto = _mapper.Map<UserDto>(userEntity);
             return CreatedAtRoute("GetUser", new
             {
-                userId = returnUser.Id
-            }, returnUser);
+                userId = userDto.Id
+            }, userDto);
         }
 
-        [HttpDelete("{userId}")]
+        [HttpDelete("{userId:int}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             try
@@ -64,7 +64,7 @@ namespace CoastlineServer.Service.Controllers
                 await _userRepository.Delete(user);
                 return NoContent();
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }

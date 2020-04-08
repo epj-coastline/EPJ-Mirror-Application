@@ -8,7 +8,7 @@ namespace CoastlineServer.Service.Profiles
     {
         public UserProfile()
         {
-            CreateMap<UserDto, User>();
+            CreateMap<UserForCreationDto, User>();
             CreateMap<User, UserDto>();
         }
     }

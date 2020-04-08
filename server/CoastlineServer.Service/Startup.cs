@@ -25,7 +25,7 @@ namespace CoastlineServer.Service
         {
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<_userRepository>();
+            services.AddScoped<UserRepository>();
             services.AddDbContext<CoastlineContext>(options =>
             {
                 options.UseNpgsql(Configuration["ConnectionStringCoastline"]);

@@ -12,7 +12,7 @@ namespace CoastlineServer.Repository.Testing
     public class UserRepositoryTest : IDisposable
     {
         private SqliteConnection Connection { get; set; }
-        private readonly _userRepository _userRepository;
+        private readonly UserRepository _userRepository;
         private User User { get; set; }
 
         public UserRepositoryTest()
@@ -24,7 +24,7 @@ namespace CoastlineServer.Repository.Testing
                 .Options;
             var context = new CoastlineContext(options);
             context.Database.EnsureCreated();
-            _userRepository = new _userRepository(context);
+            _userRepository = new UserRepository(context);
         }
 
         public void Dispose()
@@ -43,7 +43,7 @@ namespace CoastlineServer.Repository.Testing
                 Email = "markus.christen@hsr.ch",
                 Biography = "This is a test",
                 DegreeProgram = "Testing",
-                StartDate = "HS2020"
+                StartDate = "HS2020s"
             };
 
             // act

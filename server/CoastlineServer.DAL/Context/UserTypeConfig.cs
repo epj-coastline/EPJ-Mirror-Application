@@ -23,7 +23,7 @@ namespace CoastlineServer.DAL.Context
                     FirstName = "David",
                     LastName = "Luthiger",
                     DegreeProgram = "Informatik",
-                    Biography = "Start HS2018",
+                    Biography = "Start HS18",
                     Email = "david.luthiger@hsr.ch",
                     StartDate = "HS2018"
                 },

@@ -1,4 +1,4 @@
-# ASP.NET & EFCore Service - Instruction
+# Coastline Server
 
 ## Setup ServerPrototype
 

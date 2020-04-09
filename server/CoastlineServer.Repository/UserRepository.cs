@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository.Exceptions;
 
 namespace CoastlineServer.Repository
 {
-    public class UserRepository
+    public class UserRepository : RepositoryBase
     {
         private readonly CoastlineContext _context;
 
@@ -15,35 +17,49 @@ namespace CoastlineServer.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
-        public List<User> GetAll()
+        
+        public async Task<List<User>> GetAll()
         {
-            return _context.Users.ToList();
+            return await _context.Users.ToListAsync();
         }
 
-        public User Get(int primaryKey)
+        public async Task<User> Get(int primaryKey)
         {
-            return _context.Users.Single(u => u.Id == primaryKey);
+            try
+            {
+                return await _context.Users.SingleAsync(u => u.Id == primaryKey);
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message, ex);
+            }
         }
 
-        public User Insert(User user)
+        public async Task<User> Insert(User user)
         {
             _context.Entry(user).State = EntityState.Added;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return user;
         }
 
-        public void Update(User user)
+        public async Task Update(User user)
         {
-            _context.Entry(user).State = EntityState.Modified;
-            _context.SaveChanges();
+            try
+            {
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw CreateOptimisticConcurrencyException(_context, user);
+            }
         }
 
-        public void Delete(User user)
+        public async Task Delete(User user)
         {
             _context.Entry(user).State = EntityState.Deleted;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

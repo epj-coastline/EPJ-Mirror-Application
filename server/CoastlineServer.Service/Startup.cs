@@ -46,7 +46,7 @@ namespace CoastlineServer.Service
             }
 
             app.UseRouting();
-            
+
             app.UseCors(builder =>
             {
                 builder.WithOrigins(Configuration["AllowedOrigin"])

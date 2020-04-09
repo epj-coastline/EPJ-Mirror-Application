@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
@@ -22,47 +23,51 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var users = _userRepository.GetAll();
+            var users = await _userRepository.GetAll();
             return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
         }
 
         [HttpGet("{userId:int}", Name = "GetUser")]
-        public ActionResult<UserDto> GetUser(int userId)
+        public async Task<ActionResult<UserDto>> GetUser(int userId)
         {
-            var user = _userRepository.Get(userId);
-            if (user == null)
+            try
+            {
+                var user = await _userRepository.Get(userId);
+                return Ok(_mapper.Map<UserDto>(user));
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-
-            return Ok(_mapper.Map<UserDto>(user));
         }
 
         [HttpPost]
-        public ActionResult<UserDto> CreateUser(UserDto userDto)
+        public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
-            var userEntity = _mapper.Map<User>(userDto);
-            var newUser = _userRepository.Insert(userEntity);
-            var returnUser = _mapper.Map<UserDto>(newUser);
+            var user = _mapper.Map<User>(userForCreationDto);
+            var userEntity = await _userRepository.Insert(user);
+            var userDto = _mapper.Map<UserDto>(userEntity);
             return CreatedAtRoute("GetUser", new
             {
-                userId = returnUser.Id
-            }, returnUser);
+                userId = userDto.Id
+            }, userDto);
         }
 
-        [HttpDelete("{userId}")]
-        public IActionResult DeleteUser(int userId)
+        [HttpDelete("{userId:int}")]
+        public async Task<IActionResult> DeleteUser(int userId)
         {
-            var user = _userRepository.Get(userId);
-            if (user == null)
+            try
+            {
+                var user = await _userRepository.Get(userId);
+                await _userRepository.Delete(user);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-
-            _userRepository.Delete(user);
-            return NoContent();
         }
 
         [HttpOptions]

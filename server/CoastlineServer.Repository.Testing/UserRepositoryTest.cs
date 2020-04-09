@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
 using Microsoft.Data.Sqlite;
@@ -10,7 +12,7 @@ namespace CoastlineServer.Repository.Testing
     public class UserRepositoryTest : IDisposable
     {
         private SqliteConnection Connection { get; set; }
-        private UserRepository UserRepository { get; set; }
+        private readonly UserRepository _userRepository;
         private User User { get; set; }
 
         public UserRepositoryTest()
@@ -22,7 +24,7 @@ namespace CoastlineServer.Repository.Testing
                 .Options;
             var context = new CoastlineContext(options);
             context.Database.EnsureCreated();
-            UserRepository = new UserRepository(context);
+            _userRepository = new UserRepository(context);
         }
 
         public void Dispose()
@@ -31,7 +33,7 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public void InsertTest()
+        public async Task Insert_SingleUser_ReturnsCreatedUser()
         {
             // arrange
             var newUser = new User
@@ -41,31 +43,31 @@ namespace CoastlineServer.Repository.Testing
                 Email = "markus.christen@hsr.ch",
                 Biography = "This is a test",
                 DegreeProgram = "Testing",
-                StartDate = "HS2020"
+                StartDate = "HS2020s"
             };
 
             // act
-            User = UserRepository.Insert(newUser);
+            User = await _userRepository.Insert(newUser);
 
             // assert
             Assert.Equal(User.FirstName, newUser.FirstName);
         }
 
         [Fact]
-        public void GetTest()
+        public async Task Get_SingleUserById_ReturnsUser()
         {
             // act
-            User = UserRepository.Get(-1);
+            User = await _userRepository.Get(-1);
 
             // assert
             Assert.Equal("David", User.FirstName);
         }
 
         [Fact]
-        public void GetAllTest()
+        public async Task GetAll_ReturnsAllUser()
         {
             // act
-            var users = UserRepository.GetAll();
+            var users = await _userRepository.GetAll();
 
             // assert
             Assert.Equal(4, users.Count);
@@ -73,32 +75,59 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public void UpdateTest()
+        public async Task Update_SingleUser_ReturnsUpdatedUser()
         {
             // arrange
-            User = UserRepository.Get(-1);
+            User = await _userRepository.Get(-1);
             User.Biography = "This is a test";
 
             // act
-            UserRepository.Update(User);
-            var updatedUser = UserRepository.Get(-1);
+            await _userRepository.Update(User);
+            var updatedUser = await _userRepository.Get(-1);
 
             // assert
             Assert.Equal(User.Biography, updatedUser.Biography);
         }
 
         [Fact]
-        public void DeleteTest()
+        public async Task Delete_SingleUser_ThrowsException()
         {
             // arrange
-            User = UserRepository.Get(-2);
+            User = await _userRepository.Get(-2);
 
             // act
-            UserRepository.Delete(User);
+            await _userRepository.Delete(User);
 
             // assert
-            var ex = Assert.Throws<InvalidOperationException>(() =>
-                UserRepository.Get(User.Id));
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _userRepository.Get(User.Id));
+        }
+
+        [Fact]
+        public async Task Get_SingleUserByInvalidId_ThrowsException()
+        {
+            // arrange
+            var invalidUserId = -500;
+
+            // act & assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _userRepository.Get(invalidUserId));
+        }
+
+        [Fact]
+        public async Task Delete_SingleInvalidUser_ThrowsException()
+        {
+            // arrange
+            User = new User
+            {
+                Id = 500,
+                FirstName = "Invalid",
+                LastName = "Invalid"
+            };
+
+            // act & assert
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+                await _userRepository.Delete(User));
         }
     }
 }

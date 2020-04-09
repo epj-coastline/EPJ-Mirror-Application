@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper.Configuration;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -14,14 +15,14 @@ namespace CoastlineServer.Service.Testing
     {
         private readonly HttpClient _client;
 
-        // public UsersControllerTest()
-        // {
-        //     var appFactory = new WebApplicationFactory<Startup>();
-        //     _client = appFactory.CreateClient();
-        // }
-        //
+        public UsersControllerTest()
+        {
+            var appFactory = new WebApplicationFactory<Startup>();
+            _client = appFactory.CreateClient();
+        }
+        
         // [Fact]
-        // public async Task GetAllUsersTest()
+        // public async Task GetAll_ReturnsAllUsers()
         // {
         //     // arrange & act
         //     var response = await _client.GetAsync("/users/");
@@ -36,7 +37,7 @@ namespace CoastlineServer.Service.Testing
         //
         //
         // [Fact]
-        // public async Task GetUserTest()
+        // public async Task Get_SingleUserById_ReturnsUser()
         // {
         //     // arrange
         //     var userId = -1;
@@ -53,10 +54,10 @@ namespace CoastlineServer.Service.Testing
         // }
         //
         // [Fact]
-        // public async Task PostAndDeleteUserTest()
+        // public async Task PostDelete_SingleUser_ReturnsNoContent()
         // {
         //     // arrange
-        //     var userDto = new UserDto
+        //     var userForCreationDto = new UserForCreationDto()
         //     {
         //         FirstName = "Markus",
         //         LastName = "Christen",
@@ -65,7 +66,7 @@ namespace CoastlineServer.Service.Testing
         //         DegreeProgram = "Testing",
         //         StartDate = "HS2020"
         //     };
-        //     var content = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8, "application/json");
+        //     var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8, "application/json");
         //     
         //     // act
         //     var postResponse = await _client.PostAsync("/users/", content);
@@ -73,11 +74,11 @@ namespace CoastlineServer.Service.Testing
         //     var stringResponse = await postResponse.Content.ReadAsStringAsync();
         //     var responseDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
         //
-        //     // arrange
+        //     // assert
         //     Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
-        //     Assert.Equal(userDto.FirstName, responseDto.FirstName);
+        //     Assert.Equal(userForCreationDto.FirstName, responseDto.FirstName);
         //
-        //     // act
+        //     // arrange
         //     var query = postResponse.Headers.Location.PathAndQuery;
         //     
         //     // act
@@ -86,6 +87,54 @@ namespace CoastlineServer.Service.Testing
         //
         //     // assert
         //     Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
+        // }
+        //
+        // [Fact]
+        // public async Task Get_SingleUserByInvalidId_ReturnsNotFound()
+        // {
+        //     // arrange
+        //     var invalidUserId = -500;
+        //     
+        //     // act
+        //     var response = await _client.GetAsync($"/users/{invalidUserId}");
+        //
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        // }
+        //
+        // [Fact]
+        // public async Task Delete_SingleUserByInvalidId_ReturnsNotFound()
+        // {
+        //     // arrange
+        //     var invalidUserId = -500;
+        //     
+        //     // act
+        //     var response = await _client.DeleteAsync($"/users/{invalidUserId}");
+        //
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        // }
+        //
+        // [Fact]
+        // public async Task Post_SingleInvalidUser_ReturnsBadRequest()
+        // {
+        //     // arrange
+        //     var userForCreationDto = new UserForCreationDto()
+        //     {
+        //         FirstName = "",
+        //         LastName = "Christen",
+        //         Email = "markus.christen@hsr.ch",
+        //         Biography = "this is a test",
+        //         DegreeProgram = "Testing",
+        //         StartDate = "HS2020"
+        //     };
+        //     var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8, "application/json");
+        //     
+        //     // act
+        //     var response = await _client.PostAsync("/users/", content);
+        //     
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         // }
     }
 }

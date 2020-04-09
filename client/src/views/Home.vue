@@ -93,114 +93,114 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
-import {
-  required,
-  email,
-  minLength,
-  maxLength,
-} from 'vuelidate/lib/validators';
-import Configuration from '../Configuration';
+  import { validationMixin } from 'vuelidate';
+  import {
+    required,
+    email,
+    minLength,
+    maxLength,
+  } from 'vuelidate/lib/validators';
+  import Configuration from '../Configuration';
 
-export default {
-  name: 'FormValidation',
-  mixins: [validationMixin],
-  data: () => ({
-    form: {
-      firstName: null,
-      lastName: null,
-      email: null,
-      degreeProgram: null,
-      startDate: null,
-      biography: null,
-    },
-    userSaved: false,
-    sending: false,
-    lastUser: null,
-    api: Configuration.CONFIG.backendHost,
-  }),
-  validations: {
-    form: {
-      firstName: {
-        required,
-        minLength: minLength(3),
+  export default {
+    name: 'FormValidation',
+    mixins: [validationMixin],
+    data: () => ({
+      form: {
+        firstName: null,
+        lastName: null,
+        email: null,
+        degreeProgram: null,
+        startDate: null,
+        biography: null,
       },
-      lastName: {
-        required,
-        minLength: minLength(3),
-      },
-      startDate: {
-        required,
-      },
-      degreeProgram: {
-        required,
-      },
-      biography: {
-        maxLength: maxLength(140),
-      },
-      email: {
-        required,
-        email,
-      },
-    },
-  },
-  methods: {
-    getValidationClass(fieldName) {
-      const field = this.$v.form[fieldName];
-      let returnObject = {};
-      if (field) {
-        returnObject = {
-          'md-invalid': field.$invalid && field.$dirty,
-        };
-      }
-      return returnObject;
-    },
-    clearForm() {
-      this.$v.$reset();
-      this.form.firstName = null;
-      this.form.lastName = null;
-      this.form.email = null;
-      this.form.biography = null;
-      this.form.degreeProgram = null;
-      this.form.startDate = null;
-    },
-    saveUser() {
-      this.sending = true;
-
-      const dataObject = {
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
-        email: this.form.email,
-        biography: this.form.biography,
-        degreeProgram: this.form.degreeProgram,
-        startDate: this.form.startDate,
-      };
-      fetch(`${Configuration.CONFIG.backendHost}/users`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
+      userSaved: false,
+      sending: false,
+      lastUser: null,
+      api: Configuration.CONFIG.backendHost,
+    }),
+    validations: {
+      form: {
+        firstName: {
+          required,
+          minLength: minLength(3),
         },
-        body: JSON.stringify(dataObject),
-      });
-
-      // Instead of this timeout, here you can call your API
-      window.setTimeout(() => {
-        this.lastUser = `${this.form.firstName} ${this.form.lastName}`;
-        this.userSaved = true;
-        this.sending = false;
-
-        this.clearForm();
-      }, 1500);
+        lastName: {
+          required,
+          minLength: minLength(3),
+        },
+        startDate: {
+          required,
+        },
+        degreeProgram: {
+          required,
+        },
+        biography: {
+          maxLength: maxLength(140),
+        },
+        email: {
+          required,
+          email,
+        },
+      },
     },
-    validateUser() {
-      this.$v.$touch();
+    methods: {
+      getValidationClass(fieldName) {
+        const field = this.$v.form[fieldName];
+        let returnObject = {};
+        if (field) {
+          returnObject = {
+            'md-invalid': field.$invalid && field.$dirty,
+          };
+        }
+        return returnObject;
+      },
+      clearForm() {
+        this.$v.$reset();
+        this.form.firstName = null;
+        this.form.lastName = null;
+        this.form.email = null;
+        this.form.biography = null;
+        this.form.degreeProgram = null;
+        this.form.startDate = null;
+      },
+      saveUser() {
+        this.sending = true;
 
-      if (!this.$v.$invalid) {
-        this.saveUser();
-      }
+        const dataObject = {
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          email: this.form.email,
+          biography: this.form.biography,
+          degreeProgram: this.form.degreeProgram,
+          startDate: this.form.startDate,
+        };
+        fetch(`${Configuration.CONFIG.backendHost}/users`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(dataObject),
+        });
+
+        // Instead of this timeout, here you can call your API
+        window.setTimeout(() => {
+          this.lastUser = `${this.form.firstName} ${this.form.lastName}`;
+          this.userSaved = true;
+          this.sending = false;
+
+          this.clearForm();
+        }, 1500);
+      },
+      validateUser() {
+        this.$v.$touch();
+
+        if (!this.$v.$invalid) {
+          this.saveUser();
+        }
+      },
     },
-  },
-};
+  };
 </script>
 
 <style lang="scss" scoped>

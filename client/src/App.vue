@@ -24,11 +24,11 @@
 </style>
 
 <script>
-import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+  import BottomNavigation from '@/components/layout/BottomNavigation.vue';
 
-export default {
-  components: {
-    BottomNavigation,
-  },
-};
+  export default {
+    components: {
+      BottomNavigation,
+    },
+  };
 </script>

@@ -41,11 +41,11 @@
 </template>
 
 <script lang="ts">
-import {
-  Component, Prop, Vue,
-} from 'vue-property-decorator';
-import User from '@/services/User';
-import Header from '@/components/layout/Header.vue';
+  import {
+    Component, Prop, Vue,
+  } from 'vue-property-decorator';
+  import User from '@/services/User';
+  import Header from '@/components/layout/Header.vue';
 
 @Component({
   components: {
@@ -57,8 +57,8 @@ import Header from '@/components/layout/Header.vue';
     },
   },
 })
-export default class StudentOne extends Vue {
+  export default class StudentOne extends Vue {
   @Prop()
   student!: User;
-}
+  }
 </script>

@@ -22,12 +22,12 @@
 </template>
 
 <script lang="ts">
-import {
-  Component, Prop, Vue,
-} from 'vue-property-decorator';
+  import {
+    Component, Prop, Vue,
+  } from 'vue-property-decorator';
 
 @Component({ components: {} })
-export default class HeaderAttributes extends Vue {
+  export default class HeaderAttributes extends Vue {
   @Prop({
     required: true,
     default: 'DEV: Please add a title',
@@ -49,7 +49,7 @@ export default class HeaderAttributes extends Vue {
   actionButtonClicked() {
     this.$emit('actionButtonClicked');
   }
-}
+  }
 </script>
 
 <style lang="scss">

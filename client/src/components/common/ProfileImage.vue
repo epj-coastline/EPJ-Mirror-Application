@@ -3,20 +3,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
-export default class ProfileImage extends Vue {
-  @Prop()
-  firstName!: string;
+  @Component
+  export default class ProfileImage extends Vue {
+    @Prop()
+    firstName!: string;
 
-  @Prop()
-  lastName!: string;
+    @Prop()
+    lastName!: string;
 
-  get initials() {
-    return this.firstName.slice(0, 1) + this.lastName.slice(0, 1);
+    get initials() {
+      return this.firstName.slice(0, 1) + this.lastName.slice(0, 1);
+    }
   }
-}
 </script>
 
 <style lang="scss">

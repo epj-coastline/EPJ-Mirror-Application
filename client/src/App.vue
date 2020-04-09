@@ -33,13 +33,13 @@
 </style>
 
 <script>
-import BottomNavigation from '@/components/layout/BottomNavigation.vue';
-import Header from '@/components/layout/Header.vue';
+  import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+  import Header from '@/components/layout/Header.vue';
 
-export default {
-  components: {
-    BottomNavigation,
-    Header,
-  },
-};
+  export default {
+    components: {
+      BottomNavigation,
+      Header,
+    },
+  };
 </script>

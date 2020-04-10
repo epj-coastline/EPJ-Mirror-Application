@@ -4,17 +4,17 @@
 
 Prerequisites: PostgreSQL, Jetbrains Rider, .NET Core SDK
 
-*  Open solution in Rider and Terminal to restore dependencies run:
+*  Open solution in Rider and Terminal to restore dependencies run
 ```c#
 dotnet restore
 ```
 
-* Check if the CLI version is on current version by running:
+* Check if the CLI version is on current version by running
 ```c#
 dotnet ef
 ```
 
-If errors occur the CLI tools version might be outdated or not installed, to install tools run:
+If errors occur the CLI tools version might be outdated or not installed, to install tools run
 ```c#
 dotnet tool install --global dotnet-ef
 ```
@@ -28,7 +28,7 @@ dotnet tool install --global dotnet-ef
 If the auto-migration did not work try migrating the database manually
 
 * Rider user open CLI Console and navigate to DAL-project
-* Update database for creating first schema with following command:
+* Update database for creating first schema with following command
   
 ```c#
 dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
@@ -36,7 +36,7 @@ dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
 
 * Run service tests or check the created database via DataGrip / pgAdmin
 
-**References / Documentation:**
+**References / Documentation**
 
 * EF Core CLI Tools: https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet
 * EF Core Migrations: https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli
@@ -45,15 +45,41 @@ dotnet ef database update InitialCreate --project ../ServerPrototype.DAL
 
 For testing integration- and unit tests open the Testing folder, hit right-click on test project and run tests.
 
-Testing folder includes:
+Testing folder includes
 
-* Service.Testing: Integration tests
+* Service.Testing: Integration tests for service layer
 
-* Repository.Testing: Unit tests
+* Repository.Testing: Unit tests for repository layer
 
-### Testing Conventions
+### Testing convention
 
+Following the TDD approach, add more failing tests first, then update the target code. 
 
+**Test naming**
+
+- The name of the method being tested
+- The scenario under which it's being tested
+- The expected behaviour when the scenario is invoked
+
+Example: `Insert_SingleUser_ReturnsCreatedUser()`
+
+**Arrange, Act, Assert** is a common pattern when unit testing. As the name implies, it consists of three main actions:
+
+- *Arrange* your objects, creating and setting them up as necessary.
+- *Act* on an object.
+- *Assert* that something is as expected.
+
+**xUnit Framework**
+
+The `[Fact]` attribute declares a test method that's run by the test runner. If there are multiple different input parameters which should result in the same behaviour use the `[Theory]` and `[InlineData(inputparameter)]` attributes to declare a test.
+
+- `[Theory]` represents a suite of tests that execute the same code but have different input arguments.
+- `[InlineData]` attribute specifies values for those inputs.
+
+**References / Documentation**
+
+* .NET Unit Testing Best Practices: https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices
+* xUnit Framework: https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test
 
 
 ## Run in Docker 

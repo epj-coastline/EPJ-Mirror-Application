@@ -51,7 +51,9 @@ Testing folder includes
 
 * Repository.Testing: Unit tests for repository layer
 
-### Testing convention
+## Backend Conventions
+
+### Testing Convention
 
 Following the TDD approach, add more failing tests first, then update the target code. 
 
@@ -80,6 +82,22 @@ The `[Fact]` attribute declares a test method that's run by the test runner. If 
 
 * .NET Unit Testing Best Practices: https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices
 * xUnit Framework: https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test
+
+### Relationship Convention
+
+For migrating the new entities to the database, the CoastlineContext must be updated. For the new entity add an EnitityTypeConfig class and specify the constraints with Fluent-Api including adding seed data to enable testing on the repo layer.
+
+Many-to-many relationships are not supported by EF Core and must be mapped to a new entity to represent the join table.
+Naming of join-table entities: `ClassAClassB`
+
+Join-table entities have one primary key combined of both foreign key:
+Fluent-Api syntax: `.HasKey(t => new { a.PK, b.PK });`
+
+Do not forget to add the join-table entity as a list reference in the related classes.
+
+References / Documentation
+
+* EF Core relationships: https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key
 
 
 ## Run in Docker 

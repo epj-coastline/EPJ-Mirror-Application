@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY ./ .
+RUN rm -rf .env
 RUN npm run build
 
 FROM nginx:1.17-alpine as production-stage

@@ -6,6 +6,8 @@ import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 
+require('dotenv').config();
+
 Vue.config.productionTip = false;
 
 Vue.use(VueMaterial);

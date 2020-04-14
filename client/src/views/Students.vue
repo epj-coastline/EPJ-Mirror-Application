@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header title="Studierende"/>
     <UserList :users="students" title="Studierende"/>
   </div>
 </template>
@@ -11,9 +12,14 @@ import {
 import UserService from '@/services/userService';
 import User from '@/services/User';
 import UserList from '@/components/common/UserList.vue';
+import Header from '@/components/layout/Header.vue';
 
 @Component({
-  components: { UserList },
+  components: {
+    UserList,
+    Header,
+  },
+
 })
 export default class Student extends Vue {
   private students: Array<User> = [];

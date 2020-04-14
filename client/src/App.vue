@@ -1,11 +1,8 @@
 <template>
-  <div class="coastline-app">
-    <Header/>
     <main>
       <router-view/>
+      <BottomNavigation/>
     </main>
-    <BottomNavigation/>
-  </div>
 </template>
 
 <style lang="scss">
@@ -22,24 +19,16 @@
   @import "~vue-material/dist/theme/all";
 
   body {
-    background-color: white;
-  }
-
-  main {
-    background-color: white;
-    padding-top: 80px;
-    padding-bottom:  56px;
+     background-color: white;
   }
 </style>
 
 <script>
 import BottomNavigation from '@/components/layout/BottomNavigation.vue';
-import Header from '@/components/layout/Header.vue';
 
 export default {
   components: {
     BottomNavigation,
-    Header,
   },
 };
 </script>

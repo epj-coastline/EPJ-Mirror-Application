@@ -53,7 +53,7 @@ import Header from '@/components/layout/Header.vue';
   },
   methods: {
     actionButtonClicked() {
-      console.log('clicked');
+      alert('clicked');
     },
   },
 })

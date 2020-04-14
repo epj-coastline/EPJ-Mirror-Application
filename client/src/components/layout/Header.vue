@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-toolbar class="md-primary cl-header md-large">
+    <md-toolbar class="md-primary cl-header">
       <div class="cl-first-row">
         <md-button v-if="backButton" @click=$router.go(-1) class="md-icon-button cl-back-button">
           <md-icon>chevron_left</md-icon>
@@ -13,17 +13,17 @@
           <md-icon>more_vert</md-icon>
         </md-button>
       </div>
-      <div class="md-toolbar-row cl-second-row">
+      <div class="md-toolbar-row" :class="[Boolean(subTitle) ? 'cl-second-row' : 'cl-second-row-off']">
         <div class="md-title cl-second-row-title">{{subTitle}}</div>
       </div>
     </md-toolbar>
-    <div class="cl-fake-placeholder-header"></div>
+    <div :class="[Boolean(subTitle) ? 'cl-fake-placeholder-header-big' : 'cl-fake-placeholder-header-small']"></div>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  Component, Prop, Emit, Vue,
+  Component, Prop, Vue,
 } from 'vue-property-decorator';
 
 @Component({ components: {} })
@@ -34,10 +34,7 @@ export default class HeaderAttributes extends Vue {
   })
   title!: string;
 
-  @Prop({
-    required: true,
-    default: 'DEV: Please add a subtitle',
-  })
+  @Prop()
   subTitle!: string;
 
   @Prop({ default: false })
@@ -49,7 +46,6 @@ export default class HeaderAttributes extends Vue {
   @Prop({ default: false })
   menuButton!: boolean;
 
-  @Emit('actionButtonClicked')
   actionButtonClicked() {
     this.$emit('actionButtonClicked');
   }
@@ -57,8 +53,12 @@ export default class HeaderAttributes extends Vue {
 </script>
 
 <style lang="scss">
-  .cl-fake-placeholder-header {
+  .cl-fake-placeholder-header-big {
     height: 136px;
+    background-color: white;
+  }
+  .cl-fake-placeholder-header-small {
+    height: 88px;
     background-color: white;
   }
   .cl-header {
@@ -101,6 +101,10 @@ export default class HeaderAttributes extends Vue {
   .cl-second-row {
     padding-top: 24px           !important;
     padding-bottom: 32px        !important;
+  }
+  .cl-second-row-off {
+    height: 32px;
+    min-height: 0;
   }
   .cl-second-row-title {
     font-size: 16px;

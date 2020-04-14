@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header title="Student bababababababa" @actionButtonClicked="actionButtonClicked" :backButton="true" :menu-button="true" :action-button="true" sub-title="Very subtitle wow"/>
+    <Header title="Student bababababababa" @actionButtonClicked="coolAlert" :backButton="true" :menu-button="true" :action-button="true" sub-title="Very subtitle wow"/>
         <p>FIRST</p>
         <p>dsfhbvhsjdbvsdfvs</p>
         <p>dsfhbvhsjdbvsdfvs</p>
@@ -52,8 +52,8 @@ import Header from '@/components/layout/Header.vue';
     Header,
   },
   methods: {
-    actionButtonClicked() {
-      alert('clicked');
+    coolAlert() {
+      alert('I just clicked the action Button');
     },
   },
 })

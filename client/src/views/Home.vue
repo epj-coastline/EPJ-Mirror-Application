@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header title="EoE Demo Seite 1"/>
     <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -100,11 +101,16 @@
     minLength,
     maxLength,
   } from 'vuelidate/lib/validators';
+  import Header from '@/components/layout/Header.vue';
   import Configuration from '../Configuration';
+
 
   export default {
     name: 'FormValidation',
     mixins: [validationMixin],
+    components: {
+      Header,
+    },
     data: () => ({
       form: {
         firstName: null,

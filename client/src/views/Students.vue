@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header title="Studierende"/>
+    <Header title="EoE Demo Seite 2"/>
     <UserList :users="students" title="Studierende"/>
   </div>
 </template>

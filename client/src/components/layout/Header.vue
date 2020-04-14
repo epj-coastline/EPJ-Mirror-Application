@@ -26,29 +26,29 @@
     Component, Prop, Vue,
   } from 'vue-property-decorator';
 
-@Component({ components: {} })
+  @Component({ components: {} })
   export default class HeaderAttributes extends Vue {
-  @Prop({
-    required: true,
-    default: 'DEV: Please add a title',
-  })
-  title!: string;
+    @Prop({
+      required: true,
+      default: 'DEV: Please add a title',
+    })
+    title!: string;
 
-  @Prop()
-  subTitle!: string;
+    @Prop()
+    subTitle!: string;
 
-  @Prop({ default: false })
-  backButton!: boolean;
+    @Prop({ default: false })
+    backButton!: boolean;
 
-  @Prop({ default: false })
-  actionButton!: boolean;
+    @Prop({ default: false })
+    actionButton!: boolean;
 
-  @Prop({ default: false })
-  menuButton!: boolean;
+    @Prop({ default: false })
+    menuButton!: boolean;
 
-  actionButtonClicked() {
-    this.$emit('actionButtonClicked');
-  }
+    actionButtonClicked() {
+      this.$emit('actionButtonClicked');
+    }
   }
 </script>
 
@@ -86,8 +86,8 @@
     float: right;
   }
   .cl-menu-button {
-     margin: -8px 8px -8px -8px  !important;
-     float: right;
+    margin: -8px 8px -8px -8px  !important;
+    float: right;
   }
   .cl-menu-button-only {
     margin: -8px 8px -8px auto  !important;

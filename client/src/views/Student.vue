@@ -1,42 +1,42 @@
 <template>
   <div>
-    <Header title="Student bababababababa" @actionButtonClicked="coolAlert" :backButton="true" :menu-button="true" :action-button="true" sub-title="Very subtitle wow"/>
-        <p>FIRST</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
-        <p>dsfhbvhsjdbvsdfvs</p>
+    <Header title="qwertzuiopasdfghjklyxcvbnmüöäèéäÖÉ" @actionButtonClicked="coolAlert" :backButton="true" :menu-button="true" :action-button="true" sub-title="qwertzuiopasdfghjklyxcvbnmüöäèéäÖÉ"/>
+    <p>FIRST</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
+    <p>dsfhbvhsjdbvsdfvs</p>
   </div>
 </template>
 
@@ -47,18 +47,19 @@
   import User from '@/services/User';
   import Header from '@/components/layout/Header.vue';
 
-@Component({
-  components: {
-    Header,
-  },
-  methods: {
-    coolAlert() {
-      alert('I just clicked the action Button');
+  @Component({
+    components: {
+      Header,
     },
-  },
-})
+    methods: {
+      coolAlert() {
+        // eslint-disable-next-line
+        alert('I just clicked the action Button');
+      },
+    },
+  })
   export default class StudentOne extends Vue {
-  @Prop()
-  student!: User;
+    @Prop()
+    student!: User;
   }
 </script>

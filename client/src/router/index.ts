@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import StudentOne from '@/views/Student.vue';
+import Studygroups from '@/views/Studygroups.vue';
+import Coaching from '@/views/Coaching.vue';
+import Testing from '@/views/Testing.vue';
 import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
@@ -23,6 +26,21 @@ const routes: Array<RouteConfig> = [
     path: '/students/:userId',
     name: 'Student',
     component: StudentOne,
+  },
+  {
+    path: '/studygroups',
+    name: 'Lerngruppen',
+    component: Studygroups,
+  },
+  {
+    path: '/coaching',
+    name: 'Nachhilfe',
+    component: Coaching,
+  },
+  {
+    path: '/experimental',
+    name: 'Experimental',
+    component: Testing,
   },
 ];
 

@@ -1,8 +1,8 @@
 <template>
-    <main>
-      <router-view/>
-      <BottomNavigation/>
-    </main>
+  <main>
+    <router-view/>
+    <BottomNavigation/>
+  </main>
 </template>
 
 <style lang="scss">
@@ -19,7 +19,7 @@
   @import "~vue-material/dist/theme/all";
 
   body {
-     background-color: white;
+    background-color: white;
   }
 </style>
 

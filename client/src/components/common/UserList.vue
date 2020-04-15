@@ -2,7 +2,7 @@
   <md-list class="md-double-line">
     <md-subheader class="subheader">{{ title}}</md-subheader>
     <div v-for="user in users" :key="user.id">
-      <md-list-item :to="{ name: 'Student', params: { userId: 123 }}" exact>
+      <md-list-item>
         <profile-image v-bind:first-name="user.firstName" v-bind:last-name="user.lastName" />
         <div class="md-list-item-text">
           <span>{{ `${user.firstName} ${user.lastName}` }} </span>

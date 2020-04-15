@@ -3,16 +3,15 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import StudentOne from '@/views/Student.vue';
 import Studygroups from '@/views/Studygroups.vue';
 import Coaching from '@/views/Coaching.vue';
+import CoachingModule from '@/views/CoachingModule.vue';
 import Testing from '@/views/Testing.vue';
-import Home from '../views/Home.vue';
+import StudygroupsModule from '@/views/StudygroupsModule.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home,
+    path: '/', redirect: '/studygroups',
   },
   {
     path: '/students',
@@ -33,9 +32,19 @@ const routes: Array<RouteConfig> = [
     component: Studygroups,
   },
   {
+    path: '/studygroups/:moduleId',
+    name: 'LerngruppenProModul',
+    component: StudygroupsModule,
+  },
+  {
     path: '/coaching',
     name: 'Nachhilfe',
     component: Coaching,
+  },
+  {
+    path: '/coaching/:moduleId',
+    name: 'NachhilfeProModul',
+    component: CoachingModule,
   },
   {
     path: '/experimental',

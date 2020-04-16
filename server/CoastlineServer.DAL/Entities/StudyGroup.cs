@@ -10,8 +10,8 @@ namespace CoastlineServer.DAL.Entities
         public string Purpose { get; set; }
         public DateTime CreationDate { get; set; }
         public byte[] RowVersion { get; set; }
-        public int CreatorId { get; set; }
-        public User Creator { get; set; }
-        public ICollection<Member> Type { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public ICollection<Member> Members { get; set; }
     }
 }

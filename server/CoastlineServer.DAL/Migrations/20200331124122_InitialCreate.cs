@@ -32,10 +32,10 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "Biography", "DegreeProgram", "Email", "FirstName", "LastName", "StartDate" },
                 values: new object[,]
                 {
-                    { -1, "Start HS2018", "Informatik", "david.luthiger@hsr.ch", "David", "Luthiger", "HS2018" },
-                    { -2, "Start HS2018", "Informatik", "fabian.germann@hsr.ch", "Fabian", "Germann", "HS2018" },
-                    { -3, "Start HS2018", "Informatik", "eliane.schmidli@hsr.ch", "Eliane", "Schmidli", "HS2018" },
-                    { -4, "Start HS2018", "Informatik", "yves.boillat@hsr.ch", "Yves", "Boillat", "HS2018" }
+                    { -1, "Start HS2018", "Informatik", "david.luthiger@hsr.ch", "David", "Luthiger", "HS18" },
+                    { -2, "Start HS2018", "Informatik", "fabian.germann@hsr.ch", "Fabian", "Germann", "HS18" },
+                    { -3, "Start HS2018", "Informatik", "eliane.schmidli@hsr.ch", "Eliane", "Schmidli", "HS18" },
+                    { -4, "Start HS2018", "Informatik", "yves.boillat@hsr.ch", "Yves", "Boillat", "HS18" }
                 });
         }
 

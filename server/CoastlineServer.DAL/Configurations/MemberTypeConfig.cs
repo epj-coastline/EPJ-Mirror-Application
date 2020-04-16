@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CoastlineServer.DAL.Context
+namespace CoastlineServer.DAL.Configurations
 {
     public class MemberTypeConfig : IEntityTypeConfiguration<Member>
     {

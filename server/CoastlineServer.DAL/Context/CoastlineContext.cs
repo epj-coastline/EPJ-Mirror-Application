@@ -1,4 +1,5 @@
-﻿using CoastlineServer.DAL.Entities;
+﻿using CoastlineServer.DAL.Configurations;
+using CoastlineServer.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoastlineServer.DAL.Context

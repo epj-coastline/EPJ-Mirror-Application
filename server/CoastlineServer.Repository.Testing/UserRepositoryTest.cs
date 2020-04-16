@@ -43,7 +43,7 @@ namespace CoastlineServer.Repository.Testing
                 Email = "markus.christen@hsr.ch",
                 Biography = "This is a test",
                 DegreeProgram = "Testing",
-                StartDate = "HS2020s"
+                StartDate = "HS20"
             };
 
             // act

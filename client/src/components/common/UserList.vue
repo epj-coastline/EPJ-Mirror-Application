@@ -6,7 +6,7 @@
         <profile-image v-bind:first-name="user.firstName" v-bind:last-name="user.lastName" />
         <div class="md-list-item-text">
           <span>{{ `${user.firstName} ${user.lastName}` }} </span>
-          <span>{{ user.degreeProgram }}</span>
+          <span>{{ user[secondRowContent] }}</span>
         </div>
       </md-list-item>
       <md-divider class="md-inset"></md-divider>
@@ -26,6 +26,10 @@
 
     @Prop()
     title!: string;
+
+    // ToDo: There is probably an elegant way with typechecking!
+    @Prop({ default: 'degreeProgram' })
+    secondRowContent!: string;
   }
 </script>
 

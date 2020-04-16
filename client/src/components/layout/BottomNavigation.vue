@@ -1,8 +1,12 @@
 <template>
-  <md-bottom-bar class="bottom-navigation" md-sync-route>
-    <md-bottom-bar-item to="/" exact md-label="Home" md-icon="home"></md-bottom-bar-item>
-    <md-bottom-bar-item to="/students" md-label="Studierende" md-icon="people"></md-bottom-bar-item>
-  </md-bottom-bar>
+  <div>
+    <md-bottom-bar class="bottom-navigation" md-sync-route>
+      <md-bottom-bar-item to="/studygroups" md-label="Lerngruppen" md-icon="group"></md-bottom-bar-item>
+      <md-bottom-bar-item to="/coaching" md-label="Nachhilfe" md-icon="school"></md-bottom-bar-item>
+    </md-bottom-bar>
+    <div class="cl-placeholder-bottom-bar">
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -10,5 +14,11 @@
     position: fixed;
     bottom: 0;
     z-index: 100;
+  }
+  .cl-placeholder-bottom-bar {
+    height: 56px;
+    width: 100%;
+    background-color: white;
+    display: flex;
   }
 </style>

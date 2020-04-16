@@ -15,7 +15,7 @@ namespace CoastlineServer.Service.Models
         public string Biography { get; set; }
         [Required]
         public string DegreeProgram { get; set; }
-        [Required, StringLength(6)]
+        [Required, StringLength(4)]
         public string StartDate { get; set; }
     }
 }

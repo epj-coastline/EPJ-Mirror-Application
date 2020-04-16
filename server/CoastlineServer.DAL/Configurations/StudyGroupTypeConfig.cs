@@ -18,7 +18,7 @@ namespace CoastlineServer.DAL.Configurations
                 .HasForeignKey(e => e.UserId)
                 .HasConstraintName("FK_StudyGroups_UserId");
 
-            /*builder.HasData(
+            builder.HasData(
                 new StudyGroup
                 {
                     Id = -1,
@@ -53,7 +53,7 @@ namespace CoastlineServer.DAL.Configurations
                     Purpose = "Algorithmen in C++",
                     CreationDate = new DateTime(2020, 4, 16),
                     UserId = -4
-                });*/
+                });
         }
     }
 }

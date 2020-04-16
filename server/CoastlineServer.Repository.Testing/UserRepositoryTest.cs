@@ -23,7 +23,7 @@ namespace CoastlineServer.Repository.Testing
                 .UseSqlite(Connection)
                 .Options;
             var context = new CoastlineContext(options);
-            context.Database.EnsureCreated();
+            context.Database.EnsureCreatedAsync();
             _userRepository = new UserRepository(context);
         }
 

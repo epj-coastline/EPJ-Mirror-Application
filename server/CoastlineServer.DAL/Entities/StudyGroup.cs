@@ -12,6 +12,6 @@ namespace CoastlineServer.DAL.Entities
         public byte[] RowVersion { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public ICollection<Member> Members { get; set; }
+        public ICollection<Member> Members { get; set; } = new List<Member>();
     }
 }

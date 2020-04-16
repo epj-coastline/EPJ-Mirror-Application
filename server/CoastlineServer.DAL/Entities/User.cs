@@ -13,7 +13,8 @@ namespace CoastlineServer.DAL.Entities
         public string DegreeProgram { get; set; }
         public string StartDate { get; set; }
         public byte[] RowVersion { get; set; }
-        public ICollection<Member> Members { get; set; }
-        public ICollection<StudyGroup> StudyGroups { get; set; }
+        public ICollection<Member> Members { get; set; } = new List<Member>();
+            
+        public ICollection<StudyGroup> StudyGroups { get; set; } = new List<StudyGroup>();
     }
 }

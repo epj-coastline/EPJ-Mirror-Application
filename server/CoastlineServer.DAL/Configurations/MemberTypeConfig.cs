@@ -21,7 +21,7 @@ namespace CoastlineServer.DAL.Configurations
                 .HasForeignKey(e => e.StudyGroupId)
                 .HasConstraintName("FK_Members_StudyGroupId");
 
-            builder.HasData(
+            /*builder.HasData(
                 new Member
                 {
                     Id = -1,
@@ -57,7 +57,7 @@ namespace CoastlineServer.DAL.Configurations
                     UserId = -5,
                     StudyGroupId = -4
                 }
-                );
+                );*/
         }
     }
 }

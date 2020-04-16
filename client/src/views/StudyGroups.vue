@@ -18,7 +18,7 @@
       ModuleList,
     },
   })
-  export default class Studygroups extends Vue {
+  export default class StudyGroups extends Vue {
     private modules: Array<Module> = [];
 
     @Watch('$route', { immediate: true, deep: true })

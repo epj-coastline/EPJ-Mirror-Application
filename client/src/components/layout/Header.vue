@@ -17,7 +17,7 @@
         <div class="md-title cl-second-row-title">{{subTitle}}</div>
       </div>
     </md-toolbar>
-    <div :class="[Boolean(subTitle) ? 'cl-fake-placeholder-header-big' : 'cl-fake-placeholder-header-small']"></div>
+    <div :class="[Boolean(subTitle) ? 'cl-placeholder-header-big' : 'cl-placeholder-header-small']"></div>
   </div>
 </template>
 
@@ -53,11 +53,11 @@
 </script>
 
 <style lang="scss">
-  .cl-fake-placeholder-header-big {
+  .cl-placeholder-header-big {
     height: 136px;
     background-color: white;
   }
-  .cl-fake-placeholder-header-small {
+  .cl-placeholder-header-small {
     height: 88px;
     background-color: white;
   }

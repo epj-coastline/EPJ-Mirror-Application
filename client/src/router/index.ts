@@ -1,30 +1,15 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import StudentOne from '@/views/Student.vue';
-import Studygroups from '@/views/Studygroups.vue';
+import Studygroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
-import CoachingModule from '@/views/CoachingModule.vue';
-import Testing from '@/views/Testing.vue';
-import StudygroupsModule from '@/views/StudygroupsModule.vue';
+import CoachingModule from '@/views/CoachingPerModule.vue';
+import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: '/', redirect: '/studygroups',
-  },
-  {
-    path: '/students',
-    name: 'Studenten',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Students.vue'),
-  },
-  {
-    path: '/students/:userId',
-    name: 'Student',
-    component: StudentOne,
   },
   {
     path: '/studygroups',
@@ -45,11 +30,6 @@ const routes: Array<RouteConfig> = [
     path: '/coaching/:moduleId',
     name: 'NachhilfeProModul',
     component: CoachingModule,
-  },
-  {
-    path: '/experimental',
-    name: 'Experimental',
-    component: Testing,
   },
 ];
 

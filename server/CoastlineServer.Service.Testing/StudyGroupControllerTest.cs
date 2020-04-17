@@ -19,7 +19,7 @@ namespace CoastlineServer.Service.Testing
             _client = appFactory.CreateClient();
         }
         
-         [Fact]
+         /*[Fact]
          public async Task GetAll_ReturnsAllUsers()
          {
              // arrange & act
@@ -31,6 +31,6 @@ namespace CoastlineServer.Service.Testing
              // assert
              Assert.Equal(HttpStatusCode.OK, response.StatusCode);
              Assert.Contains(studyGroupDtos, u => u.Id == -1);
-         }
+         }*/
     }
 }

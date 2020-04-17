@@ -31,6 +31,23 @@ namespace CoastlineServer.Service.Testing
              // assert
              Assert.Equal(HttpStatusCode.OK, response.StatusCode);
              Assert.Contains(studyGroupDtos, u => u.Id == -1);
+         }
+
+         [Fact]
+         public async Task Get_SingleStudyGroupById_ReturnsStudyGroupDto()
+         {
+             // arrange
+             var studyGroupId = -1;
+             
+             // act
+             var response = await _client.GetAsync($"/studygroups/{studyGroupId}");
+             response.EnsureSuccessStatusCode();
+             var stringResponse = await response.Content.ReadAsStringAsync();
+             var studyGroupDto = JsonConvert.DeserializeObject<StudyGroupDto>(stringResponse);
+             
+             // assert
+             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+             Assert.Equal(studyGroupId, studyGroupDto.Id);
          }*/
     }
 }

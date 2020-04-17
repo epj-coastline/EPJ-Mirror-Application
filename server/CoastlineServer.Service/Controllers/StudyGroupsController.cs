@@ -30,5 +30,19 @@ namespace CoastlineServer.Service.Controllers
             var studyGroups = await _studyGroupRepository.GetAll();
             return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
         }
+
+        [HttpGet("{studyGroupId:int}")]
+        public async Task<ActionResult<StudyGroupDto>> GetStudyGroup(int studyGroupId)
+        {
+            try
+            {
+                var user = await _studyGroupRepository.Get(studyGroupId);
+                return Ok(_mapper.Map<StudyGroupDto>(user));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

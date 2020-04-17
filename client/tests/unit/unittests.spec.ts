@@ -1,20 +1,10 @@
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import HelloWorld from '@/components/HelloWorld.vue';
 import ProfileImage from '@/components/common/ProfileImage.vue';
 import StudyGroupList from '@/components/common/StudyGroupList.vue';
 import ModuleList from '@/components/common/ModuleList.vue';
-
-
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message';
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
-    });
-    expect(wrapper.text()).to.include(msg);
-  });
-});
+import { User, validUser, validUsers } from '@/services/User';
+import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -111,5 +101,111 @@ describe('ModuleList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('XyAn1I Analysis 1 für Informatikerkeyboard_arrow_rightAn1I Analysis 1 für Informatikerkeyboard_arrow_right');
+  });
+});
+
+describe('User type checking', () => {
+  it('succeeds on correct data', () => {
+    const testUser: User = {
+      id: 12,
+      firstName: 'Sebi',
+      lastName: 'Hueber',
+      email: 'seb@yolo.com',
+      biography: 'hallo',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+
+    const userValidity = validUser(testUser);
+    expect(userValidity).to.be.equal(true);
+  });
+});
+
+describe('User array type checking', () => {
+  it('succeeds on correct data', () => {
+    const testUsers: Array<User> = [
+      {
+        id: 12,
+        firstName: 'Sebi',
+        lastName: 'Hueber',
+        email: 'seb@yolo.com',
+        biography: 'hallo',
+        degreeProgram: 'Informatik',
+        startDate: 'HS18',
+      },
+      {
+        id: 14,
+        firstName: 'Sebastian',
+        lastName: 'Peter',
+        email: 'seb@yovfvlo.com',
+        biography: 'hallo 3',
+        degreeProgram: 'Informatik',
+        startDate: 'HS19',
+      },
+    ];
+
+    const usersValidity = validUsers(testUsers);
+    expect(usersValidity).to.be.equal(true);
+  });
+});
+
+describe('Study Group type checking', () => {
+  it('succeeds on correct data', () => {
+    const testStudyGroup: StudyGroup = {
+      id: 12,
+      purpose: 'none',
+      creationDate: new Date(41241234124),
+      user: {
+        id: 12,
+        firstName: 'Sebi',
+        lastName: 'Hueber',
+        email: 'seb@yolo.com',
+        biography: 'hallo',
+        degreeProgram: 'Informatik',
+        startDate: 'HS18',
+      },
+    };
+
+    const studyGroupValidity = validStudyGroup(testStudyGroup);
+    expect(studyGroupValidity).to.be.equal(true);
+  });
+});
+
+
+describe('Study Group Array type checking', () => {
+  it('succeeds on correct data', () => {
+    const testStudyGroups: Array<StudyGroup> = [
+      {
+        id: 12,
+        purpose: 'none',
+        creationDate: new Date(41241234124),
+        user: {
+          id: 12,
+          firstName: 'Sebi',
+          lastName: 'Hueber',
+          email: 'seb@yolo.com',
+          biography: 'hallo',
+          degreeProgram: 'Informatik',
+          startDate: 'HS18',
+        },
+      },
+      {
+        id: 22,
+        purpose: 'ne',
+        creationDate: new Date(41241224),
+        user: {
+          id: 14,
+          firstName: 'Seba',
+          lastName: 'Hur',
+          email: 'seb@ycdcdolo.com',
+          biography: 'hao',
+          degreeProgram: 'Informatik',
+          startDate: 'HS20',
+        },
+      },
+    ];
+
+    const studyGroupsValidity = validStudyGroups(testStudyGroups);
+    expect(studyGroupsValidity).to.be.equal(true);
   });
 });

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace CoastlineServer.Repository.Testing
 {
-    public class StudyGroupRepositoryTest
+    public class StudyGroupRepositoryTest : IDisposable
     {
         private SqliteConnection Connection { get; set; }
         private readonly StudyGroupRepository _studyGroupRepository;

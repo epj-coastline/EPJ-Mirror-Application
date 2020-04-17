@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoastlineServer.Repository
 {
-    public class StudyGroupRepository
+    public class StudyGroupRepository : RepositoryBase
     {
         private readonly CoastlineContext _context;
 

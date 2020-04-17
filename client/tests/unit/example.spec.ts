@@ -43,7 +43,6 @@ describe('StudyGroupList.vue', () => {
         purpose: 'Lorem ipsum dolor sit amet',
         creationDate: new Date(),
         creator: creator1,
-        module: { },
     };
 
     const wrapper = shallowMount(StudyGroupList, {
@@ -71,15 +70,13 @@ describe('StudyGroupList.vue', () => {
       id: 1,
       purpose: 'Lorem ipsum dolor sit amet',
       creationDate: new Date(),
-      creator: creator1,
-      module: {},
+      user: creator1,
     };
     const studyGroup2 = {
       id: 2,
       purpose: 'sit amet',
       creationDate: new Date(),
-      creator: creator1,
-      module: {},
+      user: creator1,
     };
 
     const wrapper = shallowMount(StudyGroupList, {

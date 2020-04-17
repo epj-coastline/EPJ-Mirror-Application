@@ -5,8 +5,7 @@ interface StudyGroup {
   id: number;
   purpose: string;
   creationDate: Date;
-  creator: User;
-  module: Module;
+  user: User;
 }
 
 export default StudyGroup;

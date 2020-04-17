@@ -4,8 +4,8 @@
       <div v-for="group in studyGroups" v-bind:key="group.id">
         <md-card>
           <md-card-header>
-            <profile-image v-bind:first-name="group.creator.firstName" v-bind:last-name="group.creator.lastName" />
-            <div class="cl-headline6">{{ `${group.creator.firstName} ${group.creator.lastName}` }} </div>
+            <profile-image v-bind:first-name="group.user.firstName" v-bind:last-name="group.user.lastName" />
+            <div class="cl-headline6">{{ `${group.user.firstName} ${group.user.lastName}` }} </div>
             <div class="md-subhead">{{formatDate(group.creationDate)}}</div>
           </md-card-header>
           <md-card-content class="md-body-2">
@@ -48,6 +48,7 @@
     padding: 20px 24px 20px 24px;
   }
   .md-card {
+    width: 100%;
     max-width: 400px;
     margin: 8px 0px;
     display: inline-block;

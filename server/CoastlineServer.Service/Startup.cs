@@ -36,7 +36,12 @@ namespace CoastlineServer.Service
                 {
                     document.Info.Version = "v1";
                     document.Info.Title = "Coastline API";
-                    document.Info.Description = "A simple ASP.NET Core web API";
+                    document.Info.Description = "ASP.NET Core web API for Coastline";
+                    document.ExternalDocumentation = new NSwag.OpenApiExternalDocumentation
+                    {
+                        Description = "Coastline Documentation",
+                        Url = "http://epj.pages.ifs.hsr.ch/2020/coastline/documentation/"
+                    };
                 };
             });
         }
@@ -65,10 +70,10 @@ namespace CoastlineServer.Service
             });
 
             app.UseAuthorization();
-            
+
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi3(options => { options.Path = ""; });
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

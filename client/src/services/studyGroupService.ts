@@ -1,4 +1,6 @@
 import Configuration from '@/Configuration';
+import { plainToClass } from 'class-transformer';
+import { StudyGroup } from '@/services/StudyGroup';
 
 class StudyGroupService {
   static getAll() {
@@ -8,7 +10,8 @@ class StudyGroupService {
         Accept: 'application/json',
       },
     }).then((response) => response.json())
-      .then((result) => result);
+      .then((users: typeof StudyGroup[]) => plainToClass(StudyGroup, users,
+        { excludeExtraneousValues: true }));
   }
 }
 export default StudyGroupService;

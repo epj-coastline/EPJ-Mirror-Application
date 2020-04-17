@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import User from '@/services/User';
+  import { User } from '@/services/User';
   import ProfileImage from '@/components/common/ProfileImage.vue';
 
   @Component({ components: { ProfileImage } })

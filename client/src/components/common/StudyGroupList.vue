@@ -22,7 +22,7 @@
     Component, Prop, Vue,
   } from 'vue-property-decorator';
   import ProfileImage from '@/components/common/ProfileImage.vue';
-  import StudyGroup from '@/services/StudyGroup';
+  import { StudyGroup } from '@/services/StudyGroup';
   import moment from 'moment';
 
   @Component({

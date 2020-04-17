@@ -5,6 +5,7 @@ import 'vue-material/dist/theme/default.css';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
+import 'reflect-metadata';
 
 Vue.config.productionTip = false;
 

@@ -10,6 +10,7 @@ using CoastlineServer.Service.Models;
 namespace CoastlineServer.Service.Controllers
 {
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
@@ -23,19 +24,20 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             var users = await _userRepository.GetAll();
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            return Ok(_mapper.Map<IEnumerable<UserDTO>>(users));
         }
 
         [HttpGet("{userId:int}", Name = "GetUser")]
-        public async Task<ActionResult<UserDto>> GetUser(int userId)
+        public async Task<ActionResult<UserDTO>> GetUser(int userId)
         {
             try
             {
                 var user = await _userRepository.Get(userId);
-                return Ok(_mapper.Map<UserDto>(user));
+                return Ok(_mapper.Map<UserDTO>(user));
             }
             catch (KeyNotFoundException)
             {
@@ -44,11 +46,11 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
+        public async Task<ActionResult<UserDTO>> CreateUser(UserDTO userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
             var userEntity = await _userRepository.Insert(user);
-            var userDto = _mapper.Map<UserDto>(userEntity);
+            var userDto = _mapper.Map<UserDTO>(userEntity);
             return CreatedAtRoute("GetUser", new
             {
                 userId = userDto.Id

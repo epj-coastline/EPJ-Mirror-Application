@@ -50,7 +50,7 @@ namespace CoastlineServer.Repository.Testing
             User = await _userRepository.Insert(newUser);
 
             // assert
-            Assert.Equal(User.FirstName, newUser.FirstName);
+            Assert.Equal(newUser.FirstName, User.FirstName);
         }
 
         [Fact]

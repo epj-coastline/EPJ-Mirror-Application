@@ -91,5 +91,23 @@ namespace CoastlineServer.Repository.Testing
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
                 await _studyGroupRepository.Get(invalidStudyGroupId));
         }
+
+        [Fact]
+        public async Task Insert_SingleStudyGroup_ReturnStudyGroup()
+        {
+            // arrange
+            var newStudyGroup = new StudyGroup()
+            {
+                CreationDate = new DateTime(2020, 04, 16),
+                Purpose = "test studygroup",
+                UserId = -1
+            };
+
+            // act
+            StudyGroup = await _studyGroupRepository.Insert(newStudyGroup);
+            
+            // assert
+            Assert.Equal(newStudyGroup.Purpose, StudyGroup.Purpose);
+        }
     }
 }

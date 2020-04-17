@@ -39,5 +39,13 @@ namespace CoastlineServer.Repository
                 throw new KeyNotFoundException(ex.Message, ex);
             }
         }
+
+        public async Task<StudyGroup> Insert(StudyGroup studyGroup)
+        {
+            _context.Entry(studyGroup).State = EntityState.Added;
+            await _context.SaveChangesAsync();
+            
+            return studyGroup;
+        }
     }
 }

@@ -2,11 +2,12 @@
   <md-list class="md-double-line">
     <md-subheader class="subheader">{{ title}}</md-subheader>
     <div v-for="module in modules" :key="module.id">
-      <md-list-item :to="{ name: navigateTo, params: { moduleId: module.id }}" exact>
+      <md-list-item class="cl-list-padding" :to="{ name: navigateTo, params: { moduleId: module.id }}" exact>
         <div class="md-list-item-text">
           <span>{{ module.token }} </span>
           <span>{{ module.name }}</span>
         </div>
+        <md-icon>keyboard_arrow_right</md-icon>
       </md-list-item>
       <md-divider class="cl-inset"></md-divider>
     </div>
@@ -46,5 +47,9 @@
   .cl-list-padding{
     padding-left:   8px;
     padding-right:  8px;
+  }
+  .md-subheader {
+    padding-top: 24px;
+    padding-bottom: 8px;
   }
 </style>

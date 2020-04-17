@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.Repository;
+using Newtonsoft.Json;
 
 namespace CoastlineServer.Service
 {
@@ -26,6 +27,7 @@ namespace CoastlineServer.Service
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<UserRepository>();
+            services.AddScoped<StudyGroupRepository>();
             services.AddDbContext<CoastlineContext>(options =>
             {
                 options.UseNpgsql(Configuration["ConnectionStringCoastline"]);

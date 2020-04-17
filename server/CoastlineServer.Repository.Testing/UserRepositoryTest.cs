@@ -56,7 +56,7 @@ namespace CoastlineServer.Repository.Testing
         [Fact]
         public async Task Get_SingleUserById_ReturnsUser()
         {
-            // act
+            // arrange & act
             User = await _userRepository.Get(-1);
 
             // assert
@@ -66,7 +66,7 @@ namespace CoastlineServer.Repository.Testing
         [Fact]
         public async Task GetAll_ReturnsAllUser()
         {
-            // act
+            // arrange & act
             var users = await _userRepository.GetAll();
 
             // assert

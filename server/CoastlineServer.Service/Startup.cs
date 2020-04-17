@@ -30,6 +30,15 @@ namespace CoastlineServer.Service
             {
                 options.UseNpgsql(Configuration["ConnectionStringCoastline"]);
             });
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "Coastline API";
+                    document.Info.Description = "A simple ASP.NET Core web API";
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +65,10 @@ namespace CoastlineServer.Service
             });
 
             app.UseAuthorization();
+            
+            // Register the Swagger generator and the Swagger UI middlewares
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

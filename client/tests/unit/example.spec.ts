@@ -42,7 +42,7 @@ describe('StudyGroupList.vue', () => {
         id: 1,
         purpose: 'Lorem ipsum dolor sit amet',
         creationDate: new Date(),
-        creator: creator1,
+        user: creator1,
     };
 
     const wrapper = shallowMount(StudyGroupList, {
@@ -110,6 +110,6 @@ describe('ModuleList.vue', () => {
       },
     });
 
-    expect(wrapper.text()).to.be.equal('XyAn1I Analysis 1 für InformatikerAn1I Analysis 1 für Informatiker');
+    expect(wrapper.text()).to.be.equal('XyAn1I Analysis 1 für Informatikerkeyboard_arrow_rightAn1I Analysis 1 für Informatikerkeyboard_arrow_right');
   });
 });

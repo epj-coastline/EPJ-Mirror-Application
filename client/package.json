@@ -24,7 +24,7 @@
       },
       "manifestOptions": {
         "description": "Gemeinsam lernen und weiterkommen",
-        "display": "fullscreen",
+        "display": "standalone",
         "start_url": ".",
         "background_color": "#3949AB"
       },

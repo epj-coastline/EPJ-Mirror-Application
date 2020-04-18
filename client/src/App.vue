@@ -18,6 +18,9 @@
   // Apply the theme
   @import "~vue-material/dist/theme/all";
 
+  html {
+    background-color: md-get-palette-color(indigo, 600);
+  }
   body {
     background-color: white;
   }

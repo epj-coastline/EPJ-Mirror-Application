@@ -18,16 +18,6 @@
   // Apply the theme
   @import "~vue-material/dist/theme/all";
 
-  // PWA Support for iOS: body background-color needs to be in app color, not white
-  body {
-    background-color: md-get-palette-color(indigo, 600);
-    height: 100%;
-  }
-
-  main {
-    height: 100%;
-    background-color: white;
-  }
 </style>
 
 <script>

@@ -4,6 +4,7 @@ import Studygroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
 import CoachingModule from '@/views/CoachingPerModule.vue';
 import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
+import authGuard from '@/auth/AuthGuard';
 
 Vue.use(VueRouter);
 
@@ -38,5 +39,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach(authGuard);
 
 export default router;

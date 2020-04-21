@@ -18,6 +18,10 @@
   // Apply the theme
   @import "~vue-material/dist/theme/all";
 
+  body {
+    background-color: white;
+  }
+
 </style>
 
 <script>

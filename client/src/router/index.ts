@@ -4,6 +4,7 @@ import Studygroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
 import CoachingModule from '@/views/CoachingPerModule.vue';
 import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
+import Profile from '@/views/Profile.vue';
 import authGuard from '@/auth/AuthGuard';
 
 Vue.use(VueRouter);
@@ -31,6 +32,11 @@ const routes: Array<RouteConfig> = [
     path: '/coaching/:moduleId',
     name: 'NachhilfeProModul',
     component: CoachingModule,
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
   },
 ];
 

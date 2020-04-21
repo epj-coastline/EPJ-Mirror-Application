@@ -10,6 +10,7 @@ const authGuard: NavigationGuard = async (to, from, next) => {
       await authService.handleAuthentication(to.fullPath);
     } catch (error) {
       // TODO: Error handling for authentication failure.
+      throw new Error('autenticatio failed');
     }
     if (authService.isAuthenticated) {
       next();

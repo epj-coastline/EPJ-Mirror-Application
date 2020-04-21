@@ -9,12 +9,21 @@ export interface AppState {
   targetPath: string;
 }
 
+export interface Auth0User {
+  email: string;
+  emailVerified: boolean;
+  nickname: string;
+  picture: string;
+  sub: string;
+  updatedAt: string;
+}
+
 class AuthService {
   private static instance: AuthService;
 
   private _isAuthenticated = false;
 
-  private _user: any;
+  private _user?: Auth0User;
 
   private _auth0Client: Auth0Client;
 
@@ -31,7 +40,6 @@ class AuthService {
       // eslint-disable-next-line @typescript-eslint/camelcase
       redirect_uri: Configuration.CONFIG.auth0.redirectUri,
     };
-    console.log(options);
     this._auth0Client = new Auth0Client(options);
   }
 
@@ -54,27 +62,12 @@ class AuthService {
     this._onRedirectCallback = callback;
   }
 
-  public loginWithRedirect(targetPath: string): Promise<void> {
-    const appState: AppState = { targetPath };
-    return this._auth0Client.loginWithRedirect({ appState });
-  }
-
-  // Returns the access token. If the token is invalid or missing, a new one is retrieved
-  public getTokenSilently(): Promise<any> {
+  // Returns the access token. If the token is invalid or missing, a new one is retrieved.
+  public getTokenSilently(): Promise<string> {
     return this._auth0Client.getTokenSilently();
   }
 
-  public async _refreshToken(): Promise<void> {
-    try {
-      await this.getTokenSilently();
-    } catch (error) {
-      if (error._error !== 'login_required') {
-        throw error;
-      }
-    }
-  }
-
-  // Logs the user out and removes their session on the authorization server
+  // Logs the user out and removes his session on the authorization server
   public logout(): void {
     this._auth0Client.logout();
   }
@@ -98,10 +91,17 @@ class AuthService {
     }
   }
 
+  private loginWithRedirect(targetPath: string): Promise<void> {
+    const appState: AppState = { targetPath };
+    return this._auth0Client.loginWithRedirect({ appState });
+  }
+
   private async handleReturn() {
     const appState: AppState = await this._auth0Client.handleRedirectCallback() as AppState;
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
-    this._user = await this._auth0Client.getUser();
+    this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
+    console.log(this._user);
+    console.log(await this.getTokenSilently());
     const fallBackPath = '/';
     // Auth0 converts empty string (root path) to undefined.
     const targetPath = appState.targetPath ?? fallBackPath;
@@ -112,7 +112,19 @@ class AuthService {
   private async refreshToken(): Promise<void> {
     await this.getTokenSilently();
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
-    this._user = await this._auth0Client.getUser();
+    this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private static mapAuth0User(user: any): Auth0User {
+    return {
+      email: user.email,
+      emailVerified: user.email_verified,
+      nickname: user.nickname,
+      picture: user.picture,
+      sub: user.sub,
+      updatedAt: user.updated_at,
+    };
   }
 }
 

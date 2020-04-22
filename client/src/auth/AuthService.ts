@@ -69,6 +69,8 @@ class AuthService {
 
   // Logs the user out and removes his session on the authorization server
   public logout(): void {
+    AuthService.toggleVisibility();
+    this._isAuthenticated = false;
     this._auth0Client.logout();
   }
 
@@ -79,10 +81,10 @@ class AuthService {
     } else {
       try {
         await this.refreshToken();
-        console.log(`Refreshed Token: ${targetPath}`);
+        // console.log(`Refreshed Token: ${targetPath}`);
       } catch (error) {
         if (error.error === 'login_required') {
-          console.log(`Login required: ${targetPath}`);
+          // console.log(`Login required: ${targetPath}`);
           await this.loginWithRedirect(targetPath);
         } else {
           throw error;
@@ -100,12 +102,13 @@ class AuthService {
     const appState: AppState = await this._auth0Client.handleRedirectCallback() as AppState;
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
     this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
-    console.log(this._user);
-    console.log(await this.getTokenSilently());
+    AuthService.toggleVisibility();
+    // console.log(this._user);
+    // console.log(await this.getTokenSilently());
     const fallBackPath = '/';
     // Auth0 converts empty string (root path) to undefined.
     const targetPath = appState.targetPath ?? fallBackPath;
-    console.log(`Return to Coastline: ${targetPath}`);
+    // console.log(`Return to Coastline: ${targetPath}`);
     this._onRedirectCallback(targetPath);
   }
 
@@ -113,6 +116,7 @@ class AuthService {
     await this.getTokenSilently();
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
     this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
+    AuthService.toggleVisibility();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -125,6 +129,13 @@ class AuthService {
       sub: user.sub,
       updatedAt: user.updated_at,
     };
+  }
+
+  private static toggleVisibility() {
+    const mainElement = document.getElementById('main');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    mainElement.classList.toggle('not-visible');
   }
 }
 

@@ -1,8 +1,11 @@
 <template>
-  <main>
-    <router-view/>
-    <BottomNavigation/>
-  </main>
+  <div>
+    <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
+    <main class="not-visible" id="main">
+      <router-view/>
+      <BottomNavigation/>
+    </main>
+  </div>
 </template>
 
 <style lang="scss">
@@ -22,8 +25,10 @@
     background-color: white;
   }
 
+  .not-visible {
+      opacity: 0;
+  }
 </style>
-
 <script>
   import BottomNavigation from '@/components/layout/BottomNavigation.vue';
 

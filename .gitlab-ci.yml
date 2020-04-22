@@ -26,6 +26,8 @@ variables:
   # - GCP_SA_PROD
   # - COASTLINE_DATABASE_PASSWORD_DEV
   # - COASTLINE_DATABASE_PASSWORD_PROD
+  # - AUTH0_CLIENT_ID_DEV
+  # - AUTH0_AUDIENCE_DEV
 
   # Docker registry repositories
   CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
@@ -64,6 +66,9 @@ variables:
   CONNECTION_STRING_REVIEW: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$CI_COMMIT_REF_SLUG;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
   CONNECTION_STRING_STAGING: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$ENVIRONMENT_ID_STAGING;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
   CONNECTION_STRING_PROD: "Server=$CLOUD_SQL_IP_PROD;Port=5432;Database=$ENVIROMENT_ID_PRODUCTION;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_PROD;"
+
+  # Auth0
+  AUTH0_DOMAIN_DEV: "dev-coastline.eu.auth0.com"
 
   #URLs
   DOMAIN: coastline.app
@@ -166,6 +171,10 @@ deploy_review:
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_REVIEW"
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
+      --set client.config.auth0_client_id="AUTH0_CLIENT_ID_DEV"
+      --set client.config.auth0_audience="AUTH0_AUDIENCE_DEV"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"

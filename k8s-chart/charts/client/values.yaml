@@ -5,6 +5,10 @@ image:
   pull_secret: gitlab-registry-coastline-application
 config:
   coastline_api_uri: "https://api.coastline.app"
+  auth0_domain: "no_default"
+  auth0_client_id: "no_default"
+  auth0_audience: "no_default"
+  auth0_redirect_uri: "no_default"
 service:
   port: 80
 ingress:

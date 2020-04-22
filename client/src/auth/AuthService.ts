@@ -97,8 +97,8 @@ class AuthService {
     // Auth0 converts empty string (root path) to undefined.
     console.log(`AppState.targetPath: ${appState.targetPath}`);
     const targetPath = appState.targetPath ?? fallBackPath;
-    console.log(`Return to Coastline: ${targetPath}`);
-    console.log(appState);
+    // console.log(`Return to Coastline: ${targetPath}`);
+    // console.log(appState);
     this._onRedirectCallback(targetPath);
   }
 

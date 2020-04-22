@@ -95,7 +95,7 @@ class AuthService {
     // console.log(await this.getTokenSilently());
     const fallBackPath = '/';
     // Auth0 converts empty string (root path) to undefined.
-    console.log(`AppState.targetPath: ${appState.targetPath}`);
+    // console.log(`AppState.targetPath: ${appState.targetPath}`);
     const targetPath = appState.targetPath ?? fallBackPath;
     // console.log(`Return to Coastline: ${targetPath}`);
     // console.log(appState);

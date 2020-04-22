@@ -34,20 +34,20 @@ spec:
                   name: {{ .Release.Name }}-{{ .Chart.Name }}-config
                   key: auth0-domain
             - name: AUTH0_CLIENT_ID
-                valueFrom:
-                  configMapKeyRef:
-                    name: {{ .Release.Name }}-{{ .Chart.Name }}-config
-                    key: auth0-client-id
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: auth0-client-id
             - name: AUTH0_AUDIENCE
-                valueFrom:
-                  configMapKeyRef:
-                    name: {{ .Release.Name }}-{{ .Chart.Name }}-config
-                    key: auth0-audience
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: auth0-audience
             - name: AUTH0_REDIRECT_URI
-                valueFrom:
-                  configMapKeyRef:
-                    name: {{ .Release.Name }}-{{ .Chart.Name }}-config
-                    key: auth0-redirect-uri
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: auth0-redirect-uri
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}

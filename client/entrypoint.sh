@@ -11,11 +11,7 @@ do
     cp $file $file.tmpl.js
   fi
 
-  envsubst '$COASTLINE_API_URI' < $file.tmpl.js > $file
-  envsubst '$AUTH0_DOMAIN' < $file.tmpl.js > $file
-  envsubst '$AUTH0_CLIENT_ID' < $file.tmpl.js > $file
-  envsubst '$AUTH0_AUDIENCE' < $file.tmpl.js > $file
-  envsubst '$AUTH0_REDIRECT_URI' < $file.tmpl.js > $file
+  envsubst '$COASTLINE_API_URI,$AUTH0_DOMAIN,$AUTH0_CLIENT_ID,$AUTH0_AUDIENCE,$AUTH0_REDIRECT_URI' < $file.tmpl.js > $file
 
 done
 

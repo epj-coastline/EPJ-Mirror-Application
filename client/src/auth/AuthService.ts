@@ -1,22 +1,9 @@
-import { Auth0Client } from '@auth0/auth0-spa-js';
 import Configuration from '@/Configuration';
-
-export interface OnRedirectCallback {
-  (targetPath: string): void;
-}
-
-export interface AppState {
-  targetPath: string;
-}
-
-export interface Auth0User {
-  email: string;
-  emailVerified: boolean;
-  nickname: string;
-  picture: string;
-  sub: string;
-  updatedAt: string;
-}
+import { Auth0Client } from '@auth0/auth0-spa-js';
+import { Auth0User } from '@/auth/Auth0User';
+import { Auth0OnRedirectCallback } from '@/auth/Auth0OnRedirectCallback';
+import { Auth0AppState } from '@/auth/Auth0AppState';
+import mapAuth0User from '@/auth/Auth0TypeMappers';
 
 class AuthService {
   private static instance: AuthService;
@@ -27,7 +14,7 @@ class AuthService {
 
   private _auth0Client: Auth0Client;
 
-  private _onRedirectCallback: OnRedirectCallback = () => {
+  private _onRedirectCallback: Auth0OnRedirectCallback = () => {
     throw new Error('onRedirectCallback is not configured.');
   };
 
@@ -58,7 +45,7 @@ class AuthService {
     return AuthService.instance;
   }
 
-  public setRedirectCallback(callback: OnRedirectCallback): void {
+  public setRedirectCallback(callback: Auth0OnRedirectCallback): void {
     this._onRedirectCallback = callback;
   }
 
@@ -94,41 +81,32 @@ class AuthService {
   }
 
   private loginWithRedirect(targetPath: string): Promise<void> {
-    const appState: AppState = { targetPath };
+    const appState: Auth0AppState = { targetPath };
     return this._auth0Client.loginWithRedirect({ appState });
   }
 
   private async handleReturn() {
-    const appState: AppState = await this._auth0Client.handleRedirectCallback() as AppState;
+    const result = await this._auth0Client.handleRedirectCallback();
+    const appState: Auth0AppState = result.appState as Auth0AppState;
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
-    this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
+    this._user = mapAuth0User(await this._auth0Client.getUser());
     AuthService.toggleVisibility();
     // console.log(this._user);
     // console.log(await this.getTokenSilently());
     const fallBackPath = '/';
     // Auth0 converts empty string (root path) to undefined.
+    console.log(`AppState.targetPath: ${appState.targetPath}`);
     const targetPath = appState.targetPath ?? fallBackPath;
-    // console.log(`Return to Coastline: ${targetPath}`);
+    console.log(`Return to Coastline: ${targetPath}`);
+    console.log(appState);
     this._onRedirectCallback(targetPath);
   }
 
   private async refreshToken(): Promise<void> {
     await this.getTokenSilently();
     this._isAuthenticated = await this._auth0Client.isAuthenticated();
-    this._user = AuthService.mapAuth0User(await this._auth0Client.getUser());
+    this._user = mapAuth0User(await this._auth0Client.getUser());
     AuthService.toggleVisibility();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static mapAuth0User(user: any): Auth0User {
-    return {
-      email: user.email,
-      emailVerified: user.email_verified,
-      nickname: user.nickname,
-      picture: user.picture,
-      sub: user.sub,
-      updatedAt: user.updated_at,
-    };
   }
 
   private static toggleVisibility() {
@@ -136,6 +114,9 @@ class AuthService {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     mainElement.classList.toggle('not-visible');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    mainElement.classList.toggle('cl-animation');
   }
 }
 

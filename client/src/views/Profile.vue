@@ -14,7 +14,8 @@
     Component, Vue,
   } from 'vue-property-decorator';
   import Header from '@/components/layout/Header.vue';
-  import AuthService, { Auth0User } from '@/auth/AuthService';
+  import AuthService from '@/auth/AuthService';
+  import { Auth0User } from '@/auth/Auth0User';
 
   @Component({
     components: {

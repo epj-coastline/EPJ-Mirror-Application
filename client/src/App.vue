@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <md-progress-spinner class="md-accent" md-mode="indeterminate"></md-progress-spinner>
     <main class="not-visible" id="main">
       <router-view/>
       <BottomNavigation/>
     </main>
-  </div>
 </template>
 
 <style lang="scss">
@@ -26,8 +23,17 @@
   }
 
   .not-visible {
-      opacity: 0;
+    opacity: 0;
   }
+
+  .cl-animation {
+    aimation: fadeIn ease 200ms;
+  }
+  @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+
 </style>
 <script>
   import BottomNavigation from '@/components/layout/BottomNavigation.vue';

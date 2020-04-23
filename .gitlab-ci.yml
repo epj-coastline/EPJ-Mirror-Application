@@ -165,7 +165,6 @@ deploy_review:
     # Create Auth0 application (needs curl which is installed with setupHelmClient)
     - setupHelmClient
     - apk add jq
-    - curl https://google.com
     - echo "hello"
     - >-
       curl
@@ -174,7 +173,7 @@ deploy_review:
       --header "content-type: application/json"
       --data '{
         "client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq",
-        "client_secret":"$AUTH0_API_DEV_SECRET",
+        "client_secret":"RFAHdf2EhMSzhuU6BWvWyEbulZ0G-bQQgZ0gMadN_opOYp19KnebYOBgoS28yslH",
         "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
         "grant_type":"client_credentials"}'
     - auth0AccessToken=$(jq -r .access_token ./auth0_access_token.json)

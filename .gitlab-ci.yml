@@ -191,6 +191,7 @@ deploy_review:
         "callbacks":["https://'$APP_URL_REVIEW'"],
         "web_origins":["https://'$APP_URL_REVIEW'"],
         "allowed_logout_urls":["https://'$APP_URL_REVIEW'"],
+        "token_endpoint_auth_method": "none",
         "app_type":"spa",
         "is_first_party":true,
         "oidc_conformant":true,

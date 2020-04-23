@@ -166,7 +166,8 @@ deploy_review:
     - setupHelmClient
     - apk add jq
     - >-
-      curl -o auth0_access_token.json
+      curl
+      -o auth0_access_token.json
       --request POST
       --url https://dev-coastline.eu.auth0.com/oauth/token
       --header "content-type: application/json"
@@ -177,9 +178,9 @@ deploy_review:
         "grant_type":"client_credentials"
       }'
     - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
-    - echo $auth0AccessToken
     - >-
-      curl -o auth0_result_create_client.json
+      curl
+      -o auth0_result_create_client.json
       -H "Authorization: Bearer '$auth0AccessToken'"
       -X POST
       -H "Content-Type: application/json"
@@ -196,8 +197,7 @@ deploy_review:
         "sso":false,
         "cross_origin_auth":false,
         "sso_disabled":false,
-        "custom_login_page_on":false
-      }' https://dev-coastline.eu.auth0.com/api/v2/clients
+        "custom_login_page_on":false }' https://dev-coastline.eu.auth0.com/api/v2/clients
     - jq -r .client_id auth0_result_create_client.json
     - auth0ClientId=$(jq -r .client_id auth0_result_create_client.json)
     # Deploy Application
@@ -208,7 +208,7 @@ deploy_review:
       --set client.ingress.host="$APP_URL_REVIEW"
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
       --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
-      --set client.config.auth0_client_id="$auth0ClientId"
+      --set client.config.auth0_client_id="${auth0ClientId}"
       --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
       --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"

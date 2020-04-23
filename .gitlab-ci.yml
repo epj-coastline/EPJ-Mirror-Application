@@ -65,10 +65,6 @@ variables:
   CONNECTION_STRING_STAGING: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$ENVIRONMENT_ID_STAGING;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
   CONNECTION_STRING_PROD: "Server=$CLOUD_SQL_IP_PROD;Port=5432;Database=$ENVIROMENT_ID_PRODUCTION;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_PROD;"
 
-  # Auth0
-  AUTH0_DOMAIN_DEV: "dev-coastline.eu.auth0.com"
-  AUTH0_AUDIENCE_DEV: "tbd"
-
   #URLs
   DOMAIN: coastline.app
   # Production
@@ -162,18 +158,13 @@ deploy_review:
     - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
-    # Deploy Application
+    # Deploy application
     - setupHelmClient
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_REVIEW"
-      --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
-      --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
-      --set client.config.auth0_client_id="tbd"
-      --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
-      --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"

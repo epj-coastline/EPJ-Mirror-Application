@@ -176,7 +176,7 @@ deploy_review:
     - echo $auth0AccessToken
     - >-
       curl
-      -H "Authorization: Bearer '${auth0AccessToken}'"
+      -H "Authorization: Bearer $auth0AccessToken"
       -X POST
       -H "Content-Type: application/json"
       -d '{

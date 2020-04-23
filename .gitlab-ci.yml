@@ -165,9 +165,10 @@ deploy_review:
     # Create Auth0 application (needs curl which is installed with setupHelmClient)
     - setupHelmClient
     - apk add jq
+    - echo $AUTH0_API_DEV_SECRET
+    - test=$AUTH0_API_DEV_SECRET
     - >-
       curl
-      -o auth0_access_token.json
       --request POST
       --url https://dev-coastline.eu.auth0.com/oauth/token
       --header "content-type: application/json"

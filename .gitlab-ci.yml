@@ -166,8 +166,7 @@ deploy_review:
     - setupHelmClient
     - apk add jq
     - >-
-      curl
-      -o auth0_access_token.json
+      curl -o auth0_access_token.json
       --request POST
       --url https://dev-coastline.eu.auth0.com/oauth/token
       --header "content-type: application/json"
@@ -180,8 +179,7 @@ deploy_review:
     - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
     - echo $auth0AccessToken
     - >-
-      curl
-      -o auth0_result_create_client.json
+      curl -o auth0_result_create_client.json
       -H "Authorization: Bearer '$auth0AccessToken'"
       -X POST
       -H "Content-Type: application/json"

@@ -209,6 +209,7 @@ deploy_review:
       --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
       --set client.config.auth0_client_id="$auth0ClientId"
       --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
+      --set  client.config.auth0_redirect_uri="https://$API_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"

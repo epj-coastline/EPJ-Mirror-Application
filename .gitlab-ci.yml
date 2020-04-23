@@ -176,7 +176,6 @@ deploy_review:
     - echo $auth0AccessToken
     - >-
       curl
-      -o auth0_result_create_client.json
       -H "Authorization: Bearer '$auth0AccessToken'"
       -X POST
       -H "Content-Type: application/json"

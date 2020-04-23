@@ -167,6 +167,7 @@ deploy_review:
     - apk add jq
     - >-
       curl
+      - o auth0_access_token.json
       --request POST
       --url https://dev-coastline.eu.auth0.com/oauth/token
       --header "content-type: application/json"

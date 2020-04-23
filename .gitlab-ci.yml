@@ -179,9 +179,9 @@ deploy_review:
         "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
         "grant_type":"client_credentials"}'
     - auth0AccessToken=$(jq -r .access_token ./auth0_access_token.json)
+    - ls -a
     - >-
       curl
-      -o ./auth0_result_create_client.json
       -H "Authorization: Bearer ${auth0AccessToken}"
       -X POST
       -H "Content-Type: application/json"

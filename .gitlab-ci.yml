@@ -180,6 +180,7 @@ deploy_review:
         "grant_type":"client_credentials"}'
     - auth0AccessToken=$(jq -r .access_token ./auth0_access_token.json)
     - ls -a
+    - echo $auth0AccessToken
     - >-
       curl
       -H "Authorization: Bearer ${auth0AccessToken}"

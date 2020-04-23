@@ -165,19 +165,33 @@ deploy_review:
     # Create Auth0 application (needs curl which is installed with setupHelmClient)
     - setupHelmClient
     - apk add jq
-    - curl
+    - >-
+      curl
       -o auth0_access_token.json
       --request POST
       --url https://dev-coastline.eu.auth0.com/oauth/token
-      --header 'content-type: application/json'
-      --data '{"client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq","client_secret":"$AUTH0_API_DEV_SECRET","audience":"https://dev-coastline.eu.auth0.com/api/v2/","grant_type":"client_credentials"}'
+      --header "content-type: application/json"
+      --data '{
+        "client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq",
+        "client_secret":"$AUTH0_API_DEV_SECRET",
+        "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
+        "grant_type":"client_credentials"}'
     - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
-    - curl
+    - >-
+      curl
       -o auth0_result_create_client.json
       -H "Authorization: Bearer ${auth0AccessToken}"
       -X POST
       -H "Content-Type: application/json"
-      -d '{"name":"coastline-review-$CI_COMMIT_REF_SLUG","description":"Application for Coastline Review App","logo_uri":"https://$APP_URL_REVIEW/img/icons/coastline-logo-auth0.png","callbacks":["https://$APP_URL_REVIEW"],"web_origins":["https://$APP_URL_REVIEW"],"allowed_logout_urls":["https://$APP_URL_REVIEW"],"app_type":"spa","is_first_party":true,"oidc_conformant":true,"sso":false,"cross_origin_auth":false,"sso_disabled":false,"custom_login_page_on":false}' https://dev-coastline.eu.auth0.com/api/v2/clients
+      -d '{
+        "name":"coastline-review-$CI_COMMIT_REF_SLUG",
+        "description":"Application for Coastline Review App",
+        "logo_uri":"https://$APP_URL_REVIEW/img/icons/coastline-logo-auth0.png",
+        "callbacks":["https://$APP_URL_REVIEW"],"web_origins":["https://$APP_URL_REVIEW"],
+        "allowed_logout_urls":["https://$APP_URL_REVIEW"],
+        "app_type":"spa","is_first_party":true,"oidc_conformant":true,
+        "sso":false,"cross_origin_auth":false,"sso_disabled":false,
+        "custom_login_page_on":false }' https://dev-coastline.eu.auth0.com/api/v2/clients
     - jq -r .client_id auth0_result_create_client.json
     - auth0ClientId=$(jq -r .client_id auth0_result_create_client.json)
     # Deploy Application

@@ -160,6 +160,7 @@ deploy_review:
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
     # Deploy application
     - setupHelmClient
+    - apk add jq
     - >-
       curl
       -o auth0_access_token.json

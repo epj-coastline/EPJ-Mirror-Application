@@ -398,7 +398,5 @@ deploy_production:
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/
   }
 
-  function createAuth0ClientForReview() { }
-
 before_script:
   - *functions

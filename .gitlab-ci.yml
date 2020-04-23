@@ -165,8 +165,6 @@ deploy_review:
     # Create Auth0 application (needs curl which is installed with setupHelmClient)
     - setupHelmClient
     - apk add jq
-    - echo $AUTH0_API_DEV_SECRET
-    - test=$AUTH0_API_DEV_SECRET
     - >-
       curl
       --request POST
@@ -179,6 +177,7 @@ deploy_review:
         "grant_type":"client_credentials"
       }'
     - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
+    - echo $auth0AccessToken
     - >-
       curl
       -o auth0_result_create_client.json

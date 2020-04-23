@@ -169,7 +169,7 @@ deploy_review:
       --header "content-type: application/json"
       --data '{
         "client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq",
-        "client_secret":"$AUTH0_API_DEV_SECRET",
+        "client_secret":"'$AUTH0_API_DEV_SECRET'",
         "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
         "grant_type":"client_credentials"}'
     - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)

@@ -162,10 +162,8 @@ deploy_review:
     - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
-    # Create Auth0 application (needs curl which is installed with setupHelmClient)
-    - setupHelmClient
-    - apk add jq
     # Deploy Application
+    - setupHelmClient
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install

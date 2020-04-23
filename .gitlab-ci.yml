@@ -166,6 +166,7 @@ deploy_review:
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_REVIEW"
@@ -352,7 +353,7 @@ deploy_production:
   }
 
   function setupHelmClient() {
-    apk add curl openssl ca-certificates
+    apk add bash curl openssl ca-certificates
     curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     helm version
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/

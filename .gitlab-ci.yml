@@ -26,8 +26,6 @@ variables:
   # - GCP_SA_PROD
   # - COASTLINE_DATABASE_PASSWORD_DEV
   # - COASTLINE_DATABASE_PASSWORD_PROD
-  # - AUTH0_CLIENT_ID_DEV
-  # - AUTH0_AUDIENCE_DEV
 
   # Docker registry repositories
   CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
@@ -69,6 +67,7 @@ variables:
 
   # Auth0
   AUTH0_DOMAIN_DEV: "dev-coastline.eu.auth0.com"
+  AUTH0_AUDIENCE_DEV: "tbd"
 
   #URLs
   DOMAIN: coastline.app
@@ -163,6 +162,9 @@ deploy_review:
     - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
+    # Create Auth0 application
+    - createAuth0ClientForReview
+    - auth0ClientId=$(jq -r .client_id auth0_result_create_client.json)
     # Deploy application
     - setupHelmClient
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
@@ -172,7 +174,7 @@ deploy_review:
       --set client.ingress.host="$APP_URL_REVIEW"
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
       --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
-      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_DEV"
+      --set client.config.auth0_client_id=$auth0ClientId
       --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
       --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
@@ -366,6 +368,19 @@ deploy_production:
     curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     helm version
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+  }
+
+  function createAuth0ClientForReview() {
+    apk add jq
+
+    curl -o auth0_access_token.json --request POST \
+      --url https://dev-coastline.eu.auth0.com/oauth/token \
+      --header 'content-type: application/json' \
+      --data '{"client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq","client_secret":"$AUTH0_API_DEV_SECRET","audience":"https://dev-coastline.eu.auth0.com/api/v2/","grant_type":"client_credentials"}'
+
+    auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
+
+    curl  -o auth0_result_create_client.json  -H "Authorization: Bearer ${auth0AccessToken}" -X POST  -H "Content-Type: application/json" -d '{"name":"coastline-review-xxx","description":"Application for Coastline Review App","logo_uri":"https://$APP_URL_REVIEW/img/icons/coastline-logo-auth0.png","callbacks":["https://$APP_URL_REVIEW"],"web_origins":["https://$APP_URL_REVIEW"],"allowed_logout_urls":["https://$APP_URL_REVIEW"],"app_type":"spa","is_first_party":true,"oidc_conformant":true,"sso":false,"cross_origin_auth":false,"sso_disabled":false,"custom_login_page_on":false}' https://dev-coastline.eu.auth0.com/api/v2/clients
   }
 
 before_script:

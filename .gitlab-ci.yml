@@ -160,6 +160,19 @@ deploy_review:
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
     # Deploy application
     - setupHelmClient
+    - >-
+      curl
+      -o auth0_access_token.json
+      --request POST
+      --url https://dev-coastline.eu.auth0.com/oauth/token
+      --header "content-type: application/json"
+      --data '{
+        "client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq",
+        "client_secret":"$AUTH0_API_DEV_SECRET",
+        "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
+        "grant_type":"client_credentials"}'
+    - echo $auth0AccessToken
+    - auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install

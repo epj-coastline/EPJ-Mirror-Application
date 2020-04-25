@@ -5,7 +5,7 @@ import Coaching from '@/views/Coaching.vue';
 import CoachingModule from '@/views/CoachingPerModule.vue';
 import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
 import Profile from '@/views/Profile.vue';
-import authGuard from '@/auth/AuthGuard';
+import authGuard from '@/auth/authGuard';
 
 Vue.use(VueRouter);
 

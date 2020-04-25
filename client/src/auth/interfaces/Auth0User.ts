@@ -1,4 +1,4 @@
-export interface Auth0User {
+interface Auth0User {
     email: string;
     emailVerified: boolean;
     nickname: string;
@@ -6,3 +6,5 @@ export interface Auth0User {
     sub: string;
     updatedAt: string;
 }
+
+export default Auth0User;

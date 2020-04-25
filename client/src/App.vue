@@ -1,8 +1,8 @@
 <template>
-    <main class="not-visible" id="main">
-      <router-view/>
-      <BottomNavigation/>
-    </main>
+  <main v-bind:class="{ 'not-visible': showContent }">
+    <router-view/>
+    <BottomNavigation/>
+  </main>
 </template>
 
 <style lang="scss">
@@ -26,21 +26,23 @@
     opacity: 0;
   }
 
-  .cl-animation {
-    aimation: fadeIn ease 200ms;
-  }
-  @keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
 </style>
-<script>
+<script lang="ts">
   import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+  import { Component, Vue } from 'vue-property-decorator';
+  import { getAuthService } from '@/auth/authServiceFactory';
 
-  export default {
+
+  @Component({
     components: {
       BottomNavigation,
     },
-  };
+  })
+  export default class App extends Vue {
+    private authService = getAuthService();
+
+    get showContent() {
+      return this.authService.isLoading || !this.authService.isAuthenticated;
+    }
+  }
 </script>

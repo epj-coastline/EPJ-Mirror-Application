@@ -14,8 +14,9 @@
     Component, Vue,
   } from 'vue-property-decorator';
   import Header from '@/components/layout/Header.vue';
-  import AuthService from '@/auth/AuthService';
-  import { Auth0User } from '@/auth/Auth0User';
+  import { Auth0User } from '@/auth/interfaces';
+  import { getAuthService } from '@/auth/authServiceFactory';
+
 
   @Component({
     components: {
@@ -23,7 +24,7 @@
     },
   })
   export default class Profile extends Vue {
-    private authService = AuthService.getInstance();
+    private authService = getAuthService();
 
     private user?: Auth0User = this.authService.user;
   }

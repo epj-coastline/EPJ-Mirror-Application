@@ -69,6 +69,14 @@ variables:
   AUTH0_DOMAIN_DEV: "dev-coastline.eu.auth0.com"
   AUTH0_AUDIENCE_DEV: "tbd"
 
+  AUTH0_DOMAIN_STAGING: "staging-coastline.eu.auth0.com"
+  AUTH0_CLIENT_ID_STAGING: "LBMJLGgO780RvrXgAapSnbu3VbMkU58W"
+  AUTH0_AUDIENCE_STAGING:  "tbd"
+
+  AUTH0_DOMAIN_PROD: "coastline-app.eu.auth0.com"
+  AUTH0_CLIENT_ID_PROD: "NoF2s3smojrQTNPgiXskLGT0vflAyNyN"
+  AUTH0_AUDIENCE_PROD:  "tbd"
+
   #URLs
   DOMAIN: coastline.app
   # Production
@@ -166,7 +174,7 @@ deploy_review:
     - setupHelmClient
     # Create a Auth0 client and get its id from auth0_result_create_client.json
     - createAth0ClientForReview
-    - auth0ClientId=$(jq -r .client_id auth0_result_create_client.json)
+    - AUTH0_CLIENT_ID_DEV=$(jq -r .client_id auth0_result_create_client.json)
     # Deploy application
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
@@ -176,9 +184,9 @@ deploy_review:
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
       --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
-      --set client.config.auth0_client_id="$auth0ClientId"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_DEV"
       --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
-      --set  client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"
@@ -246,6 +254,10 @@ deploy_staging:
       --set client.image.tag="master"
       --set client.ingress.host="$APP_URL_STAGING"
       --set client.config.coastline_api_uri="https://$API_URL_STAGING"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_STAGING"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_STAGING"
+      --set client.config.auth0_audience="$AUTH0_AUDIENCE_STAGING"
+      --set  client.config.auth0_redirect_uri="https://$APP_URL_STAGING"
       --set server.image.tag="master"
       --set server.ingress.host="$API_URL_STAGING"
       --set server.config.database_migrations="automatic"
@@ -281,6 +293,10 @@ deploy_production:
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_PRODUCTION"
       --set client.config.coastline_api_uri="https://$API_URL_PRODUCTION"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_PROD"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_PROD"
+      --set client.config.auth0_audience="$AUTH0_AUDIENCE_PROD"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_PRODUCTION"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"

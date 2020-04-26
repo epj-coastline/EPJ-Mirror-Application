@@ -48,6 +48,19 @@ namespace CoastlineServer.Service.Testing
              // assert
              Assert.Equal(HttpStatusCode.OK, response.StatusCode);
              Assert.Equal(studyGroupId, studyGroupDto.Id);
+         }
+         
+         [Fact]
+         public async Task Get_SingleStudyGroupByInvalidId_ReturnsNotFound()
+         {
+             // arrange
+             var studyGroupId = -500;
+             
+             // act
+             var response = await _client.GetAsync($"/studygroups/{studyGroupId}");
+        
+             // assert
+             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
          }*/
     }
 }

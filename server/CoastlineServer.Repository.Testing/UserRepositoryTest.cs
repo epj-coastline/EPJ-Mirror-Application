@@ -75,7 +75,7 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public async Task Update_SingleUser_ReturnsUpdatedUser()
+        public async Task Update_SingleUser()
         {
             // arrange
             User = await _userRepository.Get(-1);

@@ -37,7 +37,7 @@ namespace CoastlineServer.Repository.Testing
         {
             // arrange & act
             var studyGroups = await _studyGroupRepository.GetAll();
-            
+
             // assert
             Assert.Equal(5, studyGroups.Count);
             Assert.Contains(studyGroups, s => s.Id == -1);
@@ -48,28 +48,28 @@ namespace CoastlineServer.Repository.Testing
         {
             // arrange
             var studyGroups = await _studyGroupRepository.GetAll();
-            
+
             // act
             var membersOfStudyGroup = studyGroups.Find(s => s.Id == -1).Members;
-            
+
             // assert
             Assert.NotEmpty(membersOfStudyGroup);
         }
-        
+
         [Fact]
         public async Task GetAll_ReturnsStudyGroupsWithCreators()
         {
             // arrange
             var studyGroups = await _studyGroupRepository.GetAll();
-            
+
             // act
             var creator = studyGroups.Find(s => s.Id == -1).User;
-            
+
             // assert
             Assert.NotNull(creator);
             Assert.Equal(-1, creator.Id);
         }
-        
+
         [Fact]
         public async Task Get_SingleStudyGroupById_ReturnsStudyGroup()
         {
@@ -80,7 +80,7 @@ namespace CoastlineServer.Repository.Testing
             Assert.Equal(-1, StudyGroup.Id);
             Assert.NotNull(StudyGroup.User);
         }
-        
+
         [Fact]
         public async Task Get_SingleStudyGroupByInvalidId_ThrowsException()
         {
@@ -105,9 +105,54 @@ namespace CoastlineServer.Repository.Testing
 
             // act
             StudyGroup = await _studyGroupRepository.Insert(newStudyGroup);
-            
+
             // assert
             Assert.Equal(newStudyGroup.Purpose, StudyGroup.Purpose);
+        }
+
+        [Fact]
+        public async Task Update_SingleStudyGroup()
+        {
+            // arrange
+            StudyGroup = await _studyGroupRepository.Get(-1);
+            StudyGroup.Purpose = "This is a test";
+
+            // act
+            await _studyGroupRepository.Update(StudyGroup);
+            var updatedStudyGroup = await _studyGroupRepository.Get(-1);
+
+            // assert
+            Assert.Equal(StudyGroup.Purpose, updatedStudyGroup.Purpose);
+        }
+
+        [Fact]
+        public async Task Delete_SingleStudyGroup_ThrowsException()
+        {
+            // arrange
+            StudyGroup = await _studyGroupRepository.Get(-1);
+
+            // act
+            await _studyGroupRepository.Delete(StudyGroup);
+
+            // assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _studyGroupRepository.Get(StudyGroup.Id));
+        }
+
+        [Fact]
+        public async Task Delete_SingleInvalidStudyGroup_ThrowsException()
+        {
+            // arrange
+            StudyGroup = new StudyGroup()
+            {
+                Id = 500,
+                Purpose = "Invalid",
+                UserId = -1
+            };
+
+            // act & assert
+            await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+                await _studyGroupRepository.Delete(StudyGroup));
         }
     }
 }

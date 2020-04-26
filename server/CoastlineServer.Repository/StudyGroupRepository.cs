@@ -47,5 +47,25 @@ namespace CoastlineServer.Repository
             
             return studyGroup;
         }
+
+        public async Task Update(StudyGroup studyGroup)
+        {
+            try
+            {
+                _context.Entry(studyGroup).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+                throw CreateOptimisticConcurrencyException(_context, studyGroup);
+            }
+        }
+
+        public async Task Delete(StudyGroup studyGroup)
+        {
+            _context.Entry(studyGroup).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+        }
     }
 }

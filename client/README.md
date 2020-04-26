@@ -1,28 +1,24 @@
 # Coastline Client
 
-# WARNING: YOU NEED TO SET BACKEND API MANUALLY IN Configuration.ts to 'http://localhost:5000' INSTEAD OF '$COASTLINE\_API_URI' UNTIL [ISSUE 117](https://gitlab.dev.ifs.hsr.ch/epj/2020/coastline/application/-/issues/117) IS FIXED!
+*For all commands make sure you are in the `client` directory, not in repository root.*
 
-## Project setup
+## Prerequisites
 
-Clone this repository
+This project uses [npm](https://www.npmjs.com/) for packaging and dependencies management. npm comes usually with [node.js](https://nodejs.org/en/).
 
-```
-git clone https://gitlab.dev.ifs.hsr.ch/epj/2020/coastline/application.git
-```
-
-
-Go into the client folder and downloading all modules
+1. Install all dependencies
 
 ```
-cd application/client
 npm install
 ```
 
-Open Webstorm and open this project **inside** the client folder!
+2. Open the **client** directory with WebStorm
 
 ## Development
 
-**DON'T FORGET:** Start the back end to have the database and API running! Otherwise you will get an error like this in the web inspector:
+### Coastline Server
+
+**Important**: The Coastline Client communicates with a RestAPI. Therefore you need to start the Coastline Server and Database on your local machine. Otherwise you will face a similar error as following.
 
 ```
 ERROR:
@@ -30,40 +26,76 @@ GET http://localhost:5000/users net::ERR_SOCKET_NOT_CONNECTED  userService.ts?11
 Uncaught (in promise) TypeError: Failed to fetch asyncToGenerator.js?1da1:6
 ```
 
-Open the console at the very bottom left of Webstorm and use the following commands:
+Choose one of the following options to start the Coastline Server and database on your local machine.
 
-Compile, start and auto reload the App (use CTRL+C to stop)
+- Install [PostgreSQL](https://www.postgresql.org/) and start the server with Rider 
+- User Docker Compose
+- Run the database in a Docker container and start the server with Rider
 
-```npm run serve```
+You can find detailed instructions for each option in the [Coastline Server Readme](../server/README.md).
 
-Build for production 
+### Commands
 
-```npm run build```
+**Compiles, starts and hot-reloads the app for development**
 
-Lint the project
+```
+npm run serve
+```
 
-```npm run lint```
+**Compiles and minifies for production**
 
-Lint the project and automatically fix issues
+```
+npm run build
+```
 
-```npm run lint --fix```
+*Use `CTRL`+ `C` to stop the app.*
 
-Run unit tests
+**Run your unit tests**
 
-```npm run test:unit```
+```
+npm run test:unit
+```
+
+**Lints  the project**
+
+```
+npm run lint
+```
+
+**Lints  the project and fixes files**
+```
+npm run lint --fix
+```
+### Run Coastline Client with Docker
+
+**Build Docker image**
+
+```
+docker build -t coastline-client -f prod.dockerfile .
+```
+
+**Run Coastline Client**
+
+```
+docker run -i --rm -p 8080:80 --name coast \ 
+-e "COASTLINE_API_URI"="http://localhost:5000" \
+-e "AUTH0_DOMAIN"="dev-coastline.eu.auth0.com" \
+-e "AUTH0_CLIENT_ID"="fEdg7DDNdDKg06X5701ufUW1gbRnblhA" \
+-e "AUTH0_REDIRECT_URI"="http://localhost:8080" \
+-e "AUTH0_AUDIENCE"="tbd" \
+coastline-client
+```
+
+### Customise Vue CLI configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Introduction
 
-[VUE Introduction](https://vuejs.org/v2/guide/index.html) (scrolling down on this page should give a good overview)
+- [VUE Introduction](https://vuejs.org/v2/guide/index.html) (scrolling down on this page should give a good overview)
 
-[Vue Material GUI Component Examples](https://vuematerial.io/components/button)
+- [Vue Material GUI Component Examples](https://vuematerial.io/components/button)
 
-[VUE + TypeScript Class decorators Introduction](https://www.sitepoint.com/class-based-vue-js-typescript/) the @Component and @Prop things
+- [VUE + TypeScript Class decorators Introduction](https://www.sitepoint.com/class-based-vue-js-typescript/) (the @Component and @Prop things)
 
-[More TypeScript with vue](https://ordina-jworks.github.io/frontend/2019/03/04/vue-with-typescript.html)
-
-
-
-
-
-
+- [More TypeScript with vue](https://ordina-jworks.github.io/frontend/2019/03/04/vue-with-typescript.html)

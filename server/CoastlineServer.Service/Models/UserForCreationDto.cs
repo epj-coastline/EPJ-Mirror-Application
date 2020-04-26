@@ -2,9 +2,8 @@
 
 namespace CoastlineServer.Service.Models
 {
-    public class UserDTO
+    public class UserForCreationDto
     {
-        public int Id { get; set; }
         [Required, StringLength(20)]
         public string FirstName { get; set; }
         [Required, StringLength(20)]

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace CoastlineServer.Service.Models
 {
     public class UserDto

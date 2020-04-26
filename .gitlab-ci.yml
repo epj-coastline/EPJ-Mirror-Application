@@ -145,11 +145,7 @@ server_unit_tests:
     - postgres:11-alpine
   script:
     - cd /src
-<<<<<<< HEAD
     - ConnectionStringCoastline="Server=postgres;Port=5432;Database=coastline;User Id=runner;Password=mysecretpassword;" dotnet test
-=======
-    - "ConnectionStringCoastline"="Server=postgres;Port=5432;Database=coastline;User Id=runner;Password=mysecretpassword;" dotnet test
->>>>>>> 9d2d959e1aaad92c70c2399e297bcd70698d5942
   extends: .server_changes
   needs:
     - build_server

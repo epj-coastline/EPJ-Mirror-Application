@@ -24,7 +24,6 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var users = await _userRepository.GetAll();
@@ -46,7 +45,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser(UserDto userForCreationDto)
+        public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
             var userEntity = await _userRepository.Insert(user);

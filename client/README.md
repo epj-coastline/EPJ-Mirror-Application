@@ -66,6 +66,35 @@ npm run lint
 ```
 npm run lint --fix
 ```
+### Environment variables
+
+Vue documentation: [Modes and Environment Variables](https://cli.vuejs.org/guide/mode-and-env.html)
+
+#### Local development
+
+The environment variables for local development are defined in the `.env` file.
+
+```
+VUE_APP_COASTLINE_API_URI=http://localhost:5000
+VUE_APP_AUTH0_DOMAIN=dev-coastline.eu.auth0.com
+VUE_APP_AUTH0_CLIENT_ID=fEdg7DDNdDKg06X5701ufUW1gbRnblhA
+VUE_APP_AUTH0_REDIRECT_URI=http://localhost:8080
+VUE_APP_AUTH0_AUDIENCE=http://localhost:5000
+```
+
+If you need special configuration you can overwrite them by creating a `.env.local` file in the client directory. This file is ignored by git and will not be checked in.
+
+#### Production
+
+- The environment variables for production depend on the deployment. A deployment for the staging environment has not the same environment variables as a review application.
+- Therefore they are replaced on each container startup by the ` entrypoint.sh` script.
+
+#### Defining new environment variables
+
+1. Add the environment variable `.env` file
+2. Add a new entry in the `Configurations.ts`
+3. Add the placeholder in `entrypoint.sh` so it gets replaced on startup 
+
 ### Run Coastline Client with Docker
 
 **Build Docker image**
@@ -77,13 +106,19 @@ docker build -t coastline-client -f prod.dockerfile .
 **Run Coastline Client**
 
 ```
-docker run -i --rm -p 8080:80 --name coast \ 
--e "COASTLINE_API_URI"="http://localhost:5000" \
--e "AUTH0_DOMAIN"="dev-coastline.eu.auth0.com" \
--e "AUTH0_CLIENT_ID"="fEdg7DDNdDKg06X5701ufUW1gbRnblhA" \
--e "AUTH0_REDIRECT_URI"="http://localhost:8080" \
--e "AUTH0_AUDIENCE"="tbd" \
+docker run -i --rm -p 8080:80 --name coast \
+--env "COASTLINE_API_URI"="http://localhost:7747" \
+--env "AUTH0_DOMAIN"="dev-coastline.eu.auth0.com" \
+--env "AUTH0_CLIENT_ID"="fEdg7DDNdDKg06X5701ufUW1gbRnblhA" \
+--env "AUTH0_REDIRECT_URI"="http://localhost:8080" \
+--env "AUTH0_AUDIENCE"="tbd" \
 coastline-client
+```
+
+**Stop Coastline Client**
+
+```
+docker stop coast
 ```
 
 ### Customise Vue CLI configuration

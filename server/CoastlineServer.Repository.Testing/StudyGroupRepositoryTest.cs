@@ -102,7 +102,8 @@ namespace CoastlineServer.Repository.Testing
                 Purpose = "test studygroup",
                 UserId = -1
             };
-
+            
+            
             // act
             StudyGroup = await _studyGroupRepository.Insert(newStudyGroup);
 

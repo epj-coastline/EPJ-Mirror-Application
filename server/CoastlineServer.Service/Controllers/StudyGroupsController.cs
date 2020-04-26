@@ -31,13 +31,41 @@ namespace CoastlineServer.Service.Controllers
             return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
         }
 
-        [HttpGet("{studyGroupId:int}")]
+        [HttpGet("{studyGroupId:int}", Name = "GetStudyGroup")]
         public async Task<ActionResult<StudyGroupDto>> GetStudyGroup(int studyGroupId)
         {
             try
             {
                 var user = await _studyGroupRepository.Get(studyGroupId);
                 return Ok(_mapper.Map<StudyGroupDto>(user));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<StudyGroupDto>> CreateStudyGroup(
+            StudyGroupForCreationDto studyGroupForCreationDto)
+        {
+            var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
+            studyGroup.CreationDate = DateTime.Now;
+            var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
+            var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);
+            return CreatedAtRoute("GetStudyGroup", new
+            {
+                studyGroupId = studyGroupDto.Id
+            }, studyGroupDto);
+        }
+        
+        public async Task<IActionResult> DeleteUser(int studyGroupId)
+        {
+            try
+            {
+                var studyGroup = await _studyGroupRepository.Get(studyGroupId);
+                await _studyGroupRepository.Delete(studyGroup);
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {

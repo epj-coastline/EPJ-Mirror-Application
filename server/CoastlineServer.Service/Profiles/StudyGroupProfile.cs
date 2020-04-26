@@ -9,6 +9,7 @@ namespace CoastlineServer.Service.Profiles
         public StudyGroupProfile()
         {
             CreateMap<StudyGroup, StudyGroupDto>();
+            CreateMap<StudyGroupForCreationDto, StudyGroup>();
         }
     }
 }

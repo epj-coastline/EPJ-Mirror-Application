@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using CoastlineServer.DAL.Context;
+using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;

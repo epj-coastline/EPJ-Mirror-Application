@@ -2,7 +2,7 @@
 
 *For all commands make sure you are in the `client` directory, not in repository root.*
 
-## Prerequisites
+## Project setup
 
 This project uses [npm](https://www.npmjs.com/) for packaging and dependencies management. npm comes usually with [node.js](https://nodejs.org/en/).
 
@@ -12,7 +12,7 @@ This project uses [npm](https://www.npmjs.com/) for packaging and dependencies m
 npm install
 ```
 
-2. Open the **client** directory with WebStorm
+2. Open the **client** directory with JetBrains WebStorm
 
 ## Development
 
@@ -37,6 +37,8 @@ You can find detailed instructions for each option in the [Coastline Server Read
 ### Commands
 
 **Compiles, starts and hot-reloads the app for development**
+
+**Important**: Make sure you run the Coastline Client on port 8080 otherwise you will face a CORS error.
 
 ```
 npm run serve
@@ -95,7 +97,11 @@ If you need special configuration you can overwrite them by creating a `.env.loc
 2. Add a new entry in the `Configurations.ts`
 3. Add the placeholder in `entrypoint.sh` so it gets replaced on startup 
 
-### Run Coastline Client with Docker
+### Customise Vue CLI configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Run Coastline Client with Docker
 
 **Build Docker image**
 
@@ -120,10 +126,6 @@ coastline-client
 ```
 docker stop coast
 ```
-
-### Customise Vue CLI configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Introduction
 

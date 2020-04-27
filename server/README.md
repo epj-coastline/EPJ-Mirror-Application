@@ -28,7 +28,8 @@ dotnet restore
 
 ### Local PostgreSQL installation
 
-- Start the `CoastlineServer.Service` run configuration. The database should be automatically migrated.
+- Start the `CoastlineServer.Service` run configuration.
+- The database should be automatically migrated.
 - Run integration tests or check the created database via DataGrip / pgAdmin.
 
 ### PostgresSQL in Docker
@@ -51,9 +52,9 @@ If the database runs in a docker container one has to set the connection string 
 ConnectionStringCoastline="Server=127.0.0.1;Port=7000;Database=coastline;User Id=postgres;Password=mysecretpassword;" dotnet test
 ```
 
-## Manual Migration
+## Manual migration
 
-**Entity Framework Core .NET CLI Tool**
+**Entity Framework Core .NET CLI Tools**
 
 Check if the Entity Framework Core .NET CLI Tools are installed and on current version.
 
@@ -124,14 +125,12 @@ The `[Fact]` attribute declares a test method that runs by the test runner. If t
 ### Relationship Convention
 
 - For migrating the new entities to the database, the CoastlineContext must be updated. For the new entity add an EnitityTypeConfig class and specify the constraints with Fluent-API including adding seed data to enable testing on the repo layer.
-
-- Many-to-many relationships are not supported by EF Core and must be mapped to a new entity to represent the join table
-  Naming of join-table entities: `ClassAClassB`
-
-- Join-table entities have one primary key combined of both foreign key:
-  Fluent-Api syntax: `.HasKey(t => new { a.PK, b.PK });`
-
-- Do not forget to add the join-table entity as a list reference in the related classes.
+- Many-to-many relationships are not supported by EF Core.
+  - They must be mapped to a new entity to represent the join table.
+- Naming of join-table entities: `ClassAClassB`
+  - Join-table entities have one primary key combined of both foreign key.
+  - Fluent-Api syntax: `.HasKey(t => new { a.PK, b.PK });`
+  - Do not forget to add the join-table entity as a list reference in the related classes.
 
 **References / Documentation**
 

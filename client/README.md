@@ -1,10 +1,10 @@
 # Coastline Client
 
-*For all commands make sure you are in the `client` directory, not in repository root.*
+*For all commands make sure you are in the `client` directory, not in the repository root.*
 
 ## Project setup
 
-This project uses [npm](https://www.npmjs.com/) for packaging and dependencies management. npm comes usually with [node.js](https://nodejs.org/en/).
+This project uses [npm](https://www.npmjs.com/) for packaging and dependency management. npm comes usually with [node.js](https://nodejs.org/en/).
 
 1. Install all dependencies
 
@@ -18,7 +18,7 @@ npm install
 
 ### Coastline Server
 
-**Important**: The Coastline Client communicates with a RestAPI. Therefore you need to start the Coastline Server and Database on your local machine. Otherwise you will face a similar error as following.
+**Important**: The Coastline Client communicates with a RestAPI. Therefore you need to start the Coastline Server and database on your local machine. Otherwise you will face a similar error as following.
 
 ```
 ERROR:
@@ -29,28 +29,30 @@ Uncaught (in promise) TypeError: Failed to fetch asyncToGenerator.js?1da1:6
 Choose one of the following options to start the Coastline Server and database on your local machine.
 
 - Install [PostgreSQL](https://www.postgresql.org/) and start the server with Rider 
-- User Docker Compose
+- Use Docker Compose
 - Run the database in a Docker container and start the server with Rider
 
 You can find detailed instructions for each option in the [Coastline Server Readme](../server/README.md).
+
+### Allowed Origin
+
+The Coastline Server is configured to allow only `localhost:8080` as origin. Make sure you run the Coastline Client on port 8080 otherwise you will face a CORS error.
 
 ### Commands
 
 **Compiles, starts and hot-reloads the app for development**
 
-**Important**: Make sure you run the Coastline Client on port 8080 otherwise you will face a CORS error.
-
 ```
 npm run serve
 ```
+
+*Use `CTRL`+ `C` to stop the app.*
 
 **Compiles and minifies for production**
 
 ```
 npm run build
 ```
-
-*Use `CTRL`+ `C` to stop the app.*
 
 **Run your unit tests**
 
@@ -89,12 +91,12 @@ If you need special configuration you can overwrite them by creating a `.env.loc
 #### Production
 
 - The environment variables for production depend on the deployment. A deployment for the staging environment has not the same environment variables as a review application.
-- Therefore they are replaced on each container startup by the ` entrypoint.sh` script.
+- Therefore they are replaced on each container startup by the `entrypoint.sh` script.
 
 #### Defining new environment variables
 
-1. Add the environment variable `.env` file
-2. Add a new entry in the `Configurations.ts`
+1. Add the environment variable in the `.env` file
+2. Add a new entry in the `Configurations.ts` file
 3. Add the placeholder in `entrypoint.sh` so it gets replaced on startup 
 
 ### Customise Vue CLI configuration
@@ -113,7 +115,7 @@ docker build -t coastline-client -f prod.dockerfile .
 
 ```
 docker run -i --rm -p 8080:80 --name coast \
---env "COASTLINE_API_URI"="http://localhost:7747" \
+--env "COASTLINE_API_URI"="http://localhost:5000" \
 --env "AUTH0_DOMAIN"="dev-coastline.eu.auth0.com" \
 --env "AUTH0_CLIENT_ID"="fEdg7DDNdDKg06X5701ufUW1gbRnblhA" \
 --env "AUTH0_REDIRECT_URI"="http://localhost:8080" \

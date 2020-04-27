@@ -1,6 +1,6 @@
 # Coastline Server
 
-*For all commands make sure you are in the `server` directory, not in repository root.*
+*For all commands make sure you are in the `server` directory, not in the repository root.*
 
 ## Project setup
 
@@ -18,24 +18,11 @@ Open the `CoastlineServer.sln` in Rider and restore all dependencies.
 dotnet restore
 ```
 
-**Entity Framework Core .NET Command-line Tool**
-
-Check if the Entity Framework Core .NET Command-line Tools are installed and on current version.
-
-```c#
-dotnet ef
-```
-
-If errors occur the CLI tools version might be outdated or not installed. To install tools run:
-```c#
-dotnet tool install --global dotnet-ef
-```
-
 **Database**
 
 - If you run the database in Docker  you can skip this step.
 
-- Go to the `appsettings.Development.json` in the `CoastlineServer.Service` project. Make sure that `ConnectionStringCoastline` works with your local PostgreSQL installation works.
+- Go to the `appsettings.Development.json` in the `CoastlineServer.Service` project. Make sure that `ConnectionStringCoastline` with your local PostgreSQL installation works.
 
 ## Run Coastline Server
 
@@ -52,7 +39,8 @@ dotnet tool install --global dotnet-ef
 docker run --name coastline-db -p 7000:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 
-- Start the `CoastlineServer.Service Docker DB` run configuration. The database should be automatically migrated.
+- Start the `CoastlineServer.Service Docker DB` run configuration.
+- The database should be automatically migrated.
 - Run integration tests or check the created database via DataGrip / pgAdmin.
 
 **Integration test**
@@ -65,17 +53,27 @@ ConnectionStringCoastline="Server=127.0.0.1;Port=7000;Database=coastline;User Id
 
 ## Manual Migration
 
-If the auto-migration did not work try migrating the database manually.
+**Entity Framework Core .NET CLI Tool**
 
-* Open CLI Console and navigate to the `CoastlineServer.DAL`
-* Update database for creating first schema with following command
-  
+Check if the Entity Framework Core .NET CLI Tools are installed and on current version.
+
+```c#
+dotnet ef
+```
+
+If errors occur the CLI tools version might be outdated or not installed. To install tools run:
+```c#
+dotnet tool install --global dotnet-ef
+```
+
+Navigate to the `CoastlineServer.DAL` and Update the database for creating first schema.
+
 ```c#
 cd CoastlineServer.DAL 
 dotnet ef database update InitialCreate --project ../CoastlineServer.DAL
 ```
 
-* Run integration tests or check the created database via DataGrip / pgAdmin.
+Run integration tests or check the created database via DataGrip / pgAdmin.
 
 **References / Documentation**
 
@@ -160,4 +158,3 @@ docker-compose down
 ```
 docker build -t coastline-server -f prod.dockerfile .
 ```
-

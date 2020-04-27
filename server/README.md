@@ -136,6 +136,18 @@ The `[Fact]` attribute declares a test method that runs by the test runner. If t
 
 * [EF Core relationships](https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key)
 
+## Swagger API documentation
+
+**Swagger UI**: https://api.coastline.app/
+
+By adding the `[ApiConventionType(typeof(DefaultApiConventions))]` annotation on each controller class Swagger learns about the possible responses. This annotation adds the responses according to the [default API convention](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.defaultapiconventions?view=aspnetcore-3.1). Therefore the implementation should stick to this convnetion. 
+
+**References / Documentation**
+
+- [Get started with NSwag and ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-3.1&tabs=visual-studio)
+
+- [Use web API conventions](https://docs.microsoft.com/en-us/aspnet/core/web-api/advanced/conventions?view=aspnetcore-3.1)
+
 ## Run Coastline Server with Docker 
 
 **Run Coastline Server and Database**

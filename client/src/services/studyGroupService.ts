@@ -10,7 +10,7 @@ class StudyGroupService {
         Accept: 'application/json',
       },
     }).then((response) => response.json())
-      .then((users: typeof StudyGroup[]) => plainToClass(StudyGroup, users,
+      .then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
         { excludeExtraneousValues: true }));
   }
 }

@@ -15,5 +15,7 @@ namespace CoastlineServer.DAL.Entities
         public byte[] RowVersion { get; set; }
         public ICollection<Member> Members { get; set; } = new List<Member>();
         public ICollection<StudyGroup> StudyGroups { get; set; } = new List<StudyGroup>();
+        public ICollection<Strength> Strengths { get; set; } = new List<Strength>();
+        public ICollection<Confirmation> Confirmations { get; set; } = new List<Confirmation>();
     }
 }

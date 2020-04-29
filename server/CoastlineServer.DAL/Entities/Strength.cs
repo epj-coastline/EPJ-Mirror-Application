@@ -6,6 +6,7 @@ namespace CoastlineServer.DAL.Entities
     public class Strength
     {
         public int Id { get; set; }
+        public byte[] RowVersion { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
         public int ModuleId { get; set; }

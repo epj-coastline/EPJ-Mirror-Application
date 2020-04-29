@@ -9,6 +9,9 @@ namespace CoastlineServer.DAL.Context
         public DbSet<User> Users { get; set; }
         public DbSet<StudyGroup> StudyGroups { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<Module> Modules { get; set; }
+        public DbSet<Strength> Strengths { get; set; }
+        public DbSet<Confirmation> Confirmations { get; set; }
 
         public CoastlineContext(DbContextOptions options)
             : base(options)
@@ -20,6 +23,7 @@ namespace CoastlineServer.DAL.Context
             modelBuilder.ApplyConfiguration(new UserTypeConfig());
             modelBuilder.ApplyConfiguration(new StudyGroupTypeConfig());
             modelBuilder.ApplyConfiguration(new MemberTypeConfig());
+            modelBuilder.ApplyConfiguration(new ConfirmationTypeConfig());
         }
     }
 }

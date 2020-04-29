@@ -1,28 +1,24 @@
 # Coastline Client
 
-# WARNING: YOU NEED TO SET BACKEND API MANUALLY IN Configuration.ts to 'http://localhost:5000' INSTEAD OF '$COASTLINE\_API_URI' UNTIL [ISSUE 117](https://gitlab.dev.ifs.hsr.ch/epj/2020/coastline/application/-/issues/117) IS FIXED!
+*For all commands make sure you are in the `client` directory, not in the repository root.*
 
 ## Project setup
 
-Clone this repository
+This project uses [npm](https://www.npmjs.com/) for packaging and dependency management. npm comes usually with [node.js](https://nodejs.org/en/).
+
+1. Install all dependencies
 
 ```
-git clone https://gitlab.dev.ifs.hsr.ch/epj/2020/coastline/application.git
-```
-
-
-Go into the client folder and downloading all modules
-
-```
-cd application/client
 npm install
 ```
 
-Open Webstorm and open this project **inside** the client folder!
+2. Open the **client** directory with JetBrains WebStorm
 
 ## Development
 
-**DON'T FORGET:** Start the back end to have the database and API running! Otherwise you will get an error like this in the web inspector:
+### Coastline Server
+
+**Important**: The Coastline Client communicates with a RestAPI. Therefore you need to start the Coastline Server and database on your local machine. Otherwise you will face a similar error as following.
 
 ```
 ERROR:
@@ -30,40 +26,115 @@ GET http://localhost:5000/users net::ERR_SOCKET_NOT_CONNECTED  userService.ts?11
 Uncaught (in promise) TypeError: Failed to fetch asyncToGenerator.js?1da1:6
 ```
 
-Open the console at the very bottom left of Webstorm and use the following commands:
+Choose one of the following options to start the Coastline Server and database on your local machine.
 
-Compile, start and auto reload the App (use CTRL+C to stop)
+- Install [PostgreSQL](https://www.postgresql.org/) and start the server with Rider 
+- Use Docker Compose
+- Run the database in a Docker container and start the server with Rider
 
-```npm run serve```
+You can find detailed instructions for each option in the [Coastline Server Readme](../server/README.md).
 
-Build for production 
+### Allowed Origin
 
-```npm run build```
+The Coastline Server is configured to allow only `localhost:8080` as origin. Make sure you run the Coastline Client on port 8080 otherwise you will face a CORS error.
 
-Lint the project
+### Commands
 
-```npm run lint```
+**Compiles, starts and hot-reloads the app for development**
 
-Lint the project and automatically fix issues
+```
+npm run serve
+```
 
-```npm run lint --fix```
+*Use `CTRL`+ `C` to stop the app.*
 
-Run unit tests
+**Compiles and minifies for production**
 
-```npm run test:unit```
+```
+npm run build
+```
+
+**Run your unit tests**
+
+```
+npm run test:unit
+```
+
+**Lints  the project**
+
+```
+npm run lint
+```
+
+**Lints  the project and fixes files**
+```
+npm run lint --fix
+```
+### Environment variables
+
+Vue documentation: [Modes and Environment Variables](https://cli.vuejs.org/guide/mode-and-env.html)
+
+#### Local development
+
+The environment variables for local development are defined in the `.env` file.
+
+```
+VUE_APP_COASTLINE_API_URI=http://localhost:5000
+VUE_APP_AUTH0_DOMAIN=dev-coastline.eu.auth0.com
+VUE_APP_AUTH0_CLIENT_ID=fEdg7DDNdDKg06X5701ufUW1gbRnblhA
+VUE_APP_AUTH0_REDIRECT_URI=http://localhost:8080
+VUE_APP_AUTH0_AUDIENCE=http://localhost:5000
+```
+
+If you need special configuration you can overwrite them by creating a `.env.local` file in the client directory. This file is ignored by git and will not be checked in.
+
+#### Production
+
+- The environment variables for production depend on the deployment. A deployment for the staging environment has not the same environment variables as a review application.
+- Therefore they are replaced on each container startup by the `entrypoint.sh` script.
+
+#### Defining new environment variables
+
+1. Add the environment variable in the `.env` file
+2. Add a new entry in the `Configurations.ts` file
+3. Add the placeholder in `entrypoint.sh` so it gets replaced on startup 
+
+### Customise Vue CLI configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Run Coastline Client with Docker
+
+**Build Docker image**
+
+```
+docker build -t coastline-client -f prod.dockerfile .
+```
+
+**Run Coastline Client**
+
+```
+docker run -i --rm -p 8080:80 --name coast \
+--env "COASTLINE_API_URI"="http://localhost:5000" \
+--env "AUTH0_DOMAIN"="dev-coastline.eu.auth0.com" \
+--env "AUTH0_CLIENT_ID"="fEdg7DDNdDKg06X5701ufUW1gbRnblhA" \
+--env "AUTH0_REDIRECT_URI"="http://localhost:8080" \
+--env "AUTH0_AUDIENCE"="tbd" \
+coastline-client
+```
+
+**Stop Coastline Client**
+
+```
+docker stop coast
+```
 
 ## Introduction
 
-[VUE Introduction](https://vuejs.org/v2/guide/index.html) (scrolling down on this page should give a good overview)
+- [VUE Introduction](https://vuejs.org/v2/guide/index.html) (scrolling down on this page should give a good overview)
 
-[Vue Material GUI Component Examples](https://vuematerial.io/components/button)
+- [Vue Material GUI Component Examples](https://vuematerial.io/components/button)
 
-[VUE + TypeScript Class decorators Introduction](https://www.sitepoint.com/class-based-vue-js-typescript/) the @Component and @Prop things
+- [VUE + TypeScript Class decorators Introduction](https://www.sitepoint.com/class-based-vue-js-typescript/) (the @Component and @Prop things)
 
-[More TypeScript with vue](https://ordina-jworks.github.io/frontend/2019/03/04/vue-with-typescript.html)
-
-
-
-
-
-
+- [More TypeScript with vue](https://ordina-jworks.github.io/frontend/2019/03/04/vue-with-typescript.html)

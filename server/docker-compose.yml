@@ -1,9 +1,11 @@
 version: '2.0'
 services:
-  web:
+  api:
     build:
       context: .
       dockerfile: prod.dockerfile
+    image: coastline-server
+    container_name: cl-api
     ports:
       - "5000:80"
     depends_on:
@@ -15,5 +17,6 @@ services:
       - ConnectionStringCoastline=Server=db;Port=5432;Database=coastline;User Id=postgres;Password=mysecretpassword;
   db:
     image: postgres
+    container_name: cl-db
     environment:
       - POSTGRES_PASSWORD=mysecretpassword

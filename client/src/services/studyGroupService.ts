@@ -10,7 +10,18 @@ class StudyGroupService {
         Accept: 'application/json',
       },
     }).then((response) => response.json())
-      .then((users: typeof StudyGroup[]) => plainToClass(StudyGroup, users,
+      .then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
+        { excludeExtraneousValues: true }));
+  }
+
+  static getPerModuleId(moduleId: number) {
+    return fetch(`${Configuration.CONFIG.backendHost}/studygroups?module=${moduleId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    }).then((response) => response.json())
+      .then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
         { excludeExtraneousValues: true }));
   }
 }

@@ -31,7 +31,8 @@ class ModuleService {
     return JSON.parse(this.mockModuleListData);
   }
 
-  static async getModuleWithId() {
+  static async getModuleWithId(moduleId: number) {
+    // ToDo: well implement all this
     return JSON.parse(this.mockModule1);
   }
 }

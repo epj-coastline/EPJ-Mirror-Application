@@ -58,7 +58,7 @@ namespace CoastlineServer.Service.Controllers
                 studyGroupId = studyGroupDto.Id
             }, studyGroupDto);
         }
-        
+
         [HttpDelete("{studyGroupId:int}")]
         public async Task<IActionResult> DeleteUser(int studyGroupId)
         {
@@ -66,12 +66,19 @@ namespace CoastlineServer.Service.Controllers
             {
                 var studyGroup = await _studyGroupRepository.Get(studyGroupId);
                 await _studyGroupRepository.Delete(studyGroup);
-                return NoContent();
+                return Ok();
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
+        }
+
+        [HttpOptions]
+        public IActionResult GetAuthorsOptions()
+        {
+            Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");
+            return Ok();
         }
     }
 }

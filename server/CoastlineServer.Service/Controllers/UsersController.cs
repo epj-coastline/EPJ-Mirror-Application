@@ -62,7 +62,7 @@ namespace CoastlineServer.Service.Controllers
             {
                 var user = await _userRepository.Get(userId);
                 await _userRepository.Delete(user);
-                return NoContent();
+                return Ok();
             }
             catch (KeyNotFoundException)
             {

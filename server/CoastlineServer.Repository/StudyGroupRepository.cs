@@ -32,7 +32,6 @@ namespace CoastlineServer.Repository
                     .Include(s => s.User)
                     .Include(s => s.Members)
                     .SingleAsync(s => s.Id == primaryKey);
-
             }
             catch (Exception ex)
             {
@@ -44,7 +43,7 @@ namespace CoastlineServer.Repository
         {
             _context.Entry(studyGroup).State = EntityState.Added;
             await _context.SaveChangesAsync();
-            
+
             return studyGroup;
         }
 
@@ -54,7 +53,6 @@ namespace CoastlineServer.Repository
             {
                 _context.Entry(studyGroup).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
             }
             catch (Exception)
             {

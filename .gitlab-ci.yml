@@ -14,9 +14,9 @@ workflow:
     # Avoid duplicate pipeline for open merge requests
     - if: $CI_MERGE_REQUEST_ID
       when: never
-#     Avoid pipeline for release branches as the tag creation execute the pipeline anyway
-#   - if: $CI_COMMIT_BRANCH =~ /release-.+/
-#     when: never
+    #     Avoid pipeline for release branches as the tag creation execute the pipeline anyway
+    #   - if: $CI_COMMIT_BRANCH =~ /release-.+/
+    #     when: never
     # In all other cases run pipeline
     - when: always
 
@@ -137,9 +137,15 @@ server_unit_tests:
   image: $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
   variables:
     GIT_STRATEGY: none
+    POSTGRES_DB: coastline
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: "mysecretpassword"
+    POSTGRES_HOST_AUTH_METHOD: trust
+  services:
+    - postgres:11-alpine
   script:
     - cd /src
-    - dotnet test
+    - ConnectionStringCoastline="Server=postgres;Port=5432;Database=coastline;User Id=runner;Password=mysecretpassword;" dotnet test
   extends: .server_changes
   needs:
     - build_server

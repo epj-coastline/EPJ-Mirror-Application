@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoastlineServer.DAL.Migrations
 {
     [DbContext(typeof(CoastlineContext))]
-    [Migration("20200416163153_AddStudyGroups")]
-    partial class AddStudyGroups
+    [Migration("20200429122206_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,53 @@ namespace CoastlineServer.DAL.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            modelBuilder.Entity("CoastlineServer.DAL.Entities.Confirmation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("StrengthId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StrengthId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Confirmations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            StrengthId = -2,
+                            UserId = -1
+                        },
+                        new
+                        {
+                            Id = -2,
+                            StrengthId = -3,
+                            UserId = -2
+                        },
+                        new
+                        {
+                            Id = -3,
+                            StrengthId = -1,
+                            UserId = -3
+                        });
+                });
 
             modelBuilder.Entity("CoastlineServer.DAL.Entities.Member", b =>
                 {
@@ -95,6 +142,109 @@ namespace CoastlineServer.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CoastlineServer.DAL.Entities.Module", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(60)");
+
+                    b.Property<string>("Responsibility")
+                        .HasColumnType("VARCHAR(20)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("VARCHAR(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Modules");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Name = "Analysis 2 für Informatiker",
+                            Responsibility = "Informatik",
+                            Token = "An2I"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Name = "Algorithmen und Datenstrukturen 1",
+                            Responsibility = "Informatik",
+                            Token = "AD1"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Name = ".NET Technologien",
+                            Responsibility = "Informatik",
+                            Token = "MsTe"
+                        },
+                        new
+                        {
+                            Id = -4,
+                            Name = "C++",
+                            Responsibility = "Informatik",
+                            Token = "Cpp"
+                        });
+                });
+
+            modelBuilder.Entity("CoastlineServer.DAL.Entities.Strength", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Strengths");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            ModuleId = -1,
+                            UserId = -1
+                        },
+                        new
+                        {
+                            Id = -2,
+                            ModuleId = -2,
+                            UserId = -2
+                        },
+                        new
+                        {
+                            Id = -3,
+                            ModuleId = -3,
+                            UserId = -3
+                        });
+                });
+
             modelBuilder.Entity("CoastlineServer.DAL.Entities.StudyGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +254,9 @@ namespace CoastlineServer.DAL.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Purpose")
                         .HasColumnType("VARCHAR(40)");
@@ -118,6 +271,8 @@ namespace CoastlineServer.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ModuleId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("StudyGroups");
@@ -127,6 +282,7 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -1,
                             CreationDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModuleId = -1,
                             Purpose = "Integrale An2I",
                             UserId = -1
                         },
@@ -134,6 +290,7 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -2,
                             CreationDate = new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModuleId = -2,
                             Purpose = "Rekursion AD1",
                             UserId = -2
                         },
@@ -141,6 +298,7 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -3,
                             CreationDate = new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModuleId = -3,
                             Purpose = "EF Core MsTe",
                             UserId = -3
                         },
@@ -148,6 +306,7 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -4,
                             CreationDate = new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModuleId = -4,
                             Purpose = "Tests schreiben C++",
                             UserId = -4
                         },
@@ -155,6 +314,7 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -5,
                             CreationDate = new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModuleId = -4,
                             Purpose = "Algorithmen in C++",
                             UserId = -4
                         });
@@ -237,6 +397,23 @@ namespace CoastlineServer.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CoastlineServer.DAL.Entities.Confirmation", b =>
+                {
+                    b.HasOne("CoastlineServer.DAL.Entities.Strength", "Strength")
+                        .WithMany("Confirmations")
+                        .HasForeignKey("StrengthId")
+                        .HasConstraintName("FK_Confirmations_StrengthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CoastlineServer.DAL.Entities.User", "User")
+                        .WithMany("Confirmations")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Confirmations_UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CoastlineServer.DAL.Entities.Member", b =>
                 {
                     b.HasOne("CoastlineServer.DAL.Entities.StudyGroup", "StudyGroup")
@@ -254,8 +431,32 @@ namespace CoastlineServer.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CoastlineServer.DAL.Entities.Strength", b =>
+                {
+                    b.HasOne("CoastlineServer.DAL.Entities.Module", "Module")
+                        .WithMany("Strengths")
+                        .HasForeignKey("ModuleId")
+                        .HasConstraintName("FK_Strengths_ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CoastlineServer.DAL.Entities.User", "User")
+                        .WithMany("Strengths")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Strengths_UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CoastlineServer.DAL.Entities.StudyGroup", b =>
                 {
+                    b.HasOne("CoastlineServer.DAL.Entities.Module", "Module")
+                        .WithMany("StudyGroups")
+                        .HasForeignKey("ModuleId")
+                        .HasConstraintName("FK_StudyGroups_ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CoastlineServer.DAL.Entities.User", "User")
                         .WithMany("StudyGroups")
                         .HasForeignKey("UserId")

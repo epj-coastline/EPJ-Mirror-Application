@@ -100,9 +100,9 @@ namespace CoastlineServer.Repository.Testing
             {
                 CreationDate = new DateTime(2020, 04, 16),
                 Purpose = "test studygroup",
-                UserId = -1
+                UserId = -1,
+                ModuleId = -2
             };
-            
             
             // act
             StudyGroup = await _studyGroupRepository.Insert(newStudyGroup);

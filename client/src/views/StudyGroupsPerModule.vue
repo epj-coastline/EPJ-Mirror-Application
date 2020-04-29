@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import {
-    Component, Watch, Vue,
+    Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import Header from '@/components/layout/Header.vue';
   import Module from '@/services/Module';
@@ -24,16 +24,24 @@
       StudyGroupList,
       LoadingSpinner,
     },
-
   })
   export default class StudyGroupsPerModule extends Vue {
-    // ToDo: Fix the empty state
-    private module: Module = {
-      id: 0,
-      token: 'lädt...',
-      name: 'Empty',
-      responsibility: 'Empty',
-    };
+    @Prop({
+      default() {
+        return {
+          id: 9007199254740991, // ToDo: this checking integer should be defined outside, so it doesn't look like magic
+          token: 'lädt...', // used as loading text, in case it needs to fetch the module when page reloaded
+          name: 'Empty',
+          responsibility: 'Empty',
+        };
+      },
+    })
+    module!: Module;
+
+    @Prop()
+    moduleId!: number; // moduleID from URL in case of a page reload
+
+    private internalModule: Module = this.module; // so we don't modify the prop data below
 
     private studyGroups: Array<StudyGroup> = [];
 
@@ -41,13 +49,15 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      this.studyGroups = await StudyGroupService.getAll();
+      if (this.internalModule.id === 9007199254740991) { // fetch module after page reload
+        this.internalModule = await ModuleService.getModuleWithId(this.moduleId);
+      }
+      this.studyGroups = await StudyGroupService.getPerModuleId(this.internalModule.id);
       this.dataIsLoaded = validStudyGroups(this.studyGroups);
-      this.module = await ModuleService.getModuleWithId();
     }
 
     get moduleTitel() {
-      return `Modul ${this.module.token}`;
+      return `Modul ${this.internalModule.token}`;
     }
   }
 </script>

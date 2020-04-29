@@ -43,7 +43,7 @@
     async loadData() {
       this.students = await UserService.getAll();
       this.dataIsLoaded = validUsers(this.students);
-      this.module = await ModuleService.getModuleWithId();
+      this.module = await ModuleService.getModuleWithId(1);
     }
 
     get numberOfStudents() {

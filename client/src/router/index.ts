@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import Studygroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
 import CoachingModule from '@/views/CoachingPerModule.vue';
-import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
+import StudyGroupsPerModule from '@/views/StudyGroupsPerModule.vue';
 
 Vue.use(VueRouter);
 
@@ -19,7 +19,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/studygroups/:moduleId',
     name: 'LerngruppenProModul',
-    component: StudygroupsModule,
+    component: StudyGroupsPerModule,
+    props: (route) => ({
+      ...route.params,
+    }),
   },
   {
     path: '/coaching',

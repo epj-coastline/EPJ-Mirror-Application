@@ -1,4 +1,5 @@
 module.exports = {
+  parser: 'vue-eslint-parser',
   root: true,
   env: {
     node: true,
@@ -10,6 +11,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2020,
+    parser: '@typescript-eslint/parser',
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -24,9 +26,11 @@ module.exports = {
         '**/__tests__/*.{j,t}s?(x)',
         '**/tests/unit/**/*.spec.{j,t}s?(x)',
         '*.vue',
+        '*.ts',
       ],
       rules: {
         'max-len': 'off', // disables line length check
+        'no-underscore-dangle': 'off',
       },
       env: {
         mocha: true,

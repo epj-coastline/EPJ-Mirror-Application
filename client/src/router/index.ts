@@ -4,6 +4,8 @@ import Studygroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
 import CoachingModule from '@/views/CoachingPerModule.vue';
 import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
+import Profile from '@/views/Profile.vue';
+import authGuard from '@/auth/authGuard';
 
 Vue.use(VueRouter);
 
@@ -31,6 +33,11 @@ const routes: Array<RouteConfig> = [
     name: 'NachhilfeProModul',
     component: CoachingModule,
   },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile,
+  },
 ];
 
 const router = new VueRouter({
@@ -38,5 +45,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach(authGuard);
 
 export default router;

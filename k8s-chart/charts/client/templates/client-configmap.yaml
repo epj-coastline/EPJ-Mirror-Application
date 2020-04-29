@@ -4,3 +4,7 @@ metadata:
   name: {{ .Release.Name }}-{{ .Chart.Name }}-config
 data:
   coastline-api-uri: {{ .Values.config.coastline_api_uri }}
+  auth0-domain: {{ .Values.config.auth0_domain }}
+  auth0-client-id: {{ .Values.config.auth0_client_id }}
+  auth0-audience: {{ .Values.config.auth0_audience }}
+  auth0-redirect-uri: {{ .Values.config.auth0_redirect_uri }}

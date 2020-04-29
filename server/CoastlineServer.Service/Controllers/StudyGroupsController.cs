@@ -59,6 +59,7 @@ namespace CoastlineServer.Service.Controllers
             }, studyGroupDto);
         }
         
+        [HttpDelete("{studyGroupId:int}")]
         public async Task<IActionResult> DeleteUser(int studyGroupId)
         {
             try

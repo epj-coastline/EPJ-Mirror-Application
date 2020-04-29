@@ -65,6 +65,18 @@ variables:
   CONNECTION_STRING_STAGING: "Server=$CLOUD_SQL_IP_DEV;Port=5432;Database=$ENVIRONMENT_ID_STAGING;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_DEV;"
   CONNECTION_STRING_PROD: "Server=$CLOUD_SQL_IP_PROD;Port=5432;Database=$ENVIROMENT_ID_PRODUCTION;User Id=postgres;Password=$COASTLINE_DATABASE_PASSWORD_PROD;"
 
+  # Auth0
+  AUTH0_DOMAIN_DEV: "dev-coastline.eu.auth0.com"
+  AUTH0_AUDIENCE_DEV: "tbd"
+
+  AUTH0_DOMAIN_STAGING: "staging-coastline.eu.auth0.com"
+  AUTH0_CLIENT_ID_STAGING: "LBMJLGgO780RvrXgAapSnbu3VbMkU58W"
+  AUTH0_AUDIENCE_STAGING:  "tbd"
+
+  AUTH0_DOMAIN_PROD: "coastline-app.eu.auth0.com"
+  AUTH0_CLIENT_ID_PROD: "NoF2s3smojrQTNPgiXskLGT0vflAyNyN"
+  AUTH0_AUDIENCE_PROD:  "tbd"
+
   #URLs
   DOMAIN: coastline.app
   # Production
@@ -164,14 +176,23 @@ deploy_review:
     - gCloudConnectCloudSql $GCP_PROJECT_DEV $GCP_SA_DEV
     - gcloud sql databases delete $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME | true
     - gcloud sql databases create $CI_COMMIT_REF_SLUG --instance=$CLOUD_SQL_INSTANCE_NAME
-    # Deploy application
+    # setupHelmClient installs curl which is needed in createAth0ClientForReview
     - setupHelmClient
+    # Create a Auth0 client and get its id from auth0_result_create_client.json
+    - createAth0ClientForReview
+    - AUTH0_CLIENT_ID_DEV=$(jq -r .client_id auth0_result_create_client.json)
+    # Deploy application
     - gCloudConnectKubernetes $GCP_PROJECT_DEV $GCP_SA_DEV $GKE_CLUSTER_NAME
     - helm upgrade
       --install
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_REVIEW"
       --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
+      --set client.config.coastline_api_uri="https://$API_URL_REVIEW"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_DEV"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_DEV"
+      --set client.config.auth0_audience="$AUTH0_AUDIENCE_DEV"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_REVIEW"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_REVIEW"
       --set server.config.database_migrations="automatic"
@@ -239,6 +260,10 @@ deploy_staging:
       --set client.image.tag="master"
       --set client.ingress.host="$APP_URL_STAGING"
       --set client.config.coastline_api_uri="https://$API_URL_STAGING"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_STAGING"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_STAGING"
+      --set client.config.auth0_audience="$AUTH0_AUDIENCE_STAGING"
+      --set  client.config.auth0_redirect_uri="https://$APP_URL_STAGING"
       --set server.image.tag="master"
       --set server.ingress.host="$API_URL_STAGING"
       --set server.config.database_migrations="automatic"
@@ -274,6 +299,10 @@ deploy_production:
       --set client.image.tag="$CI_COMMIT_REF_SLUG"
       --set client.ingress.host="$APP_URL_PRODUCTION"
       --set client.config.coastline_api_uri="https://$API_URL_PRODUCTION"
+      --set client.config.auth0_domain="$AUTH0_DOMAIN_PROD"
+      --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_PROD"
+      --set client.config.auth0_audience="$AUTH0_AUDIENCE_PROD"
+      --set client.config.auth0_redirect_uri="https://$APP_URL_PRODUCTION"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"
@@ -364,6 +393,48 @@ deploy_production:
     curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     helm version
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+  }
+
+  function createAth0ClientForReview() {
+
+    apk add jq
+
+    curl -o auth0_access_token.json \
+    --request POST \
+    --url https://dev-coastline.eu.auth0.com/oauth/token \
+    --header "content-type: application/json" \
+    --data '{
+      "client_id":"dGs2O1vr2bbfxGv9zW1IadhG6MQXZxaq",
+      "client_secret":"'$AUTH0_API_DEV_SECRET'",
+      "audience":"https://dev-coastline.eu.auth0.com/api/v2/",
+      "grant_type":"client_credentials"}'
+
+    auth0AccessToken=$(jq -r .access_token auth0_access_token.json)
+
+    curl -o auth0_result_create_client.json \
+    -H "Authorization: Bearer $auth0AccessToken" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{
+      "name":"coastline-review-'$CI_COMMIT_REF_SLUG'",
+      "description":"Application for Coastline Review App",
+      "logo_uri":"https://'$APP_URL_REVIEW'/img/icons/coastline-logo-auth0.png",
+      "callbacks":["https://'$APP_URL_REVIEW'"],
+      "web_origins":["https://'$APP_URL_REVIEW'"],
+      "allowed_logout_urls":["https://'$APP_URL_REVIEW'"],
+      "token_endpoint_auth_method": "none",
+      "app_type":"spa",
+      "is_first_party":true,
+      "oidc_conformant":true,
+      "sso":false,
+      "cross_origin_auth":false,
+      "sso_disabled":false,
+      "jwt_configuration": {
+        "alg": "RS256",
+        "lifetime_in_seconds": 36000,
+        "secret_encoded": false
+      },
+      "custom_login_page_on":false}' https://dev-coastline.eu.auth0.com/api/v2/clients
   }
 
 before_script:

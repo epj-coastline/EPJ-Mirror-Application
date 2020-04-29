@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main v-bind:class="{ 'not-visible': showContent }">
     <router-view/>
     <BottomNavigation/>
   </main>
@@ -21,14 +21,28 @@
   body {
     background-color: white;
   }
+
+  .not-visible {
+    opacity: 0;
+  }
+
 </style>
-
-<script>
+<script lang="ts">
   import BottomNavigation from '@/components/layout/BottomNavigation.vue';
+  import { Component, Vue } from 'vue-property-decorator';
+  import { getAuthService } from '@/auth/authServiceFactory';
 
-  export default {
+
+  @Component({
     components: {
       BottomNavigation,
     },
-  };
+  })
+  export default class App extends Vue {
+    private authService = getAuthService();
+
+    get showContent() {
+      return this.authService.isLoading || !this.authService.isAuthenticated;
+    }
+  }
 </script>

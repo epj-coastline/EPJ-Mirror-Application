@@ -3,6 +3,7 @@
     <md-bottom-bar class="bottom-navigation" md-sync-route>
       <md-bottom-bar-item to="/studygroups" md-label="Lerngruppen" md-icon="group"></md-bottom-bar-item>
       <md-bottom-bar-item to="/coaching" md-label="Nachhilfe" md-icon="school"></md-bottom-bar-item>
+      <md-bottom-bar-item to="/profile" md-label="Profil" md-icon="account_circle"></md-bottom-bar-item>
     </md-bottom-bar>
     <div class="cl-placeholder-bottom-bar">
     </div>

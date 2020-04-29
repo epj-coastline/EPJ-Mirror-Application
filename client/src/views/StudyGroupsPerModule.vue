@@ -49,8 +49,8 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      if (this.internalModule.id === 9007199254740991) { // fetch module after page reload
-        this.internalModule = await ModuleService.getModuleWithId(this.moduleId);
+      if (this.internalModule.id === 9007199254740991) { // handle page reload
+        await this.$router.push('/studygroups');
       }
       this.studyGroups = await StudyGroupService.getPerModuleId(this.internalModule.id);
       this.dataIsLoaded = validStudyGroups(this.studyGroups);

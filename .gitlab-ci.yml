@@ -137,9 +137,15 @@ server_unit_tests:
   image: $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
   variables:
     GIT_STRATEGY: none
+    POSTGRES_DB: coastline
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: "mysecretpassword"
+    POSTGRES_HOST_AUTH_METHOD: trust
+  services:
+    - postgres:11-alpine
   script:
     - cd /src
-    - dotnet test
+    - ConnectionStringCoastline="Server=postgres;Port=5432;Database=coastline;User Id=runner;Password=mysecretpassword;" dotnet test
   extends: .server_changes
   needs:
     - build_server

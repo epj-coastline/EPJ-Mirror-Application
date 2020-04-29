@@ -23,6 +23,8 @@ namespace CoastlineServer.DAL.Context
             modelBuilder.ApplyConfiguration(new UserTypeConfig());
             modelBuilder.ApplyConfiguration(new StudyGroupTypeConfig());
             modelBuilder.ApplyConfiguration(new MemberTypeConfig());
+            modelBuilder.ApplyConfiguration(new ModuleTypeConfig());
+            modelBuilder.ApplyConfiguration(new StrengthTypeConfig());
             modelBuilder.ApplyConfiguration(new ConfirmationTypeConfig());
         }
     }

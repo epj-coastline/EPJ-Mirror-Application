@@ -38,7 +38,8 @@ namespace CoastlineServer.DAL.Configurations
                     Id = -3,
                     StrengthId = -1,
                     UserId = -3
-                });
+                }
+            );
         }
     }
 }

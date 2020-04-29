@@ -10,6 +10,7 @@ using CoastlineServer.Service.Models;
 namespace CoastlineServer.Service.Controllers
 {
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {

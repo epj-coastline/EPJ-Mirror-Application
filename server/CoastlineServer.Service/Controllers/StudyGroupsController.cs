@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
+using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +26,22 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudyGroupDto>>> GetStudyGroups()
+        public async Task<ActionResult<IEnumerable<StudyGroupDto>>> GetStudyGroups(
+            [FromQuery] StudyGroupResourceParameters studyGroupResourceParameters)
         {
-            var studyGroups = await _studyGroupRepository.GetAll();
-            return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
+            try
+            {
+                var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+                if (studyGroups == null)
+                {
+                    return NotFound();
+                }
+                return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet("{studyGroupId:int}", Name = "GetStudyGroup")]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository.Parameters;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -154,6 +155,26 @@ namespace CoastlineServer.Repository.Testing
             // act & assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
                 await _studyGroupRepository.Delete(StudyGroup));
+        }
+
+        [Fact]
+        public async Task GetAll_ResourceParameters_ReturnsAllStudyGroupsOfParameter()
+        {
+            // arrange
+            var studyGroupResourceParameters = new StudyGroupResourceParameters()
+            {
+                Module = "-1"
+            };
+            
+            // act
+            var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+            
+            // assert
+            Assert.NotEmpty(studyGroups);
+            foreach (var studyGroup in studyGroups)
+            {
+                Assert.Equal(-1, studyGroup.ModuleId);
+            }
         }
     }
 }

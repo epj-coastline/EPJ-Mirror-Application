@@ -20,14 +20,24 @@ namespace CoastlineServer.Repository
         
         public async Task<List<User>> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.StudyGroups)
+                .Include(u => u.Strengths)
+                .Include(u => u.Members)
+                .Include(u => u.Confirmations)
+                .ToListAsync();
         }
 
         public async Task<User> Get(int primaryKey)
         {
             try
             {
-                return await _context.Users.SingleAsync(u => u.Id == primaryKey);
+                return await _context.Users
+                    .Include(u => u.StudyGroups)
+                    .Include(u => u.Strengths)
+                    .Include(u => u.Members)
+                    .Include(u => u.Confirmations)
+                    .SingleAsync(u => u.Id == primaryKey);
             }
             catch (Exception ex)
             {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository.Parameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoastlineServer.Repository
@@ -19,6 +21,35 @@ namespace CoastlineServer.Repository
         public async Task<List<StudyGroup>> GetAll()
         {
             return await _context.StudyGroups
+                .Include(s => s.User)
+                .Include(s => s.Module)
+                .Include(s => s.Members)
+                .ToListAsync();
+        }
+
+        public async Task<List<StudyGroup>> GetAll(StudyGroupResourceParameters studyGroupResourceParameters)
+        {
+            if (studyGroupResourceParameters == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            {
+                return await GetAll();
+            }
+
+            var collection = _context.StudyGroups as IQueryable<StudyGroup>;
+
+            if (!string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            {
+                int moduleId = 0;
+                int.TryParse(studyGroupResourceParameters.Module.Trim(), out moduleId);
+                collection = collection
+                    .Where(s => s.ModuleId == moduleId);
+            }
+
+            return await collection
                 .Include(s => s.User)
                 .Include(s => s.Module)
                 .Include(s => s.Members)

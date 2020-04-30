@@ -60,7 +60,11 @@
     }
 
     get numberOfStudents() {
-      return `${this.students.length} Studierende sind bereit, dir zu helfen.`;
+      const { length } = this.students;
+      if (length === 1) {
+        return `${length} Studierender ist bereit, dir zu helfen.`;
+      }
+      return `${length} Studierende sind bereit, dir zu helfen.`;
     }
 
     get moduleTitel() {

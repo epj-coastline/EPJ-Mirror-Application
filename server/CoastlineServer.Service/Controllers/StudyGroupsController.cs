@@ -65,7 +65,7 @@ namespace CoastlineServer.Service.Controllers
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
             var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
-            studyGroup.CreationDate = DateTime.Now;
+            studyGroup.CreationDate = DateTime.UtcNow;
             var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
             var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);
 

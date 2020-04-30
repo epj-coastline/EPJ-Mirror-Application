@@ -8,5 +8,6 @@ namespace CoastlineServer.Service.Models
         public string Token { get; set; }
         public string Name { get; set; }
         public string Responsibility { get; set; }
+        public ICollection<StrengthDto> Strengths { get; set; } = new List<StrengthDto>();
     }
 }

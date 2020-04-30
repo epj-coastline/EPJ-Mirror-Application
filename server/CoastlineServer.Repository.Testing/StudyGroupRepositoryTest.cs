@@ -177,5 +177,50 @@ namespace CoastlineServer.Repository.Testing
                 Assert.Equal(-1, studyGroup.ModuleId);
             }
         }
+
+        [Fact]
+        public async Task GetAll_InvalidResourceParameters_ThrowsException()
+        {
+            // arrange
+            var studyGroupResourceParameters = new StudyGroupResourceParameters()
+            {
+                Module = "abc"
+            };
+
+            // act & assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+            {
+                await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_ResourceParametersNull_ThrowsException()
+        {
+            // arrange
+            StudyGroupResourceParameters studyGroupResourceParameters = null;
+
+            // act & assert
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_OutOfRangeResourceParameters_ReturnsEmptyCollection()
+        {
+            // arrange
+            var studyGroupResourceParameters = new StudyGroupResourceParameters()
+            {
+                Module = "-500"
+            };
+
+            // act
+            var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+
+            // assert
+            Assert.Empty(studyGroups);
+        }
     }
 }

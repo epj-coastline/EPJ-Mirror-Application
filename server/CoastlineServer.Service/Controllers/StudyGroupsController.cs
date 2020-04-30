@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -32,13 +31,15 @@ namespace CoastlineServer.Service.Controllers
             try
             {
                 var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
+
                 if (studyGroups == null)
                 {
                     return NotFound();
                 }
+
                 return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
             }
-            catch (ArgumentNullException)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -50,6 +51,7 @@ namespace CoastlineServer.Service.Controllers
             try
             {
                 var user = await _studyGroupRepository.Get(studyGroupId);
+
                 return Ok(_mapper.Map<StudyGroupDto>(user));
             }
             catch (KeyNotFoundException)
@@ -63,9 +65,10 @@ namespace CoastlineServer.Service.Controllers
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
             var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
-            studyGroup.CreationDate = DateTime.Now;
+            studyGroup.CreationDate = DateTime.UtcNow;
             var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
             var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);
+
             return CreatedAtRoute("GetStudyGroup", new
             {
                 studyGroupId = studyGroupDto.Id
@@ -79,6 +82,7 @@ namespace CoastlineServer.Service.Controllers
             {
                 var studyGroup = await _studyGroupRepository.Get(studyGroupId);
                 await _studyGroupRepository.Delete(studyGroup);
+
                 return Ok();
             }
             catch (KeyNotFoundException)
@@ -91,6 +95,7 @@ namespace CoastlineServer.Service.Controllers
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");
+
             return Ok();
         }
     }

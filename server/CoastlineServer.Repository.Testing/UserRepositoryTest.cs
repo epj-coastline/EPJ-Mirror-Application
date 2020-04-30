@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository.Parameters;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -181,6 +182,70 @@ namespace CoastlineServer.Repository.Testing
 
             // assert
             Assert.NotEmpty(confirmations);
+        }
+
+        [Fact]
+        public async Task GetALL_ResourceParameters_ReturnsUsersForStrength()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "-1"
+            };
+            
+            // act
+            var users = await _userRepository.GetAll(userResourceParameters);
+            var strengthsOfUser = users.First().Strengths;
+            var strengthOfModul = strengthsOfUser.Single(s => s.ModuleId == -1);
+            
+            // assert
+            Assert.NotEmpty(users);
+            Assert.NotNull(strengthOfModul);
+        }
+
+        [Fact]
+        public async Task GetAll_InvalidResourceParameters_ThrowsException()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "abc"
+            };
+            
+            // act
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+            {
+                await _userRepository.GetAll(userResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_ResourceParametersNull_ThrowsException()
+        {
+            // arrange
+            UserResourceParameters userResourceParameters = null;
+            
+            // act & assert
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                await _userRepository.GetAll(userResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_OutOfRangeResourceParameters_ReturnsEmptyCollection()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "-500"
+            };
+            
+            // act
+            var users = await _userRepository.GetAll(userResourceParameters);
+            
+            // assert
+            Assert.Empty(users);
         }
     }
 }

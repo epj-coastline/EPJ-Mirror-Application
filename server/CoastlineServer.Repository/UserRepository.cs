@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository.Exceptions;
+using CoastlineServer.Repository.Parameters;
 
 namespace CoastlineServer.Repository
 {
@@ -26,6 +27,33 @@ namespace CoastlineServer.Repository
                 .Include(u => u.Members)
                 .Include(u => u.Confirmations)
                 .ToListAsync();
+        }
+        
+        public async Task<List<User>> GetAll(UserResourceParameters userResourceParameters)
+        {
+            if (userResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(userResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            {
+                return await GetAll();
+            }
+
+            var collection = _context.Users as IQueryable<User>;
+
+            if (!string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            {
+                if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
+                {
+                    throw new KeyNotFoundException();
+                }
+
+                collection = collection.Where(u => u.Strengths.Any(s => s.ModuleId == moduleId));
+            }
+
+            return await collection.Include(u => u.Strengths).ToListAsync();
         }
 
         public async Task<User> Get(int primaryKey)
@@ -71,5 +99,7 @@ namespace CoastlineServer.Repository
             _context.Entry(user).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
+
+
     }
 }

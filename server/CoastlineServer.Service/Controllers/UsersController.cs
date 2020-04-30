@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
+using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
 
 namespace CoastlineServer.Service.Controllers
@@ -23,11 +24,24 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
+            [FromQuery] UserResourceParameters userResourceParameters)
         {
-            var users = await _userRepository.GetAll();
+            try
+            {
+                var users = await _userRepository.GetAll(userResourceParameters);
 
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet("{userId:int}", Name = "GetUser")]

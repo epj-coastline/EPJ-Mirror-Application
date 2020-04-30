@@ -136,6 +136,30 @@ namespace CoastlineServer.Service.Testing
 
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetAll_Parameter_ReturnsUsersWithStrengthInModule()
+        {
+            // arrange & act
+            var response = await _client.GetAsync("/users?strength=-1");
+            response.EnsureSuccessStatusCode();
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
+
+            // assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotEmpty(userDtos);
+        }
+
+        [Fact]
+        public async Task GetAll_InvalidParameter_ReturnsNotFound()
+        {
+            // arrange & act
+            var response = await _client.GetAsync("/users?strength=abc");
+            
+            // assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }*/
     }
 }

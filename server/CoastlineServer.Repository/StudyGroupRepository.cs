@@ -43,9 +43,7 @@ namespace CoastlineServer.Repository
 
             if (!string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
             {
-                int moduleId = 0;
-                
-                if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out moduleId))
+                if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out var moduleId))
                 {
                     throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
                 }

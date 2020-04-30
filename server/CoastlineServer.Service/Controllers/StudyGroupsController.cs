@@ -33,6 +33,11 @@ namespace CoastlineServer.Service.Controllers
             {
                 var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
 
+                if (studyGroups == null)
+                {
+                    return NotFound();
+                }
+
                 return Ok(_mapper.Map<IEnumerable<StudyGroupDto>>(studyGroups));
             }
             catch (Exception)

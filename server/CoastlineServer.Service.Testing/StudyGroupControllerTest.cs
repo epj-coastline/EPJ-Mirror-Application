@@ -133,7 +133,7 @@ namespace CoastlineServer.Service.Testing
         }
 
         [Fact]
-        public async Task GetAll_StudyGroupsWithParameter_ReturnsStudyGroupsOfModule()
+        public async Task GetAll_Parameter_ReturnsStudyGroupsOfModule()
         {
             // arrange & act
             var response = await _client.GetAsync("/studygroups?module=-1");
@@ -144,6 +144,16 @@ namespace CoastlineServer.Service.Testing
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(studyGroupDtos, s => s.ModuleId == -1);
+        }
+        
+        [Fact]
+        public async Task GetAll_InvalidParameter_ReturnsNotFound()
+        {
+            // arrange & act
+            var response = await _client.GetAsync("/studygroups?module=abc");
+
+            // assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }*/
     }
 }

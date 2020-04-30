@@ -5,6 +5,7 @@ import StudyGroupList from '@/components/common/StudyGroupList.vue';
 import ModuleList from '@/components/common/ModuleList.vue';
 import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
+import UserList from '@/components/common/UserList.vue';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -101,6 +102,38 @@ describe('ModuleList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('XyAn1I Analysis 1 für Informatikerkeyboard_arrow_rightAn1I Analysis 1 für Informatikerkeyboard_arrow_right');
+  });
+});
+
+describe('UserList.vue', () => {
+  it('renders users with information when passed', () => {
+    const user1 = {
+      id: 2,
+      firstName: 'Alex',
+      lastName: 'Müller',
+      email: 'alex@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+    const user2 = {
+      id: 3,
+      firstName: 'Hans',
+      lastName: 'Peters',
+      email: 'hans@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS19',
+    };
+
+    const wrapper = shallowMount(UserList, {
+      propsData: {
+        users: [user1, user2],
+        title: 'Xy',
+      },
+    });
+
+    expect(wrapper.text()).to.be.equal('XyAlex Müller InformatikHans Peters Informatik');
   });
 });
 

@@ -33,6 +33,9 @@ const routes: Array<RouteConfig> = [
     path: '/coaching/:moduleId',
     name: 'NachhilfeProModul',
     component: CoachingModule,
+    props: (route) => ({
+      ...route.params,
+    }),
   },
 ];
 

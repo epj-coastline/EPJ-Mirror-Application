@@ -50,11 +50,9 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      // ToDo: load right module title
-     /* if (this.internalModule.id === 9007199254740991) { // handle page reload
-         await this.$router.push('/studygroups');
-      } */
-      this.internalModule = await ModuleService.getModuleWithId(this.moduleId);
+      if (this.internalModule.id === 9007199254740991) { // handle page reload
+         await this.$router.push('/coaching');
+      }
       this.students = await UserService.getPerStrength(this.internalModule.id);
       this.dataIsLoaded = validUsers(this.students);
     }

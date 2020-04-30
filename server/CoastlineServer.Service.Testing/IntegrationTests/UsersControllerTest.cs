@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace CoastlineServer.Service.Testing
+namespace CoastlineServer.Service.Testing.IntegrationTests
 {
     public class UsersControllerTest
     {

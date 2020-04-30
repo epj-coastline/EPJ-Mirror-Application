@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace CoastlineServer.Service.Testing
+namespace CoastlineServer.Service.Testing.IntegrationTests
 {
     public class StudyGroupControllerTest
     {
@@ -31,7 +31,7 @@ namespace CoastlineServer.Service.Testing
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(studyGroupDtos, u => u.Id == -1);
+            Assert.Contains(studyGroupDtos, s => s.Id == -1);
         }
 
         [Fact]

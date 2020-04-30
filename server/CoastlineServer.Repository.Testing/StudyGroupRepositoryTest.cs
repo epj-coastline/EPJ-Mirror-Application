@@ -206,7 +206,7 @@ namespace CoastlineServer.Repository.Testing
                 await _studyGroupRepository.GetAll(studyGroupResourceParameters);
             });
         }
-        
+
         [Fact]
         public async Task GetAll_OutOfRangeResourceParameters_ReturnsEmptyCollection()
         {

@@ -18,7 +18,7 @@ namespace CoastlineServer.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        
+
         public async Task<List<User>> GetAll()
         {
             return await _context.Users
@@ -28,7 +28,7 @@ namespace CoastlineServer.Repository
                 .Include(u => u.Confirmations)
                 .ToListAsync();
         }
-        
+
         public async Task<List<User>> GetAll(UserResourceParameters userResourceParameters)
         {
             if (userResourceParameters == null)
@@ -99,7 +99,5 @@ namespace CoastlineServer.Repository
             _context.Entry(user).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
-
-
     }
 }

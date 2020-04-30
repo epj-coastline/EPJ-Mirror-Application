@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
@@ -51,7 +52,7 @@ namespace CoastlineServer.Repository.Testing
             var studyGroups = await _studyGroupRepository.GetAll();
 
             // act
-            var membersOfStudyGroup = studyGroups.Find(s => s.Id == -1).Members;
+            var membersOfStudyGroup = studyGroups.Single(s => s.Id == -1).Members;
 
             // assert
             Assert.NotEmpty(membersOfStudyGroup);
@@ -64,7 +65,7 @@ namespace CoastlineServer.Repository.Testing
             var studyGroups = await _studyGroupRepository.GetAll();
 
             // act
-            var creator = studyGroups.Find(s => s.Id == -1).User;
+            var creator = studyGroups.Single(s => s.Id == -1).User;
 
             // assert
             Assert.NotNull(creator);
@@ -104,7 +105,7 @@ namespace CoastlineServer.Repository.Testing
                 UserId = -1,
                 ModuleId = -2
             };
-            
+
             // act
             StudyGroup = await _studyGroupRepository.Insert(newStudyGroup);
 
@@ -165,10 +166,10 @@ namespace CoastlineServer.Repository.Testing
             {
                 Module = "-1"
             };
-            
+
             // act
             var studyGroups = await _studyGroupRepository.GetAll(studyGroupResourceParameters);
-            
+
             // assert
             Assert.NotEmpty(studyGroups);
             foreach (var studyGroup in studyGroups)

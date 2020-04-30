@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
@@ -128,6 +130,58 @@ namespace CoastlineServer.Repository.Testing
             // act & assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
                 await _userRepository.Delete(User));
+        }
+
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithStudyGroups()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var studyGroups = users.Single(u => u.Id == -1).StudyGroups;
+
+            // assert
+            Assert.NotEmpty(studyGroups);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithStrengths()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var strengths = users.Single(u => u.Id == -1).Strengths;
+
+            // assert
+            Assert.NotEmpty(strengths);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithMembers()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var members = users.Single(u => u.Id == -1).Members;
+
+            // assert
+            Assert.NotEmpty(members);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithConfirmations()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var confirmations = users.Single(u => u.Id == -1).Confirmations;
+
+            // assert
+            Assert.NotEmpty(confirmations);
         }
     }
 }

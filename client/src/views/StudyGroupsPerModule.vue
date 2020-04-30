@@ -16,7 +16,6 @@
   import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import StudyGroupService from '@/services/studyGroupService';
-  import ModuleService from '@/services/moduleService';
 
   @Component({
     components: {

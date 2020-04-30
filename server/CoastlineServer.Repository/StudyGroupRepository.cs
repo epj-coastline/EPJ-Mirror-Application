@@ -31,7 +31,7 @@ namespace CoastlineServer.Repository
         {
             if (studyGroupResourceParameters == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(studyGroupResourceParameters));
             }
 
             if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
@@ -44,7 +44,12 @@ namespace CoastlineServer.Repository
             if (!string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
             {
                 int moduleId = 0;
-                int.TryParse(studyGroupResourceParameters.Module.Trim(), out moduleId);
+                
+                if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out moduleId))
+                {
+                    throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
+                }
+                
                 collection = collection
                     .Where(s => s.ModuleId == moduleId);
             }

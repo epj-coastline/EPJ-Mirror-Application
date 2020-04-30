@@ -26,6 +26,7 @@ namespace CoastlineServer.Service.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var users = await _userRepository.GetAll();
+
             return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
         }
 
@@ -35,6 +36,7 @@ namespace CoastlineServer.Service.Controllers
             try
             {
                 var user = await _userRepository.Get(userId);
+
                 return Ok(_mapper.Map<UserDto>(user));
             }
             catch (KeyNotFoundException)
@@ -49,6 +51,7 @@ namespace CoastlineServer.Service.Controllers
             var user = _mapper.Map<User>(userForCreationDto);
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
+
             return CreatedAtRoute("GetUser", new
             {
                 userId = userDto.Id
@@ -62,6 +65,7 @@ namespace CoastlineServer.Service.Controllers
             {
                 var user = await _userRepository.Get(userId);
                 await _userRepository.Delete(user);
+
                 return Ok();
             }
             catch (KeyNotFoundException)
@@ -74,6 +78,7 @@ namespace CoastlineServer.Service.Controllers
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");
+
             return Ok();
         }
     }

@@ -15,8 +15,7 @@
   import UserList from '@/components/common/UserList.vue';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
-  import Module from '@/services/Module';
-  import ModuleService from '@/services/moduleService';
+  import { Module } from '@/services/Module';
 
   @Component({
     components: {

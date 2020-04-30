@@ -11,7 +11,7 @@
     Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import Header from '@/components/layout/Header.vue';
-  import Module from '@/services/Module';
+  import { Module } from '@/services/Module';
   import StudyGroupList from '@/components/common/StudyGroupList.vue';
   import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';

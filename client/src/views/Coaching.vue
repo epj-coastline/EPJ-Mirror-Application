@@ -10,7 +10,7 @@
     Component, Watch, Vue,
   } from 'vue-property-decorator';
   import ModuleService from '@/services/moduleService';
-  import Module from '@/services/Module';
+  import { Module } from '@/services/Module';
   import ModuleList from '@/components/common/ModuleList.vue';
   import Header from '@/components/layout/Header.vue';
 

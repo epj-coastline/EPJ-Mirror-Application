@@ -68,15 +68,11 @@ namespace CoastlineServer.Service.Testing
         public async Task PostDelete_SingleStudyGroup_ReturnsNoContent()
         {
             // arrange
-            var getUserResponse = await _client.GetAsync($"/users/{-1}");
-            getUserResponse.EnsureSuccessStatusCode();
-            var stringUserDto = await getUserResponse.Content.ReadAsStringAsync();
-            var creator = JsonConvert.DeserializeObject<UserDto>(stringUserDto);
             var studyGroupForCreationDto = new StudyGroupForCreationDto()
             {
                 Purpose = "Test studygroup",
-                UserId = creator.Id,
-                User = creator
+                UserId = -1,
+                ModuleId = -1
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
                 "application/json");
@@ -90,6 +86,8 @@ namespace CoastlineServer.Service.Testing
             // assert
             Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
             Assert.Equal(studyGroupForCreationDto.Purpose, responseDto.Purpose);
+            Assert.NotNull(responseDto.Module);
+            Assert.NotNull(responseDto.User);
 
             // arrange
             var query = postResponse.Headers.Location.PathAndQuery;
@@ -108,9 +106,9 @@ namespace CoastlineServer.Service.Testing
             // arrange
             var studyGroupForCreationDto = new StudyGroupForCreationDto()
             {
-                Purpose = "Test studygroup",
+                Purpose = "",
                 UserId = -1,
-                User = null
+                ModuleId = -1
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
                 "application/json");

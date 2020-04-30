@@ -12,6 +12,8 @@ namespace CoastlineServer.Service.Models
         public DateTime CreationDate { get; set; }
         public int UserId { get; set; }
         public UserDto User { get; set; }
+        public int ModuleId { get; set; }
+        public ModuleDto Module { get; set; }
         public ICollection<MemberDto> Members { get; set; } = new List<MemberDto>();
     }
 }

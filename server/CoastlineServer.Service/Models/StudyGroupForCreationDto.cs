@@ -12,6 +12,6 @@ namespace CoastlineServer.Service.Models
         [Required]
         public int UserId { get; set; }
         [Required]
-        public UserDto User { get; set; }
+        public int ModuleId { get; set; }
     }
 }

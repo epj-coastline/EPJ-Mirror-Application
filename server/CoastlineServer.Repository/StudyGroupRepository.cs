@@ -20,6 +20,7 @@ namespace CoastlineServer.Repository
         {
             return await _context.StudyGroups
                 .Include(s => s.User)
+                .Include(s => s.Module)
                 .Include(s => s.Members)
                 .ToListAsync();
         }
@@ -29,6 +30,7 @@ namespace CoastlineServer.Repository
             try
             {
                 return await _context.StudyGroups
+                    .Include(s => s.User)
                     .Include(s => s.User)
                     .Include(s => s.Members)
                     .SingleAsync(s => s.Id == primaryKey);
@@ -44,7 +46,9 @@ namespace CoastlineServer.Repository
             _context.Entry(studyGroup).State = EntityState.Added;
             await _context.SaveChangesAsync();
 
-            return studyGroup;
+            return await _context.StudyGroups.Include(s => s.User)
+                .Include(s => s.Module)
+                .SingleAsync(s => s.Id == studyGroup.Id);
         }
 
         public async Task Update(StudyGroup studyGroup)

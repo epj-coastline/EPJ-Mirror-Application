@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoastlineServer.DAL.Migrations
 {
     [DbContext(typeof(CoastlineContext))]
-    [Migration("20200429122206_InitialCreate")]
+    [Migration("20200430061317_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

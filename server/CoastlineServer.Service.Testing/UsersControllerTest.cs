@@ -20,7 +20,8 @@ namespace CoastlineServer.Service.Testing
             _client = appFactory.CreateClient();
         }
 
-        /*[Fact]
+        /*
+        [Fact]
         public async Task GetAll_ReturnsAllUsers()
         {
             // arrange & act

@@ -6,6 +6,7 @@ import ModuleList from '@/components/common/ModuleList.vue';
 import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 import UserList from '@/components/common/UserList.vue';
+import { Module, validModule, validModules } from '@/services/Module';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -30,10 +31,10 @@ describe('StudyGroupList.vue', () => {
       startDate: 'HS18',
     };
     const studyGroup = {
-        id: 1,
-        purpose: 'Lorem ipsum dolor sit amet',
-        creationDate: new Date(),
-        user: creator1,
+      id: 1,
+      purpose: 'Lorem ipsum dolor sit amet',
+      creationDate: new Date(),
+      user: creator1,
     };
 
     const wrapper = shallowMount(StudyGroupList, {
@@ -85,7 +86,7 @@ describe('ModuleList.vue', () => {
       token: 'An1I',
       name: 'Analysis 1 für Informatiker',
       responsibility: 'Informatik',
-      };
+    };
     const module2 = {
       id: 1,
       token: 'An1I',
@@ -182,6 +183,43 @@ describe('User array type checking', () => {
   });
 });
 
+describe('Module type checking', () => {
+  it('succeeds on correct data', () => {
+    const testModule: Module = {
+      id: 12,
+      token: 'Infsi3',
+      name: 'Informationssicherheit 3',
+      responsibility: 'Informatik',
+    };
+
+    const moduleValidity = validModule(testModule);
+    expect(moduleValidity).to.be.equal(true);
+  });
+});
+
+
+describe('Module Array type checking', () => {
+  it('succeeds on correct data', () => {
+    const testModules: Array<Module> = [
+      {
+        id: 12,
+        token: 'Infsi3',
+        name: 'Informationssicherheit 3',
+        responsibility: 'Informatik',
+      },
+      {
+        id: 1,
+        token: 'Cpp',
+        name: 'C++ 3',
+        responsibility: 'Informatik',
+      },
+    ];
+
+    const moduleValidity = validModules(testModules);
+    expect(moduleValidity).to.be.equal(true);
+  });
+});
+
 describe('Study Group type checking', () => {
   it('succeeds on correct data', () => {
     const testStudyGroup: StudyGroup = {
@@ -203,7 +241,6 @@ describe('Study Group type checking', () => {
     expect(studyGroupValidity).to.be.equal(true);
   });
 });
-
 
 describe('Study Group Array type checking', () => {
   it('succeeds on correct data', () => {

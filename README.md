@@ -4,7 +4,7 @@
 - Check out [Coastline Documentation](http://epj.pages.ifs.hsr.ch/2020/coastline/documentation/) to learn more about the project itself.
 - Coastline is a distributed application consisting of two main parts:
   - Vue.js single page application referred as «Coastline Client»
-  - ASP.NET Core 3 web API referred as «Coastline Server»
+  - ASP.NET Core 3 web API referred as «Coastline Server»   
 
 ## Repository 
 

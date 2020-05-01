@@ -20,7 +20,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             _client = appFactory.CreateClient();
         }
 
-        [Fact]
+        /*[Fact]
         public async Task GetAll_ReturnsAllStudyGroups()
         {
             // arrange & act
@@ -154,6 +154,6 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
+        }*/
     }
 }

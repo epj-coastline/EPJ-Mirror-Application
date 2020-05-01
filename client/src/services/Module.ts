@@ -11,6 +11,9 @@ export class Module {
 }
 
  export function validModule(module: Module): boolean {
+   if (typeof module === 'undefined') {
+     return false;
+   }
   return !(module.id === undefined
     || module.token === undefined
     || module.name === undefined
@@ -18,6 +21,9 @@ export class Module {
 }
 
 export function validModules(moduleList: Module[]) {
+  if (typeof moduleList === 'undefined') {
+    return false;
+  }
   let returnValue = true;
   moduleList.forEach((module) => {
     returnValue = returnValue && validModule(module);

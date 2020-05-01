@@ -50,9 +50,14 @@
     async loadData() {
       if (this.internalModule.id === 9007199254740991) { // handle page reload
         await this.$router.push('/studygroups');
+        return;
       }
       this.studyGroups = await StudyGroupService.getPerModuleId(this.internalModule.id);
       this.dataIsLoaded = validStudyGroups(this.studyGroups);
+      if (Array.isArray(this.studyGroups)) { // ToDo: refactor this into an external helper function
+      } else { // handle invalid response
+        await this.$router.push('/studygroups');
+      }
     }
 
     get moduleTitel() {

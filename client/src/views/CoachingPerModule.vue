@@ -2,6 +2,7 @@
   <div>
     <Header :title="moduleTitel" :sub-title="numberOfStudents" back-button="true"/>
     <UserList v-if="dataIsLoaded" :users="students" second-row-content="email"/>
+    <EmptyList v-if="showEmptyList" title="Noch keine Studierende" description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>
 </template>
@@ -16,9 +17,11 @@
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
   import { Module } from '@/services/Module';
+  import EmptyList from '@/components/common/EmptyList.vue';
 
   @Component({
     components: {
+      EmptyList,
       LoadingSpinner,
       UserList,
       Header,
@@ -47,13 +50,23 @@
 
     private dataIsLoaded = false;
 
+    private showEmptyList = false;
+
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
       if (this.internalModule.id === 9007199254740991) { // handle page reload
          await this.$router.push('/coaching');
+         return;
       }
       this.students = await UserService.getPerStrength(this.internalModule.id);
       this.dataIsLoaded = validUsers(this.students);
+      if (Array.isArray(this.students)) { // ToDo: refactor this into an external helper function
+        if (this.students.length === 0) {
+          this.showEmptyList = true;
+        }
+      } else { // handle invalid response
+        await this.$router.push('/coaching');
+      }
     }
 
     get numberOfStudents() {

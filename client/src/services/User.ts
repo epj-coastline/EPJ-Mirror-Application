@@ -17,6 +17,9 @@ export class User {
 }
 
 export function validUser(user: User): boolean {
+  if (typeof user === 'undefined') {
+    return false;
+  }
   return !(user.id === undefined
     || user.firstName === undefined
     || user.lastName === undefined
@@ -27,6 +30,9 @@ export function validUser(user: User): boolean {
 }
 
 export function validUsers(users: User[]) {
+  if (typeof users === 'undefined') {
+    return false;
+  }
   let returnValue = true;
   users.forEach((user) => {
     returnValue = returnValue && validUser(user);

@@ -12,6 +12,9 @@ export class StudyGroup {
 }
 
 export function validStudyGroup(studyGroup: StudyGroup): boolean {
+  if (typeof studyGroup === 'undefined') {
+    return false;
+  }
   return !(studyGroup.id === undefined
     || studyGroup.purpose === undefined
     || studyGroup.creationDate === undefined
@@ -19,6 +22,9 @@ export function validStudyGroup(studyGroup: StudyGroup): boolean {
 }
 
 export function validStudyGroups(studyGroups: StudyGroup[]) {
+  if (typeof studyGroups === 'undefined') {
+    return false;
+  }
   let returnValue = true;
   studyGroups.forEach((studyGroup) => {
     returnValue = returnValue && validStudyGroup(studyGroup);

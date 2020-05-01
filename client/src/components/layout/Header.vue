@@ -9,9 +9,14 @@
         <md-button v-if="actionButton" @click="actionButtonClicked" class="md-icon-button cl-action-button">
           <md-icon>notifications</md-icon>
         </md-button>
-        <md-button v-if="menuButton" class="md-icon-button" :class="[actionButton ? 'cl-menu-button' : 'cl-menu-button-only']">
-          <md-icon>more_vert</md-icon>
-        </md-button>
+        <md-menu md-direction="bottom-start" :class="[actionButton ? 'cl-menu-button' : 'cl-menu-button-only']">
+          <md-button md-menu-trigger v-if="menuButton" class="md-icon-button" >
+            <md-icon>more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item v-on:click="authService.logout()">Abmelden</md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
       <div class="md-toolbar-row" :class="[Boolean(subTitle) ? 'cl-second-row' : 'cl-second-row-off']">
         <div class="md-title cl-second-row-title">{{subTitle}}</div>
@@ -25,6 +30,7 @@
   import {
     Component, Prop, Vue,
   } from 'vue-property-decorator';
+  import { getAuthService } from '@/auth/authServiceFactory';
 
   @Component({ components: {} })
   export default class HeaderAttributes extends Vue {
@@ -46,6 +52,8 @@
     @Prop({ default: false })
     menuButton!: boolean;
 
+    private authService = getAuthService();
+
     actionButtonClicked() {
       this.$emit('actionButtonClicked');
     }
@@ -53,6 +61,26 @@
 </script>
 
 <style lang="scss">
+  .md-menu-content {
+    z-index: 101;
+    top: 32px !important;
+    // ToDo: menu should open 24px from the right border
+  }
+  .md-menu-content-container {
+    border-radius: 4px;
+  }
+  .md-list-item-content {
+    padding: 6px 6px 6px 8px;
+    min-height: 20px;
+    height: 32px;
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+  }
   .cl-placeholder-header-big {
     height: 136px;
     background-color: white;

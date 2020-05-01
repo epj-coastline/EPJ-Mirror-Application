@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
+using CoastlineServer.Repository.Parameters;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -23,7 +25,7 @@ namespace CoastlineServer.Repository.Testing
                 .UseSqlite(Connection)
                 .Options;
             var context = new CoastlineContext(options);
-            context.Database.EnsureCreated();
+            context.Database.EnsureCreatedAsync();
             _userRepository = new UserRepository(context);
         }
 
@@ -43,20 +45,20 @@ namespace CoastlineServer.Repository.Testing
                 Email = "markus.christen@hsr.ch",
                 Biography = "This is a test",
                 DegreeProgram = "Testing",
-                StartDate = "HS2020s"
+                StartDate = "HS20"
             };
 
             // act
             User = await _userRepository.Insert(newUser);
 
             // assert
-            Assert.Equal(User.FirstName, newUser.FirstName);
+            Assert.Equal(newUser.FirstName, User.FirstName);
         }
 
         [Fact]
         public async Task Get_SingleUserById_ReturnsUser()
         {
-            // act
+            // arrange & act
             User = await _userRepository.Get(-1);
 
             // assert
@@ -66,7 +68,7 @@ namespace CoastlineServer.Repository.Testing
         [Fact]
         public async Task GetAll_ReturnsAllUser()
         {
-            // act
+            // arrange & act
             var users = await _userRepository.GetAll();
 
             // assert
@@ -75,7 +77,7 @@ namespace CoastlineServer.Repository.Testing
         }
 
         [Fact]
-        public async Task Update_SingleUser_ReturnsUpdatedUser()
+        public async Task Update_SingleUser()
         {
             // arrange
             User = await _userRepository.Get(-1);
@@ -128,6 +130,122 @@ namespace CoastlineServer.Repository.Testing
             // act & assert
             await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
                 await _userRepository.Delete(User));
+        }
+
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithStudyGroups()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var studyGroups = users.Single(u => u.Id == -1).StudyGroups;
+
+            // assert
+            Assert.NotEmpty(studyGroups);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithStrengths()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var strengths = users.Single(u => u.Id == -1).Strengths;
+
+            // assert
+            Assert.NotEmpty(strengths);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithMembers()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var members = users.Single(u => u.Id == -1).Members;
+
+            // assert
+            Assert.NotEmpty(members);
+        }
+        
+        [Fact]
+        public async Task GetAll_ReturnsAllUsersWithConfirmations()
+        {
+            // arrange
+            var users = await _userRepository.GetAll();
+            
+            // act
+            var confirmations = users.Single(u => u.Id == -1).Confirmations;
+
+            // assert
+            Assert.NotEmpty(confirmations);
+        }
+
+        [Fact]
+        public async Task GetALL_ResourceParameters_ReturnsUsersForStrength()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "-1"
+            };
+            
+            // act
+            var users = await _userRepository.GetAll(userResourceParameters);
+            var strengthsOfUser = users.First().Strengths;
+            var strengthOfModul = strengthsOfUser.Single(s => s.ModuleId == -1);
+            
+            // assert
+            Assert.NotEmpty(users);
+            Assert.NotNull(strengthOfModul);
+        }
+
+        [Fact]
+        public async Task GetAll_InvalidResourceParameters_ThrowsException()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "abc"
+            };
+            
+            // act
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+            {
+                await _userRepository.GetAll(userResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_ResourceParametersNull_ThrowsException()
+        {
+            // arrange
+            UserResourceParameters userResourceParameters = null;
+            
+            // act & assert
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                await _userRepository.GetAll(userResourceParameters);
+            });
+        }
+
+        [Fact]
+        public async Task GetAll_OutOfRangeResourceParameters_ReturnsEmptyCollection()
+        {
+            // arrange
+            var userResourceParameters = new UserResourceParameters()
+            {
+                Strength = "-500"
+            };
+            
+            // act
+            var users = await _userRepository.GetAll(userResourceParameters);
+            
+            // assert
+            Assert.Empty(users);
         }
     }
 }

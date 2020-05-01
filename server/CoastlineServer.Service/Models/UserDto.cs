@@ -1,3 +1,4 @@
+﻿
 namespace CoastlineServer.Service.Models
 {
     public class UserDto

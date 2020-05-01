@@ -8,6 +8,7 @@ import { createAuthService } from '@/auth/authServiceFactory';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
+import 'reflect-metadata';
 
 const auth0Client = new Auth0Client({
   domain: Configuration.CONFIG.auth0.domain,

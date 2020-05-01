@@ -63,4 +63,7 @@
     letter-spacing: 0.15px;
     color: rgba(0, 0, 0, 0.87);
   }
+  .md-subhead, .md-card-content  {
+    font-weight: 400 !important;
+  }
 </style>

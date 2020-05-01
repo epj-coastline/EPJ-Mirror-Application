@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="moduleTitel" sub-title="Wähle eine Lerngruppe oder erstelle eine neue." back-button="true"/>
+    <Header :title="moduleTitel" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>

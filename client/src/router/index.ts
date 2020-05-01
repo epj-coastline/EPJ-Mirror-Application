@@ -2,15 +2,11 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import StudyGroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
-<<<<<<< HEAD
-import CoachingModule from '@/views/CoachingPerModule.vue';
-import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
 import Profile from '@/views/Profile.vue';
 import authGuard from '@/auth/authGuard';
-=======
 import CoachingPerModule from '@/views/CoachingPerModule.vue';
 import StudyGroupsPerModule from '@/views/StudyGroupsPerModule.vue';
->>>>>>> #55-show-studygroups
+
 
 Vue.use(VueRouter);
 

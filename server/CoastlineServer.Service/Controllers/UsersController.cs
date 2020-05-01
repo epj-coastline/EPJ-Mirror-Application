@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
+using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
 
 namespace CoastlineServer.Service.Controllers
@@ -24,10 +25,24 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
+            [FromQuery] UserResourceParameters userResourceParameters)
         {
-            var users = await _userRepository.GetAll();
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            try
+            {
+                var users = await _userRepository.GetAll(userResourceParameters);
+
+                if (users == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet("{userId:int}", Name = "GetUser")]
@@ -36,6 +51,7 @@ namespace CoastlineServer.Service.Controllers
             try
             {
                 var user = await _userRepository.Get(userId);
+
                 return Ok(_mapper.Map<UserDto>(user));
             }
             catch (KeyNotFoundException)
@@ -50,6 +66,7 @@ namespace CoastlineServer.Service.Controllers
             var user = _mapper.Map<User>(userForCreationDto);
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
+
             return CreatedAtRoute("GetUser", new
             {
                 userId = userDto.Id
@@ -63,7 +80,8 @@ namespace CoastlineServer.Service.Controllers
             {
                 var user = await _userRepository.Get(userId);
                 await _userRepository.Delete(user);
-                return NoContent();
+
+                return Ok();
             }
             catch (KeyNotFoundException)
             {
@@ -75,6 +93,7 @@ namespace CoastlineServer.Service.Controllers
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");
+
             return Ok();
         }
     }

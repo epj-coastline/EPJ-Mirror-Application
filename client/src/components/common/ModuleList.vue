@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import Module from '@/services/Module';
+  import { Module } from '@/services/Module';
 
   @Component({})
   export default class ModuleList extends Vue {

@@ -8,15 +8,14 @@
 
 <script lang="ts">
   import {
-    Component, Watch, Vue,
+    Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import UserService from '@/services/userService';
   import { User, validUsers } from '@/services/User';
   import UserList from '@/components/common/UserList.vue';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
-  import Module from '@/services/Module';
-  import ModuleService from '@/services/moduleService';
+  import { Module } from '@/services/Module';
 
   @Component({
     components: {
@@ -27,31 +26,46 @@
 
   })
   export default class CoachingPerModule extends Vue {
+     @Prop({
+      default() {
+        return {
+          id: 9007199254740991, // ToDo: this checking integer should be defined outside, so it doesn't look like magic
+          token: 'lädt...', // used as loading text, in case it needs to fetch the module when page reloaded
+          name: 'Empty',
+          responsibility: 'Empty',
+        };
+      },
+    })
+    module!: Module;
+
+    @Prop()
+    moduleId!: number; // moduleID from URL in case of a page reload
+
+    private internalModule: Module = this.module; // so we don't modify the prop data below
+
     private students: Array<User> = [];
 
     private dataIsLoaded = false;
 
-    // ToDo: Fix the empty state
-    private module: Module = {
-      id: 0,
-      token: 'lädt...',
-      name: 'Empty',
-      responsibility: 'Empty',
-    };
-
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      this.students = await UserService.getAll();
+      if (this.internalModule.id === 9007199254740991) { // handle page reload
+         await this.$router.push('/coaching');
+      }
+      this.students = await UserService.getPerStrength(this.internalModule.id);
       this.dataIsLoaded = validUsers(this.students);
-      this.module = await ModuleService.getModuleWithId(1);
     }
 
     get numberOfStudents() {
-      return `${this.students.length} Studierende sind bereit, dir zu helfen.`;
+      const { length } = this.students;
+      if (length === 1) {
+        return `${length} Studierender ist bereit, dir zu helfen.`;
+      }
+      return `${length} Studierende sind bereit, dir zu helfen.`;
     }
 
     get moduleTitel() {
-      return `Modul ${this.module.token}`;
+      return `Modul ${this.internalModule.token}`;
     }
   }
 </script>

@@ -5,6 +5,8 @@ import StudyGroupList from '@/components/common/StudyGroupList.vue';
 import ModuleList from '@/components/common/ModuleList.vue';
 import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
+import UserList from '@/components/common/UserList.vue';
+import { Module, validModule, validModules } from '@/services/Module';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -29,10 +31,10 @@ describe('StudyGroupList.vue', () => {
       startDate: 'HS18',
     };
     const studyGroup = {
-        id: 1,
-        purpose: 'Lorem ipsum dolor sit amet',
-        creationDate: new Date(),
-        user: creator1,
+      id: 1,
+      purpose: 'Lorem ipsum dolor sit amet',
+      creationDate: new Date(),
+      user: creator1,
     };
 
     const wrapper = shallowMount(StudyGroupList, {
@@ -84,7 +86,7 @@ describe('ModuleList.vue', () => {
       token: 'An1I',
       name: 'Analysis 1 für Informatiker',
       responsibility: 'Informatik',
-      };
+    };
     const module2 = {
       id: 1,
       token: 'An1I',
@@ -101,6 +103,38 @@ describe('ModuleList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('XyAn1I Analysis 1 für Informatikerkeyboard_arrow_rightAn1I Analysis 1 für Informatikerkeyboard_arrow_right');
+  });
+});
+
+describe('UserList.vue', () => {
+  it('renders users with information when passed', () => {
+    const user1 = {
+      id: 2,
+      firstName: 'Alex',
+      lastName: 'Müller',
+      email: 'alex@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+    const user2 = {
+      id: 3,
+      firstName: 'Hans',
+      lastName: 'Peters',
+      email: 'hans@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS19',
+    };
+
+    const wrapper = shallowMount(UserList, {
+      propsData: {
+        users: [user1, user2],
+        title: 'Xy',
+      },
+    });
+
+    expect(wrapper.text()).to.be.equal('XyAlex Müller InformatikHans Peters Informatik');
   });
 });
 
@@ -149,6 +183,43 @@ describe('User array type checking', () => {
   });
 });
 
+describe('Module type checking', () => {
+  it('succeeds on correct data', () => {
+    const testModule: Module = {
+      id: 12,
+      token: 'Infsi3',
+      name: 'Informationssicherheit 3',
+      responsibility: 'Informatik',
+    };
+
+    const moduleValidity = validModule(testModule);
+    expect(moduleValidity).to.be.equal(true);
+  });
+});
+
+
+describe('Module Array type checking', () => {
+  it('succeeds on correct data', () => {
+    const testModules: Array<Module> = [
+      {
+        id: 12,
+        token: 'Infsi3',
+        name: 'Informationssicherheit 3',
+        responsibility: 'Informatik',
+      },
+      {
+        id: 1,
+        token: 'Cpp',
+        name: 'C++ 3',
+        responsibility: 'Informatik',
+      },
+    ];
+
+    const moduleValidity = validModules(testModules);
+    expect(moduleValidity).to.be.equal(true);
+  });
+});
+
 describe('Study Group type checking', () => {
   it('succeeds on correct data', () => {
     const testStudyGroup: StudyGroup = {
@@ -170,7 +241,6 @@ describe('Study Group type checking', () => {
     expect(studyGroupValidity).to.be.equal(true);
   });
 });
-
 
 describe('Study Group Array type checking', () => {
   it('succeeds on correct data', () => {

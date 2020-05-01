@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
->>>>>>> #55-show-studygroups
 namespace CoastlineServer.Service.Models
 {
     public class UserDto

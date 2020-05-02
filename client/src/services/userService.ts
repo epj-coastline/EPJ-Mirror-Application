@@ -1,4 +1,4 @@
-import { User } from '@/services/User';
+import { User, validUser, validUsers } from '@/services/User';
 import { plainToClass } from 'class-transformer';
 import Configuration from '../Configuration';
 
@@ -17,7 +17,13 @@ class UserService {
         return Promise.resolve();
       })
       .then((users: typeof User[]) => plainToClass(User, users,
-        { excludeExtraneousValues: true }));
+        { excludeExtraneousValues: true }))
+      .then((users) => {
+        if (!validUsers(users)) {
+          throw new Error('Users are invalid.');
+        }
+        return users;
+      });
   }
 
   static getPerStrength(moduleId: number): Promise<Array<User>> {
@@ -31,10 +37,16 @@ class UserService {
         if (response.status === 200) {
           return Promise.resolve(response.json());
         }
-        return Promise.resolve();
+        return Promise.reject();
       })
       .then((users: typeof User[]) => plainToClass(User, users,
-        { excludeExtraneousValues: true }));
+        { excludeExtraneousValues: true }))
+      .then((users) => {
+        if (!validUsers(users)) {
+          throw new Error('Users are invalid.');
+        }
+        return users;
+      });
   }
 }
 

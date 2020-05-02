@@ -1,8 +1,9 @@
 <template>
   <div>
-    <Header :title="moduleTitel" :sub-title="numberOfStudents" back-button="true"/>
+    <Header :title="moduleTitle" :sub-title="numberOfStudents" back-button="true"/>
     <UserList v-if="dataIsLoaded" :users="students" second-row-content="email"/>
-    <EmptyList v-if="showEmptyList" title="Noch keine Studierende" description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
+    <EmptyList v-if="showEmptyList" title="Noch keine Studierende"
+               description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>
 </template>
@@ -12,12 +13,13 @@
     Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import UserService from '@/services/userService';
-  import { User, validUsers } from '@/services/User';
+  import { User } from '@/services/User';
   import UserList from '@/components/common/UserList.vue';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
   import { Module } from '@/services/Module';
   import EmptyList from '@/components/common/EmptyList.vue';
+  import ModuleService from '@/services/moduleService';
 
   @Component({
     components: {
@@ -26,25 +28,16 @@
       UserList,
       Header,
     },
-
   })
+
   export default class CoachingPerModule extends Vue {
-     @Prop({
-      default() {
-        return {
-          id: 9007199254740991, // ToDo: this checking integer should be defined outside, so it doesn't look like magic
-          token: 'lädt...', // used as loading text, in case it needs to fetch the module when page reloaded
-          name: 'Empty',
-          responsibility: 'Empty',
-        };
-      },
-    })
-    module!: Module;
+    @Prop()
+    module?: Module; // module is set if user selects a module in list
 
     @Prop()
-    moduleId!: number; // moduleID from URL in case of a page reload
+    moduleId!: string; // moduleId from URL
 
-    private internalModule: Module = this.module; // so we don't modify the prop data below
+    private moduleTitle = this.module ? this.module.token : 'Modul lädt...';
 
     private students: Array<User> = [];
 
@@ -54,18 +47,30 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      if (this.internalModule.id === 9007199254740991) { // handle page reload
-         await this.$router.push('/coaching');
-         return;
-      }
-      this.students = await UserService.getPerStrength(this.internalModule.id);
-      this.dataIsLoaded = validUsers(this.students);
-      if (Array.isArray(this.students)) { // ToDo: refactor this into an external helper function
-        if (this.students.length === 0) {
-          this.showEmptyList = true;
+      try {
+        if (this.module === undefined) {
+          await this.loadModuleData();
         }
-      } else { // handle invalid response
+        await this.loadUserData();
+      } catch {
         await this.$router.push('/coaching');
+      } finally {
+        this.dataIsLoaded = true;
+      }
+    }
+
+    private async loadUserData() {
+      this.students = await UserService.getPerStrength(this.moduleIdAsNumber);
+      if (this.students.length === 0) {
+        this.showEmptyList = true;
+      }
+    }
+
+    private async loadModuleData() {
+      const result = await ModuleService.getAll();
+      const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
+      if (foundModule) {
+        this.moduleTitle = foundModule.token;
       }
     }
 
@@ -77,8 +82,8 @@
       return `${length} Studierende sind bereit, dir zu helfen.`;
     }
 
-    get moduleTitel() {
-      return `Modul ${this.internalModule.token}`;
+    get moduleIdAsNumber() {
+      return parseInt(this.moduleId, 10);
     }
   }
 </script>

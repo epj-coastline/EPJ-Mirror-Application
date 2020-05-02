@@ -19,7 +19,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             _client = appFactory.CreateClient();
         }
 
-        /*[Fact]
+        [Fact]
         public async Task GetAll_ReturnsAllModules()
         {
             // arrange & act
@@ -31,6 +31,6 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(moduleDtos, m => m.Id == -1);
-        }*/
+        }
     }
 }

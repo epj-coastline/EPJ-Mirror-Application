@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="moduleTitel" sub-title="Wähle eine Lerngruppe." back-button="true"/>
+    <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>
@@ -13,9 +13,10 @@
   import Header from '@/components/layout/Header.vue';
   import { Module } from '@/services/Module';
   import StudyGroupList from '@/components/common/StudyGroupList.vue';
-  import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
+  import { StudyGroup } from '@/services/StudyGroup';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import StudyGroupService from '@/services/studyGroupService';
+  import ModuleService from '@/services/moduleService';
 
   @Component({
     components: {
@@ -25,22 +26,13 @@
     },
   })
   export default class StudyGroupsPerModule extends Vue {
-    @Prop({
-      default() {
-        return {
-          id: 9007199254740991, // ToDo: this checking integer should be defined outside, so it doesn't look like magic
-          token: 'lädt...', // used as loading text, in case it needs to fetch the module when page reloaded
-          name: 'Empty',
-          responsibility: 'Empty',
-        };
-      },
-    })
+    @Prop()
     module!: Module;
 
     @Prop()
-    moduleId!: number; // moduleID from URL in case of a page reload
+    moduleId!: string; // moduleID from URL
 
-    private internalModule: Module = this.module; // so we don't modify the prop data below
+    private moduleTitle = this.module ? this.module.token : 'Modul lädt...';
 
     private studyGroups: Array<StudyGroup> = [];
 
@@ -48,19 +40,28 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      if (this.internalModule.id === 9007199254740991) { // handle page reload
+      try {
+        if (this.module === undefined) {
+          await this.loadModuleData();
+        }
+        this.studyGroups = await StudyGroupService.getPerModuleId(this.moduleIdAsNumber);
+      } catch {
         await this.$router.push('/studygroups');
-        return;
-      }
-      this.studyGroups = await StudyGroupService.getPerModuleId(this.internalModule.id);
-      this.dataIsLoaded = validStudyGroups(this.studyGroups);
-      if (!Array.isArray(this.studyGroups)) {
-        await this.$router.push('/studygroups');
+      } finally {
+        this.dataIsLoaded = true;
       }
     }
 
-    get moduleTitel() {
-      return `Modul ${this.internalModule.token}`;
+    private async loadModuleData() {
+      const result = await ModuleService.getAll();
+      const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
+      if (foundModule) {
+        this.moduleTitle = foundModule.token;
+      }
+    }
+
+    get moduleIdAsNumber() {
+      return parseInt(this.moduleId, 10);
     }
   }
 </script>

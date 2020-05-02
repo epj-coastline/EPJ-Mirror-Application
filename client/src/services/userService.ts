@@ -1,4 +1,4 @@
-import { User, validUser, validUsers } from '@/services/User';
+import { User, validUsers } from '@/services/User';
 import { plainToClass } from 'class-transformer';
 import Configuration from '../Configuration';
 

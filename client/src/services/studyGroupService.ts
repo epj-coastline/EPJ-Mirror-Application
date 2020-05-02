@@ -1,6 +1,6 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
-import { StudyGroup } from '@/services/StudyGroup';
+import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
 
 class StudyGroupService {
   static getAll(): Promise<Array<StudyGroup>> {
@@ -34,7 +34,13 @@ class StudyGroupService {
         return Promise.resolve();
       })
       .then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
-        { excludeExtraneousValues: true }));
+        { excludeExtraneousValues: true }))
+      .then((studyGroups) => {
+        if (!validStudyGroups(studyGroups)) {
+          throw new Error('StudyGroups are invalid.');
+        }
+        return studyGroups;
+      });
   }
 }
 export default StudyGroupService;

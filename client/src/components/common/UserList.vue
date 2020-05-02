@@ -27,7 +27,6 @@
     @Prop()
     title!: string;
 
-    // ToDo: There is probably an elegant way with typechecking!
     @Prop({ default: 'degreeProgram' })
     secondRowContent!: string;
   }

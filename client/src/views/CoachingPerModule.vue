@@ -60,7 +60,7 @@
       }
       this.students = await UserService.getPerStrength(this.internalModule.id);
       this.dataIsLoaded = validUsers(this.students);
-      if (Array.isArray(this.students)) { // ToDo: refactor this into an external helper function
+      if (Array.isArray(this.students)) {
         if (this.students.length === 0) {
           this.showEmptyList = true;
         }

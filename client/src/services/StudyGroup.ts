@@ -25,9 +25,5 @@ export function validStudyGroups(studyGroups: StudyGroup[]) {
   if (typeof studyGroups === 'undefined') {
     return false;
   }
-  let returnValue = true;
-  studyGroups.forEach((studyGroup) => {
-    returnValue = returnValue && validStudyGroup(studyGroup);
-  });
-  return returnValue;
+  return studyGroups.every(validStudyGroup);
 }

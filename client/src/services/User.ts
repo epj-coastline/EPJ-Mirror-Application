@@ -33,9 +33,5 @@ export function validUsers(users: User[]) {
   if (typeof users === 'undefined') {
     return false;
   }
-  let returnValue = true;
-  users.forEach((user) => {
-    returnValue = returnValue && validUser(user);
-  });
-  return returnValue;
+  return users.every(validUser);
 }

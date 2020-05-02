@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cl-study-group-list">
     <md-list>
       <div v-for="group in studyGroups" v-bind:key="group.id">
         <md-card>
@@ -44,15 +44,19 @@
 </script>
 
 <style scoped lang="scss">
-  .md-list {
+  .cl-study-group-list .md-list {
     padding: 20px 24px 20px 24px;
   }
-  .md-card {
+  .cl-study-group-list .md-card {
     width: 100%;
     max-width: 400px;
     margin: 8px 0px;
     display: inline-block;
     vertical-align: top;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14);
   }
   .cl-headline6 {
     font-family: Roboto;
@@ -63,7 +67,7 @@
     letter-spacing: 0.15px;
     color: rgba(0, 0, 0, 0.87);
   }
-  .md-subhead, .md-card-content  {
+  .cl-study-group-list .md-subhead, .md-card-content  {
     font-weight: 400 !important;
   }
 </style>

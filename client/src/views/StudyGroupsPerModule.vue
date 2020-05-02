@@ -54,8 +54,7 @@
       }
       this.studyGroups = await StudyGroupService.getPerModuleId(this.internalModule.id);
       this.dataIsLoaded = validStudyGroups(this.studyGroups);
-      if (Array.isArray(this.studyGroups)) { // ToDo: refactor this into an external helper function
-      } else { // handle invalid response
+      if (!Array.isArray(this.studyGroups)) {
         await this.$router.push('/studygroups');
       }
     }

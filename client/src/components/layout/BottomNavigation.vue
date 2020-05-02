@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-bottom-bar class="bottom-navigation" md-sync-route>
+    <md-bottom-bar class="cl-bottom-navigation" md-sync-route>
       <md-bottom-bar-item to="/studygroups" md-label="Lerngruppen" md-icon="group"></md-bottom-bar-item>
       <md-bottom-bar-item to="/coaching" md-label="Nachhilfe" md-icon="school"></md-bottom-bar-item>
       <md-bottom-bar-item to="/profile" md-label="Profil" md-icon="account_circle"></md-bottom-bar-item>
@@ -11,7 +11,7 @@
 </template>
 
 <style lang="scss">
-  .bottom-navigation {
+  .cl-bottom-navigation {
     position: fixed;
     bottom: 0;
     z-index: 100;

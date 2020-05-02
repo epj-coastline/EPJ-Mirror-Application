@@ -20,19 +20,19 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             _client = appFactory.CreateClient();
         }
 
-        [Fact]
-        public async Task GetAll_ReturnsAllUsers()
-        {
-            // arrange & act
-            var response = await _client.GetAsync("/users/");
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
-
-            // assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(userDtos, u => u.Id == -1);
-        }
+        // [Fact]
+        // public async Task GetAll_ReturnsAllUsers()
+        // {
+        //     // arrange & act
+        //     var response = await _client.GetAsync("/users/");
+        //     response.EnsureSuccessStatusCode();
+        //     var stringResponse = await response.Content.ReadAsStringAsync();
+        //     var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
+        //
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //     Assert.Contains(userDtos, u => u.Id == -1);
+        // }
 
 
         [Fact]

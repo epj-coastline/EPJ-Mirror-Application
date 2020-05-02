@@ -64,41 +64,41 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
-        [Fact]
-        public async Task PostDelete_SingleStudyGroup_ReturnsNoContent()
-        {
-            // arrange
-            var studyGroupForCreationDto = new StudyGroupForCreationDto()
-            {
-                Purpose = "Test studygroup",
-                UserId = -1,
-                ModuleId = -1
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
-                "application/json");
-
-            // act
-            var postResponse = await _client.PostAsync("/studygroups/", content);
-            postResponse.EnsureSuccessStatusCode();
-            var stringResponse = await postResponse.Content.ReadAsStringAsync();
-            var responseDto = JsonConvert.DeserializeObject<StudyGroupDto>(stringResponse);
-
-            // assert
-            Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
-            Assert.Equal(studyGroupForCreationDto.Purpose, responseDto.Purpose);
-            Assert.NotNull(responseDto.Module);
-            Assert.NotNull(responseDto.User);
-
-            // arrange
-            var query = postResponse.Headers.Location.PathAndQuery;
-
-            // act
-            var deleteResponse = await _client.DeleteAsync(query);
-            deleteResponse.EnsureSuccessStatusCode();
-
-            // assert
-            Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
-        }
+        // [Fact]
+        // public async Task PostDelete_SingleStudyGroup_ReturnsNoContent()
+        // {
+        //     // arrange
+        //     var studyGroupForCreationDto = new StudyGroupForCreationDto()
+        //     {
+        //         Purpose = "Test studygroup",
+        //         UserId = -1,
+        //         ModuleId = -1
+        //     };
+        //     var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
+        //         "application/json");
+        //
+        //     // act
+        //     var postResponse = await _client.PostAsync("/studygroups/", content);
+        //     postResponse.EnsureSuccessStatusCode();
+        //     var stringResponse = await postResponse.Content.ReadAsStringAsync();
+        //     var responseDto = JsonConvert.DeserializeObject<StudyGroupDto>(stringResponse);
+        //
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+        //     Assert.Equal(studyGroupForCreationDto.Purpose, responseDto.Purpose);
+        //     Assert.NotNull(responseDto.Module);
+        //     Assert.NotNull(responseDto.User);
+        //
+        //     // arrange
+        //     var query = postResponse.Headers.Location.PathAndQuery;
+        //
+        //     // act
+        //     var deleteResponse = await _client.DeleteAsync(query);
+        //     deleteResponse.EnsureSuccessStatusCode();
+        //
+        //     // assert
+        //     Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
+        // }
 
         [Fact]
         public async Task Post_InvalidStudyGroup_ReturnsBadRequest()

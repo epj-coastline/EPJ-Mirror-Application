@@ -1,39 +1,67 @@
 <template>
   <div>
-    <Header :title="moduleTitel" sub-title="Wähle eine Lerngruppe oder erstelle eine neue." back-button="true"/>
+    <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
+    <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
+    <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>
 </template>
 
 <script lang="ts">
   import {
-    Component, Watch, Vue,
+    Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import Header from '@/components/layout/Header.vue';
-  import Module from '@/services/Module';
+  import { Module } from '@/services/Module';
+  import StudyGroupList from '@/components/common/StudyGroupList.vue';
+  import { StudyGroup } from '@/services/StudyGroup';
+  import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+  import StudyGroupService from '@/services/studyGroupService';
   import ModuleService from '@/services/moduleService';
 
   @Component({
     components: {
       Header,
+      StudyGroupList,
+      LoadingSpinner,
     },
-
   })
   export default class StudyGroupsPerModule extends Vue {
-    // ToDo: Fix the empty state
-    private module: Module = {
-      id: 0,
-      token: 'AA',
-      name: 'Empty',
-      responsibility: 'Empty',
-    };
+    @Prop()
+    module!: Module;
+
+    @Prop()
+    moduleId!: string; // moduleID from URL
+
+    private moduleTitle = this.module ? this.module.token : 'Modul lädt...';
+
+    private studyGroups: Array<StudyGroup> = [];
+
+    private dataIsLoaded = false;
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      this.module = await ModuleService.getModuleWithId();
+      try {
+        if (this.module === undefined) {
+          await this.loadModuleData();
+        }
+        this.studyGroups = await StudyGroupService.getPerModuleId(this.moduleIdAsNumber);
+      } catch {
+        await this.$router.push('/studygroups');
+      } finally {
+        this.dataIsLoaded = true;
+      }
     }
 
-    get moduleTitel() {
-      return `Modul ${this.module.token}`;
+    private async loadModuleData() {
+      const result = await ModuleService.getAll();
+      const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
+      if (foundModule) {
+        this.moduleTitle = foundModule.token;
+      }
+    }
+
+    get moduleIdAsNumber() {
+      return parseInt(this.moduleId, 10);
     }
   }
 </script>

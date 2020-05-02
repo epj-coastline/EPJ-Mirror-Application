@@ -1,51 +1,89 @@
 <template>
   <div>
-    <Header :title="moduleTitel" :sub-title="numberOfStudents" back-button="true"/>
-    <UserList :users="students" second-row-content="email"/>
+    <Header :title="moduleTitle" :sub-title="numberOfStudents" back-button="true"/>
+    <UserList v-if="dataIsLoaded" :users="students" second-row-content="email"/>
+    <EmptyList v-if="showEmptyList" title="Noch keine Studierende"
+               description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
+    <LoadingSpinner v-if="!dataIsLoaded"/>
   </div>
 </template>
 
 <script lang="ts">
   import {
-    Component, Watch, Vue,
+    Component, Watch, Vue, Prop,
   } from 'vue-property-decorator';
   import UserService from '@/services/userService';
-  import User from '@/services/User';
+  import { User } from '@/services/User';
   import UserList from '@/components/common/UserList.vue';
+  import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
-  import Module from '@/services/Module';
+  import { Module } from '@/services/Module';
+  import EmptyList from '@/components/common/EmptyList.vue';
   import ModuleService from '@/services/moduleService';
 
   @Component({
     components: {
+      EmptyList,
+      LoadingSpinner,
       UserList,
       Header,
     },
-
   })
+
   export default class CoachingPerModule extends Vue {
+    @Prop()
+    module?: Module; // module is set if user selects a module in list
+
+    @Prop()
+    moduleId!: string; // moduleId from URL
+
+    private moduleTitle = this.module ? this.module.token : 'Modul lädt...';
+
     private students: Array<User> = [];
 
-    // ToDo: Fix the empty state
-    private module: Module = {
-      id: 0,
-      token: 'AA',
-      name: 'Empty',
-      responsibility: 'Empty',
-    };
+    private dataIsLoaded = false;
+
+    private showEmptyList = false;
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
-      this.students = await UserService.getAll();
-      this.module = await ModuleService.getModuleWithId();
+      try {
+        if (this.module === undefined) {
+          await this.loadModuleData();
+        }
+        await this.loadUserData();
+      } catch {
+        await this.$router.push('/coaching');
+      } finally {
+        this.dataIsLoaded = true;
+      }
+    }
+
+    private async loadUserData() {
+      this.students = await UserService.getPerStrength(this.moduleIdAsNumber);
+      if (this.students.length === 0) {
+        this.showEmptyList = true;
+      }
+    }
+
+    private async loadModuleData() {
+      const result = await ModuleService.getAll();
+      const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
+      if (foundModule) {
+        this.moduleTitle = foundModule.token;
+      }
     }
 
     get numberOfStudents() {
-      return `${this.students.length} Studierende sind bereit, dir zu helfen.`;
+      const { length } = this.students;
+      if (length === 1) {
+        return `${length} Studierender ist bereit, dir zu helfen.`;
+      }
+      return `${length} Studierende sind bereit, dir zu helfen.`;
     }
 
-    get moduleTitel() {
-      return `Modul ${this.module.token}`;
+    get moduleIdAsNumber() {
+      return parseInt(this.moduleId, 10);
     }
   }
 </script>

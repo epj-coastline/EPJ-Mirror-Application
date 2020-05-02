@@ -13,7 +13,7 @@
           <md-button md-menu-trigger v-if="menuButton" class="md-icon-button" >
             <md-icon>more_vert</md-icon>
           </md-button>
-          <md-menu-content>
+          <md-menu-content class="cl-header-menu-content">
             <md-menu-item v-on:click="authService.logout()">Abmelden</md-menu-item>
           </md-menu-content>
         </md-menu>
@@ -61,15 +61,14 @@
 </script>
 
 <style lang="scss">
-  .md-menu-content {
+  .cl-header-menu-content {
     z-index: 101;
     top: 32px !important;
-    // ToDo: menu should open 24px from the right border
   }
-  .md-menu-content-container {
+  .cl-header-menu-content .md-menu-content-container {
     border-radius: 4px;
   }
-  .md-list-item-content {
+  .cl-header-menu-content .md-list-item-content {
     padding: 6px 6px 6px 8px;
     min-height: 20px;
     height: 32px;
@@ -97,10 +96,12 @@
     right: 0;
     bottom: auto;
     padding-left: 24px;
-    padding-top: 32px;
+    // padding-top: 32px;
     z-index: 100;
   }
   .cl-first-row {
+    padding-top: 30px;
+    padding-bottom: 10px;
     display: flex;
     overflow-y: auto;
     width: inherit;
@@ -123,15 +124,15 @@
   }
   .cl-first-row-title {
     font-size: 24px;
-    line-height: 24px;
+    line-height: 28px;
     margin-left: 0              !important;
   }
   .cl-second-row {
-    padding-top: 24px           !important;
+    padding-top: 12px           !important;
     padding-bottom: 32px        !important;
   }
   .cl-second-row-off {
-    height: 32px;
+    height: 20px;
     min-height: 0;
   }
   .cl-second-row-title {

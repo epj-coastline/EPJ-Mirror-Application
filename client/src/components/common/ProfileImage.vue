@@ -1,5 +1,5 @@
 <template>
-  <md-avatar class="profile-image md-avatar-icon md-primary">{{ initials }}</md-avatar>
+  <md-avatar class="cl-profile-image md-avatar-icon md-primary">{{ initials }}</md-avatar>
 </template>
 
 <script lang="ts">
@@ -20,7 +20,7 @@
 </script>
 
 <style lang="scss">
-  .profile-image {
+  .cl-profile-image {
     font-size: 18px;
   }
 </style>

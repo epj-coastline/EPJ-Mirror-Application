@@ -1,8 +1,8 @@
 <template>
-  <md-list class="md-double-line">
+  <md-list class="md-double-line cl-module-list">
     <md-subheader class="subheader">{{ title}}</md-subheader>
     <div v-for="module in modules" :key="module.id">
-      <md-list-item class="cl-list-padding" :to="{ name: navigateTo, params: { moduleId: module.id, module: module }}" exact>
+      <md-list-item :to="{ name: navigateTo, params: { moduleId: module.id, module: module }}" exact>
         <div class="md-list-item-text">
           <span>{{ module.token }} </span>
           <span>{{ module.name }}</span>
@@ -32,10 +32,10 @@
 </script>
 
 <style scoped lang="scss">
-  .md-list-item-text > span:first-child{
+  .cl-module-list .md-list-item-text > span:first-child{
     margin-bottom: 2px;
   }
-  .subheader {
+  .cl-module-list .subheader {
     min-height: 24px;
     color: rgba(0, 0, 0, 0.87);
     padding-left:   24px;
@@ -44,11 +44,11 @@
   .cl-inset {
     margin-left: 24px;
   }
-  .cl-list-padding{
+  .cl-module-list .md-list-item-router {
     padding-left:   8px;
     padding-right:  8px;
   }
-  .md-subheader {
+  .cl-module-list .md-subheader {
     padding-top: 24px;
     padding-bottom: 8px;
   }

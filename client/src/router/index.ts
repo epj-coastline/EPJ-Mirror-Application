@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import Studygroups from '@/views/StudyGroups.vue';
+import StudyGroups from '@/views/StudyGroups.vue';
 import Coaching from '@/views/Coaching.vue';
-import CoachingModule from '@/views/CoachingPerModule.vue';
-import StudygroupsModule from '@/views/StudyGroupsPerModule.vue';
+import CoachingPerModule from '@/views/CoachingPerModule.vue';
+import StudyGroupsPerModule from '@/views/StudyGroupsPerModule.vue';
 import Profile from '@/views/Profile.vue';
 import authGuard from '@/auth/authGuard';
 
@@ -16,12 +16,15 @@ const routes: Array<RouteConfig> = [
   {
     path: '/studygroups',
     name: 'Lerngruppen',
-    component: Studygroups,
+    component: StudyGroups,
   },
   {
     path: '/studygroups/:moduleId',
     name: 'LerngruppenProModul',
-    component: StudygroupsModule,
+    component: StudyGroupsPerModule,
+    props: (route) => ({
+      ...route.params,
+    }),
   },
   {
     path: '/coaching',
@@ -31,7 +34,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/coaching/:moduleId',
     name: 'NachhilfeProModul',
-    component: CoachingModule,
+    component: CoachingPerModule,
+    props: (route) => ({
+      ...route.params,
+    }),
   },
   {
     path: '/profile',

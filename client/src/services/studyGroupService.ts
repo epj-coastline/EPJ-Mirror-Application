@@ -17,7 +17,13 @@ class StudyGroupService {
         return Promise.resolve();
       })
       .then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
-        { excludeExtraneousValues: true }));
+        { excludeExtraneousValues: true }))
+      .then((studyGroups) => {
+        if (!validStudyGroups(studyGroups)) {
+          throw new Error('Study groups are invalid.');
+        }
+        return studyGroups;
+      });
   }
 
   static getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
@@ -37,10 +43,11 @@ class StudyGroupService {
         { excludeExtraneousValues: true }))
       .then((studyGroups) => {
         if (!validStudyGroups(studyGroups)) {
-          throw new Error('StudyGroups are invalid.');
+          throw new Error('Study groups are invalid.');
         }
         return studyGroups;
       });
   }
 }
+
 export default StudyGroupService;

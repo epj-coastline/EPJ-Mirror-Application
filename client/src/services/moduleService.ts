@@ -1,6 +1,6 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
-import { Module } from '@/services/Module';
+import { Module, validModules } from '@/services/Module';
 
 class ModuleService {
   static getAll(): Promise<Array<Module>> {
@@ -17,7 +17,13 @@ class ModuleService {
         return Promise.resolve();
       })
       .then((modules: typeof Module[]) => plainToClass(Module, modules,
-        { excludeExtraneousValues: true }));
+        { excludeExtraneousValues: true }))
+      .then((modules) => {
+        if (!validModules(modules)) {
+          throw new Error('Modules are invalid.');
+        }
+        return modules;
+      });
   }
 }
 

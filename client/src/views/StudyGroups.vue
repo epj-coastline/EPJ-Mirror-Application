@@ -9,7 +9,7 @@
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import ModuleService from '@/services/moduleService';
-  import { Module, validModules } from '@/services/Module';
+  import { Module } from '@/services/Module';
   import ModuleList from '@/components/common/ModuleList.vue';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import Header from '@/components/layout/Header.vue';
@@ -29,7 +29,7 @@
     @Watch('$route', { immediate: true, deep: true })
     async loadList() {
       this.modules = await ModuleService.getAll();
-      this.dataIsLoaded = validModules(this.modules);
+      this.dataIsLoaded = true;
     }
   }
 </script>

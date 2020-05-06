@@ -3,6 +3,12 @@
     <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
+    <div>
+      <md-button @click="openStudyGroupCreateDialog" class="md-fab md-primary md-fab-bottom-right cl-floating-action">
+        <md-icon>add</md-icon>
+      </md-button>
+    </div>
+    <StudyGroupCreateDialog :moduleId="moduleId" v-on:close="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
   </div>
 </template>
 
@@ -17,14 +23,17 @@
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
   import StudyGroupService from '@/services/studyGroupService';
   import ModuleService from '@/services/moduleService';
+  import StudyGroupCreateDialog from '@/components/common/StudyGroupCreateDialog.vue';
 
   @Component({
     components: {
+      StudyGroupCreateDialog,
       Header,
       StudyGroupList,
       LoadingSpinner,
     },
   })
+
   export default class StudyGroupsPerModule extends Vue {
     @Prop()
     module!: Module;
@@ -37,6 +46,8 @@
     private studyGroups: Array<StudyGroup> = [];
 
     private dataIsLoaded = false;
+
+    private studyGroupCreation = false;
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
@@ -63,9 +74,21 @@
     get moduleIdAsNumber() {
       return parseInt(this.moduleId, 10);
     }
+
+    private openStudyGroupCreateDialog() {
+      this.studyGroupCreation = true;
+    }
+
+    public closeStudyGroupCrateDialog() {
+      this.studyGroupCreation = false;
+    }
   }
+
+
 </script>
 
 <style scoped>
-
+  .cl-floating-action {
+    bottom: 80px;
+  }
 </style>

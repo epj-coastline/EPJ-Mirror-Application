@@ -67,10 +67,10 @@ If errors occur the CLI tools version might be outdated or not installed. To ins
 dotnet tool install --global dotnet-ef
 ```
 
-Navigate to the `CoastlineServer.DAL` and Update the database for creating first schema.
+Navigate to the `CoastlineServer.Service` and Update the database for creating first schema.
 
 ```c#
-cd CoastlineServer.DAL 
+cd CoastlineServer.Service 
 dotnet ef database update InitialCreate --project ../CoastlineServer.DAL
 ```
 

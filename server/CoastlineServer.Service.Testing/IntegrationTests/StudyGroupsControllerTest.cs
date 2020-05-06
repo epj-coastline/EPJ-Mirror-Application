@@ -10,11 +10,11 @@ using Xunit;
 
 namespace CoastlineServer.Service.Testing.IntegrationTests
 {
-    public class StudyGroupControllerTest
+    public class StudyGroupsControllerTest
     {
         private readonly HttpClient _client;
 
-        public StudyGroupControllerTest()
+        public StudyGroupsControllerTest()
         {
             var appFactory = new WebApplicationFactory<Startup>();
             _client = appFactory.CreateClient();
@@ -117,8 +117,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var response = await _client.PostAsync("/studygroups/", content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-
-
+        
         [Fact]
         public async Task Delete_SingleStudyGroupByInvalidId_ReturnsNotFound()
         {

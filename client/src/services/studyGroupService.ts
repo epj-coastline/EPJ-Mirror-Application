@@ -48,6 +48,18 @@ class StudyGroupService {
         return studyGroups;
       });
   }
+
+  static postStudyGroup(purpose: string, userId: number, moduleId: number) {
+    // ToDo: Add Error Handling and enable POST
+    const data = { purpose, userId, moduleId };
+    /* return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }); */
+  }
 }
 
 export default StudyGroupService;

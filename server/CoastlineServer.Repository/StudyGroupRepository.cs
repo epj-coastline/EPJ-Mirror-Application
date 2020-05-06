@@ -47,7 +47,7 @@ namespace CoastlineServer.Repository
                 {
                     throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
                 }
-                
+
                 collection = collection
                     .Where(s => s.ModuleId == moduleId);
             }

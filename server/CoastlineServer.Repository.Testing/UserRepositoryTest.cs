@@ -137,46 +137,46 @@ namespace CoastlineServer.Repository.Testing
         {
             // arrange
             var users = await _userRepository.GetAll();
-            
+
             // act
             var studyGroups = users.Single(u => u.Id == -1).StudyGroups;
 
             // assert
             Assert.NotEmpty(studyGroups);
         }
-        
+
         [Fact]
         public async Task GetAll_ReturnsAllUsersWithStrengths()
         {
             // arrange
             var users = await _userRepository.GetAll();
-            
+
             // act
             var strengths = users.Single(u => u.Id == -1).Strengths;
 
             // assert
             Assert.NotEmpty(strengths);
         }
-        
+
         [Fact]
         public async Task GetAll_ReturnsAllUsersWithMembers()
         {
             // arrange
             var users = await _userRepository.GetAll();
-            
+
             // act
             var members = users.Single(u => u.Id == -1).Members;
 
             // assert
             Assert.NotEmpty(members);
         }
-        
+
         [Fact]
         public async Task GetAll_ReturnsAllUsersWithConfirmations()
         {
             // arrange
             var users = await _userRepository.GetAll();
-            
+
             // act
             var confirmations = users.Single(u => u.Id == -1).Confirmations;
 
@@ -192,12 +192,12 @@ namespace CoastlineServer.Repository.Testing
             {
                 Strength = "-1"
             };
-            
+
             // act
             var users = await _userRepository.GetAll(userResourceParameters);
             var strengthsOfUser = users.First().Strengths;
             var strengthOfModul = strengthsOfUser.Single(s => s.ModuleId == -1);
-            
+
             // assert
             Assert.NotEmpty(users);
             Assert.NotNull(strengthOfModul);
@@ -211,7 +211,7 @@ namespace CoastlineServer.Repository.Testing
             {
                 Strength = "abc"
             };
-            
+
             // act
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
@@ -224,7 +224,7 @@ namespace CoastlineServer.Repository.Testing
         {
             // arrange
             UserResourceParameters userResourceParameters = null;
-            
+
             // act & assert
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
@@ -240,10 +240,10 @@ namespace CoastlineServer.Repository.Testing
             {
                 Strength = "-500"
             };
-            
+
             // act
             var users = await _userRepository.GetAll(userResourceParameters);
-            
+
             // assert
             Assert.Empty(users);
         }

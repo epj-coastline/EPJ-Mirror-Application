@@ -27,7 +27,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var moduleDtos = JsonConvert.DeserializeObject<IEnumerable<ModuleDto>>(stringResponse);
-            
+
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(moduleDtos, m => m.Id == -1);

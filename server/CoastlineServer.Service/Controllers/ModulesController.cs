@@ -24,7 +24,7 @@ namespace CoastlineServer.Service.Controllers
         public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules()
         {
             var modules = await _moduleRepository.GetAll();
-            
+
             return Ok(_mapper.Map<IEnumerable<ModuleDto>>(modules));
         }
     }

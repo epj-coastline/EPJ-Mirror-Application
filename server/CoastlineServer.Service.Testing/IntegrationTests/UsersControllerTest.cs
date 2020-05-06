@@ -28,13 +28,12 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
-        
+
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(userDtos, u => u.Id == -1);
         }
-
-
+        
         [Fact]
         public async Task Get_SingleUserById_ReturnsUser()
         {
@@ -157,7 +156,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange & act
             var response = await _client.GetAsync("/users?strength=abc");
-            
+
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }

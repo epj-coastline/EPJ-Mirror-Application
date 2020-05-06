@@ -145,7 +145,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(studyGroupDtos, s => s.ModuleId == -1);
         }
-        
+
         [Fact]
         public async Task GetAll_InvalidParameter_ReturnsNotFound()
         {

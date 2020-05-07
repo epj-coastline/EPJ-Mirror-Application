@@ -31,7 +31,7 @@
     },
     methods: {
       formatDate(date: Date): string {
-        // ToDo: change time with local Timezone
+        // ToDo: change time with local Timezone (& change unit tests)
           return moment(date, 'YYYY-MM-DDTHH:mm:ss').add(2, 'hours').fromNow();
       },
     },

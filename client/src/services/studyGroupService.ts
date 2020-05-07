@@ -1,6 +1,8 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
+import { getAuthService } from '@/auth/authServiceFactory';
+import { Auth0User } from '@/auth/interfaces';
 
 class StudyGroupService {
   static getAll(): Promise<Array<StudyGroup>> {
@@ -49,16 +51,23 @@ class StudyGroupService {
       });
   }
 
-  static postStudyGroup(purpose: string, userId: number, moduleId: number) {
-    // ToDo: Add Error Handling and enable POST
+  static postStudyGroup(purpose: string, module: number) {
+    const authService = getAuthService();
+    const { user } = authService;
+    // ToDo: use user.sub id
+    // const userId = user.sub;
+    const userId = -3;
+    const moduleId = Number(module);
     const data = { purpose, userId, moduleId };
-    /* return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
+
+    // ToDo: add Error handling
+    return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
-    }); */
+    });
   }
 }
 

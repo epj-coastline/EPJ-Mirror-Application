@@ -4,11 +4,11 @@
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
     <div>
-      <md-button @click="openStudyGroupCreateDialog" class="md-fab md-primary md-fab-bottom-right cl-floating-action">
+      <md-button @click="openStudyGroupCreateDialog" class="md-fab md-primary md-fab-bottom-right md-fixed cl-floating-action">
         <md-icon>add</md-icon>
       </md-button>
     </div>
-    <StudyGroupCreateDialog :moduleId="moduleId" v-on:close="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
+    <StudyGroupCreateDialog :moduleId="moduleId" :module-title="moduleTitle" v-on:close="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
   </div>
 </template>
 
@@ -81,6 +81,7 @@
 
     public closeStudyGroupCrateDialog() {
       this.studyGroupCreation = false;
+      this.loadData();
     }
   }
 
@@ -89,6 +90,6 @@
 
 <style scoped>
   .cl-floating-action {
-    bottom: 80px;
+     bottom: 80px;
   }
 </style>

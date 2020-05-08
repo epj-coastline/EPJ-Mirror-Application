@@ -80,7 +80,10 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
                 "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/") {Content = content};
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/")
+            {
+                Content = content
+            };
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
@@ -120,11 +123,16 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
                 "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/") {Content = content};
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/")
+            {
+                Content = content
+            };
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
             var response = await _client.SendAsync(postRequest);
+            
+            // assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 

@@ -70,7 +70,10 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
                 "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/") {Content = content};
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
+            {
+                Content = content
+            };
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
@@ -140,7 +143,10 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
                 "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/") {Content = content};
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
+            {
+                Content = content
+            };
             postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act

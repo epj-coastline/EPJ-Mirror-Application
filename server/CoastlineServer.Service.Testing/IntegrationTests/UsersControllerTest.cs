@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CoastlineServer.Service.Models;
+using CoastlineServer.Service.Testing.TestHelper;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
@@ -13,11 +15,13 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
     public class UsersControllerTest
     {
         private readonly HttpClient _client;
+        private readonly string _accessToken;
 
         public UsersControllerTest()
         {
             var appFactory = new WebApplicationFactory<Startup>();
             _client = appFactory.CreateClient();
+            _accessToken = Auth0Helper.GetAccessToken();
         }
 
         [Fact]
@@ -33,7 +37,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(userDtos, u => u.Id == -1);
         }
-        
+
         [Fact]
         public async Task Get_SingleUserById_ReturnsUser()
         {
@@ -66,9 +70,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
                 "application/json");
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/") {Content = content};
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
-            var postResponse = await _client.PostAsync("/users/", content);
+            var postResponse = await _client.SendAsync(postRequest);
             postResponse.EnsureSuccessStatusCode();
             var stringResponse = await postResponse.Content.ReadAsStringAsync();
             var responseDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
@@ -79,9 +85,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // arrange
             var query = postResponse.Headers.Location.PathAndQuery;
+            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, query);
+            deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
-            var deleteResponse = await _client.DeleteAsync(query);
+            var deleteResponse = await _client.SendAsync(deleteRequest);
             deleteResponse.EnsureSuccessStatusCode();
 
             // assert
@@ -105,10 +113,13 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task Delete_SingleUserByInvalidId_ReturnsNotFound()
         {
             // arrange
-            var invalidUserId = -500;
+            var invalidStudyGroupId = -500;
+            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/users/{invalidStudyGroupId}");
+            deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
-            var response = await _client.DeleteAsync($"/users/{invalidUserId}");
+            var response = await _client.SendAsync(deleteRequest);
+
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -129,12 +140,14 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
             var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
                 "application/json");
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/") {Content = content};
+            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
-            var response = await _client.PostAsync("/users/", content);
-
+            var postResponse = await _client.SendAsync(postRequest);
+            
             // assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, postResponse.StatusCode);
         }
 
         [Fact]

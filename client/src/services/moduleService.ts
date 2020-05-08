@@ -1,13 +1,18 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { Module, validModules } from '@/services/Module';
+import { getAuthService } from '@/auth/authServiceFactory';
 
 class ModuleService {
-  static getAll(): Promise<Array<Module>> {
+  private static authService = getAuthService();
+
+  static async getAll(): Promise<Array<Module>> {
+    const token = await this.authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/modules`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

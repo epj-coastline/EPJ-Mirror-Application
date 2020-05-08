@@ -1,13 +1,18 @@
+import { getAuthService } from '@/auth/authServiceFactory';
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
 
 class StudyGroupService {
-  static getAll(): Promise<Array<StudyGroup>> {
+  private static authService = getAuthService();
+
+  static async getAll(): Promise<Array<StudyGroup>> {
+    const token = await this.authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

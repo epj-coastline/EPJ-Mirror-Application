@@ -1,13 +1,18 @@
 import { User, validUsers } from '@/services/User';
 import { plainToClass } from 'class-transformer';
+import { getAuthService } from '@/auth/authServiceFactory';
 import Configuration from '../Configuration';
 
 class UserService {
+  private static authService = getAuthService();
+
   static async getAll(): Promise<Array<User>> {
+    const token = await this.authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/users`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

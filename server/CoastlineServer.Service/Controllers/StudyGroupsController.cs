@@ -6,6 +6,7 @@ using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoastlineServer.Service.Controllers
@@ -62,6 +63,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<StudyGroupDto>> CreateStudyGroup(
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
@@ -77,6 +79,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpDelete("{studyGroupId:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int studyGroupId)
         {
             try

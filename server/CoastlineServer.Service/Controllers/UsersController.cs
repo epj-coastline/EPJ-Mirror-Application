@@ -7,6 +7,7 @@ using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoastlineServer.Service.Controllers
 {
@@ -61,6 +62,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
@@ -74,6 +76,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpDelete("{userId:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             try

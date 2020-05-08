@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.Repository;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CoastlineServer.Service
 {
@@ -24,6 +24,15 @@ namespace CoastlineServer.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = $"https://{Configuration["Auth0Domain"]}/";
+                options.Audience = Configuration["Auth0Audience"];
+            });
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<UserRepository>();
@@ -72,6 +81,7 @@ namespace CoastlineServer.Service
                     .AllowCredentials();
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Register the Swagger generator and the Swagger UI middlewares

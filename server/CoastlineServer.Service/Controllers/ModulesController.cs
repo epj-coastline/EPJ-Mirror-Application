@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CoastlineServer.Service.Controllers
 {
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("[controller]")]
     public class ModulesController : ControllerBase
     {

@@ -4,10 +4,9 @@ import { plainToClass } from 'class-transformer';
 import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
 
 class StudyGroupService {
-  private static authService = getAuthService();
-
   static async getAll(): Promise<Array<StudyGroup>> {
-    const token = await this.authService.getTokenAsync();
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'GET',
       headers: {

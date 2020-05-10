@@ -4,10 +4,9 @@ import { Module, validModules } from '@/services/Module';
 import { getAuthService } from '@/auth/authServiceFactory';
 
 class ModuleService {
-  private static authService = getAuthService();
-
   static async getAll(): Promise<Array<Module>> {
-    const token = await this.authService.getTokenAsync();
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/modules`, {
       method: 'GET',
       headers: {

@@ -4,10 +4,9 @@ import { getAuthService } from '@/auth/authServiceFactory';
 import Configuration from '../Configuration';
 
 class UserService {
-  private static authService = getAuthService();
-
   static async getAll(): Promise<Array<User>> {
-    const token = await this.authService.getTokenAsync();
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/users`, {
       method: 'GET',
       headers: {

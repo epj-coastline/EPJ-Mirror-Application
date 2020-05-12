@@ -55,8 +55,8 @@
     }
   },
   "dependencies": {
-    "class-transformer": "^0.2.3",
     "@auth0/auth0-spa-js": "^1.7.0",
+    "class-transformer": "^0.2.3",
     "core-js": "^3.6.4",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",

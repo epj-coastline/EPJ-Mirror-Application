@@ -76,7 +76,7 @@ namespace CoastlineServer.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Purpose = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    Purpose = table.Column<string>(type: "VARCHAR(140)", nullable: true),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                     UserId = table.Column<int>(nullable: false),

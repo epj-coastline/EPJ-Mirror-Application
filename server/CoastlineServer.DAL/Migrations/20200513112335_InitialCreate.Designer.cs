@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoastlineServer.DAL.Migrations
 {
     [DbContext(typeof(CoastlineContext))]
-    [Migration("20200430061317_InitialCreate")]
+    [Migration("20200513112335_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,7 +259,7 @@ namespace CoastlineServer.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("VARCHAR(40)");
+                        .HasColumnType("VARCHAR(140)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

@@ -2,6 +2,8 @@
   <div>
     <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
+    <EmptyList v-if="showEmptyList" title="Noch keine Lerngruppen"
+               description="Es gibt noch keine Lerngruppen für dieses Modul. Erstelle hier die Erste."/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
     <div>
       <md-button @click="openStudyGroupCreateDialog" class="md-fab md-primary md-fab-bottom-right md-fixed cl-floating-action">
@@ -24,6 +26,7 @@
   import StudyGroupService from '@/services/studyGroupService';
   import ModuleService from '@/services/moduleService';
   import StudyGroupCreateDialog from '@/components/common/StudyGroupCreateDialog.vue';
+  import EmptyList from '@/components/common/EmptyList.vue';
 
   @Component({
     components: {
@@ -31,6 +34,7 @@
       Header,
       StudyGroupList,
       LoadingSpinner,
+      EmptyList,
     },
   })
 
@@ -49,6 +53,8 @@
 
     private studyGroupCreation = false;
 
+    private showEmptyList = false;
+
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
       try {
@@ -56,6 +62,12 @@
           await this.loadModuleData();
         }
         this.studyGroups = await StudyGroupService.getPerModuleId(this.moduleIdAsNumber);
+        console.log(this.studyGroups);
+        if (this.studyGroups.length === 0) {
+          this.showEmptyList = true;
+        } else {
+          this.showEmptyList = false;
+        }
       } catch {
         await this.$router.push('/studygroups');
       } finally {

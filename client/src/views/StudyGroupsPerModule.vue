@@ -8,7 +8,7 @@
         <md-icon>add</md-icon>
       </md-button>
     </div>
-    <StudyGroupCreateDialog :moduleId="moduleId" :module-title="moduleTitle" v-on:close="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
+    <StudyGroupCreateDialog :moduleId="moduleId" :module-title="moduleTitle" v-on:closeCreateDialog="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
   </div>
 </template>
 

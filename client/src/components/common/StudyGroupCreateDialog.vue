@@ -53,17 +53,11 @@
 
     private form = { purpose: null };
 
-    private studyGroupSaved = false;
-
     private sending = false;
 
     private invalidPurpose = true;
 
-    private lastStudyGroup = null;
-
-    private showDialog = false;
-
-      getValidationClass() {
+    getValidationClass() {
         const field = this.$v.form.purpose;
         this.invalidPurpose = !field || (field.$invalid && field.$dirty);
       }
@@ -78,15 +72,11 @@
         if (purposeTmp !== null) {
           this.sending = true;
           StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
-
           // Instead of this timeout, here you can call your API
           window.setTimeout(() => {
-            this.lastStudyGroup = this.form.purpose;
-            this.studyGroupSaved = true;
             this.sending = false;
-
             this.clearForm();
-            this.$emit('close');
+            this.$emit('closeCreateDialog');
           }, 1500);
         }
       }
@@ -105,7 +95,7 @@
 
       closeDialog() {
         this.clearForm();
-        this.$emit('close');
+        this.$emit('closeCreateDialog');
       }
   }
 
@@ -113,9 +103,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .md-dialog ::v-deep .md-dialog-container {
-    max-width: 768px;
-  }
   .cl-button-submit {
     width: 100%;
   }

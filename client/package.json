@@ -55,10 +55,11 @@
     }
   },
   "dependencies": {
-    "class-transformer": "^0.2.3",
     "@auth0/auth0-spa-js": "^1.7.0",
+    "class-transformer": "^0.2.3",
     "core-js": "^3.6.4",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "reflect-metadata": "^0.1.13",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",
@@ -71,6 +72,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.8",
     "@types/mocha": "^5.2.4",
+    "@types/moment-timezone": "^0.5.13",
     "@types/vuelidate": "^0.7.13",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",

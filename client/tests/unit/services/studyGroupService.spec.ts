@@ -63,7 +63,7 @@ describe('Study Group Array type checking', () => {
   });
 });
 
-describe('sort two dates in descending order', () => {
+describe('Sort two dates in descending order', () => {
   it('succeeds on same dates', () => {
     const date1 = new Date('2020-05-07T14:17:00.97696');
     expect(StudyGroupService.compareDateDescending(date1, date1)).to.be.equal(0);

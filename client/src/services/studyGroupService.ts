@@ -48,6 +48,10 @@ class StudyGroupService {
     // const userId = user.sub;
     const userId = -3;
     // ---- * ----
+
+    if (!purpose) {
+      throw new Error('Purpose is invalid.');
+    }
     const moduleId = Number(module);
     const data = { purpose, userId, moduleId };
 
@@ -61,7 +65,7 @@ class StudyGroupService {
       if (!response.ok) {
         throw Error(response.statusText);
       }
-      return response;
+      return Promise.resolve();
     });
   }
 }

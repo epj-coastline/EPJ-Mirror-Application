@@ -149,7 +149,7 @@ describe('StudyGroupCreateDialog.vue', () => {
       },
     });
 
-    expect(wrapper.text()).to.be.equal('Neue Lerngruppe für XyclearLerngruppe erstellen');
+    expect(wrapper.text()).to.be.equal('Neue Lerngruppe für Xyclear Lerngruppe erstellen');
   });
 });
 

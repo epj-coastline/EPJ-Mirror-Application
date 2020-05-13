@@ -2,7 +2,8 @@
   <div>
     <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
-    <EmptyList v-if="showEmptyList" title="Noch keine Lerngruppen"
+    <EmptyList v-if="showEmptyList"
+               title="Noch keine Lerngruppen"
                description="Es gibt noch keine Lerngruppen für dieses Modul. Erstelle hier die Erste."/>
     <LoadingSpinner v-if="!dataIsLoaded"/>
     <div>
@@ -10,7 +11,10 @@
         <md-icon>add</md-icon>
       </md-button>
     </div>
-    <StudyGroupCreateDialog :moduleId="moduleId" :module-title="moduleTitle" v-on:closeCreateDialog="closeStudyGroupCrateDialog" :title="moduleTitle " v-if="studyGroupCreation"></StudyGroupCreateDialog>
+    <StudyGroupCreateDialog :moduleId="moduleId"
+                            :module-title="moduleTitle"
+                            v-on:closeCreateDialog="closeStudyGroupCrateDialog"
+                            v-if="studyGroupCreation"/>
   </div>
 </template>
 
@@ -96,8 +100,6 @@
       this.loadData();
     }
   }
-
-
 </script>
 
 <style scoped>

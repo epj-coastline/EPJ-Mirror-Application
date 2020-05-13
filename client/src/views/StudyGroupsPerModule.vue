@@ -62,7 +62,7 @@
           await this.loadModuleData();
         }
         this.studyGroups = await StudyGroupService.getPerModuleId(this.moduleIdAsNumber);
-        console.log(this.studyGroups);
+
         if (this.studyGroups.length === 0) {
           this.showEmptyList = true;
         } else {

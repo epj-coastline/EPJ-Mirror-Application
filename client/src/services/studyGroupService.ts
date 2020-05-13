@@ -62,11 +62,13 @@ class StudyGroupService {
   }
 
   static postStudyGroup(purpose: string, module: number) {
+    // ---- * ----
+    // Todo: Remove this, and send token
     const authService = getAuthService();
     const { user } = authService;
-    // ToDo: use user.sub id
     // const userId = user.sub;
     const userId = -3;
+    // ---- * ----
     const moduleId = Number(module);
     const data = { purpose, userId, moduleId };
 

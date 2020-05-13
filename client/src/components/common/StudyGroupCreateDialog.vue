@@ -69,15 +69,23 @@
 
       async saveStudyGroup() {
         this.sending = true;
-        const purposeTmp = this.form.purpose;
-        if (purposeTmp !== null) {
-          await StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
-          // Instead of this timeout, here you can call your API
-          window.setTimeout(() => {
-            this.sending = false;
-            this.clearForm();
-            this.$emit('closeCreateDialog');
-          }, 1500);
+        try {
+          const purposeTmp = this.form.purpose;
+          if (purposeTmp !== null) {
+            await StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
+            // Todo: Add Timout as Promise
+            window.setTimeout(() => {
+              this.sending = false;
+              this.clearForm();
+              this.$emit('closeCreateDialog');
+            }, 1500);
+          } else {
+            throw Error('The study group could not be created.');
+          }
+        } catch {
+            await this.$router.push('/studygroups');
+        } finally {
+          this.sending = false;
         }
       }
 

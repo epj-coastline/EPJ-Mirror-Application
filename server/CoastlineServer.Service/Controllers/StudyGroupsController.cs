@@ -69,8 +69,8 @@ namespace CoastlineServer.Service.Controllers
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
             var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Split('|')[1];
-            // studyGroup.UserId = userId;
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
+            studyGroup.UserId = userId;
             studyGroup.CreationDate = DateTime.UtcNow;
             var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
             var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);

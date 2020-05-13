@@ -26,42 +26,42 @@ namespace CoastlineServer.DAL.Configurations
                 {
                     Id = -1,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -1,
+                    UserId = "1",
                     StudyGroupId = -1
                 },
                 new Member()
                 {
                     Id = -2,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -2,
+                    UserId = "2",
                     StudyGroupId = -2
                 },
                 new Member()
                 {
                     Id = -3,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -3,
+                    UserId = "3",
                     StudyGroupId = -4
                 },
                 new Member()
                 {
                     Id = -4,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -4,
+                    UserId = "4",
                     StudyGroupId = -4
                 },
                 new Member()
                 {
                     Id = -5,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -4,
+                    UserId = "4",
                     StudyGroupId = -5
                 },
                 new Member()
                 {
                     Id = -6,
                     AccessionDate = new DateTime(2020, 03, 11, 18, 22, 50),
-                    UserId = -1,
+                    UserId = "1",
                     StudyGroupId = -3
                 }
             );

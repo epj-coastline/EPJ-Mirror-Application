@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -47,8 +48,8 @@ namespace CoastlineServer.Service.Controllers
             }
         }
 
-        [HttpGet("{userId:int}", Name = "GetUser")]
-        public async Task<ActionResult<UserDto>> GetUser(int userId)
+        [HttpGet("{userId}", Name = "GetUser")]
+        public async Task<ActionResult<UserDto>> GetUser(string userId)
         {
             try
             {
@@ -67,8 +68,8 @@ namespace CoastlineServer.Service.Controllers
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Split('|')[1];
-            // user.Id = userId;
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
+            user.Id = userId;
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
 
@@ -78,9 +79,9 @@ namespace CoastlineServer.Service.Controllers
             }, userDto);
         }
 
-        [HttpDelete("{userId:int}")]
+        [HttpDelete("{userId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteUser(int userId)
+        public async Task<IActionResult> DeleteUser(string userId)
         {
             try
             {

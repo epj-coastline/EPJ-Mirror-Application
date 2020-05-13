@@ -56,7 +56,7 @@ namespace CoastlineServer.Repository
             return await collection.Include(u => u.Strengths).ToListAsync();
         }
 
-        public async Task<User> Get(int primaryKey)
+        public async Task<User> Get(string primaryKey)
         {
             try
             {

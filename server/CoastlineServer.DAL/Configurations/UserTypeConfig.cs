@@ -9,7 +9,6 @@ namespace CoastlineServer.DAL.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("Users").HasKey(e => e.Id);
-            builder.Property(e => e.Id).ValueGeneratedOnAdd();
             builder.Property(e => e.RowVersion).IsRowVersion();
             builder.Property(e => e.Biography).HasColumnType("VARCHAR(140)");
             builder.Property(e => e.StartDate).HasColumnType("VARCHAR(4)");
@@ -19,7 +18,7 @@ namespace CoastlineServer.DAL.Configurations
             builder.HasData(
                 new User()
                 {
-                    Id = -1,
+                    Id = "1",
                     FirstName = "David",
                     LastName = "Luthiger",
                     DegreeProgram = "Informatik",
@@ -29,7 +28,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = -2,
+                    Id = "2",
                     FirstName = "Fabian",
                     LastName = "Germann",
                     DegreeProgram = "Informatik",
@@ -39,7 +38,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = -3,
+                    Id = "3",
                     FirstName = "Eliane",
                     LastName = "Schmidli",
                     DegreeProgram = "Informatik",
@@ -49,7 +48,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = -4,
+                    Id = "4",
                     FirstName = "Yves",
                     LastName = "Boillat",
                     DegreeProgram = "Informatik",

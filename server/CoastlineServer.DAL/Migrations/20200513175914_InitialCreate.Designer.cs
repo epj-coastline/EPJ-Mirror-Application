@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoastlineServer.DAL.Migrations
 {
     [DbContext(typeof(CoastlineContext))]
-    [Migration("20200430061317_InitialCreate")]
+    [Migration("20200513175914_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ namespace CoastlineServer.DAL.Migrations
                     b.Property<int>("StrengthId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -52,19 +52,19 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -1,
                             StrengthId = -2,
-                            UserId = -1
+                            UserId = "1"
                         },
                         new
                         {
                             Id = -2,
                             StrengthId = -3,
-                            UserId = -2
+                            UserId = "2"
                         },
                         new
                         {
                             Id = -3,
                             StrengthId = -1,
-                            UserId = -3
+                            UserId = "3"
                         });
                 });
 
@@ -86,8 +86,8 @@ namespace CoastlineServer.DAL.Migrations
                     b.Property<int>("StudyGroupId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -103,42 +103,42 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -1,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -1,
-                            UserId = -1
+                            UserId = "1"
                         },
                         new
                         {
                             Id = -2,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -2,
-                            UserId = -2
+                            UserId = "2"
                         },
                         new
                         {
                             Id = -3,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -4,
-                            UserId = -3
+                            UserId = "3"
                         },
                         new
                         {
                             Id = -4,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -4,
-                            UserId = -4
+                            UserId = "4"
                         },
                         new
                         {
                             Id = -5,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -5,
-                            UserId = -4
+                            UserId = "4"
                         },
                         new
                         {
                             Id = -6,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -3,
-                            UserId = -1
+                            UserId = "1"
                         });
                 });
 
@@ -213,8 +213,8 @@ namespace CoastlineServer.DAL.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("bytea");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -229,19 +229,19 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -1,
                             ModuleId = -1,
-                            UserId = -1
+                            UserId = "1"
                         },
                         new
                         {
                             Id = -2,
                             ModuleId = -2,
-                            UserId = -2
+                            UserId = "2"
                         },
                         new
                         {
                             Id = -3,
                             ModuleId = -3,
-                            UserId = -3
+                            UserId = "3"
                         });
                 });
 
@@ -259,15 +259,15 @@ namespace CoastlineServer.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("VARCHAR(40)");
+                        .HasColumnType("VARCHAR(140)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("bytea");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -284,7 +284,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -1,
                             Purpose = "Integrale An2I",
-                            UserId = -1
+                            UserId = "1"
                         },
                         new
                         {
@@ -292,7 +292,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -2,
                             Purpose = "Rekursion AD1",
-                            UserId = -2
+                            UserId = "2"
                         },
                         new
                         {
@@ -300,7 +300,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -3,
                             Purpose = "EF Core MsTe",
-                            UserId = -3
+                            UserId = "3"
                         },
                         new
                         {
@@ -308,7 +308,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
                             Purpose = "Tests schreiben C++",
-                            UserId = -4
+                            UserId = "4"
                         },
                         new
                         {
@@ -316,16 +316,14 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
                             Purpose = "Algorithmen in C++",
-                            UserId = -4
+                            UserId = "4"
                         });
                 });
 
             modelBuilder.Entity("CoastlineServer.DAL.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Biography")
                         .HasColumnType("VARCHAR(140)");
@@ -357,7 +355,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -1,
+                            Id = "1",
                             Biography = "Start HS18",
                             DegreeProgram = "Informatik",
                             Email = "david.luthiger@hsr.ch",
@@ -367,7 +365,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = -2,
+                            Id = "2",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "fabian.germann@hsr.ch",
@@ -377,7 +375,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = -3,
+                            Id = "3",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "eliane.schmidli@hsr.ch",
@@ -387,7 +385,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = -4,
+                            Id = "4",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "yves.boillat@hsr.ch",
@@ -409,9 +407,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasOne("CoastlineServer.DAL.Entities.User", "User")
                         .WithMany("Confirmations")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Confirmations_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK_Confirmations_UserId");
                 });
 
             modelBuilder.Entity("CoastlineServer.DAL.Entities.Member", b =>
@@ -426,9 +422,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasOne("CoastlineServer.DAL.Entities.User", "User")
                         .WithMany("Members")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Members_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK_Members_UserId");
                 });
 
             modelBuilder.Entity("CoastlineServer.DAL.Entities.Strength", b =>
@@ -443,9 +437,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasOne("CoastlineServer.DAL.Entities.User", "User")
                         .WithMany("Strengths")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Strengths_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK_Strengths_UserId");
                 });
 
             modelBuilder.Entity("CoastlineServer.DAL.Entities.StudyGroup", b =>
@@ -460,9 +452,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasOne("CoastlineServer.DAL.Entities.User", "User")
                         .WithMany("StudyGroups")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_StudyGroups_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK_StudyGroups_UserId");
                 });
 #pragma warning restore 612, 618
         }

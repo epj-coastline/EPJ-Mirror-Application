@@ -40,6 +40,7 @@ namespace CoastlineServer.Repository.Testing
             // arrange
             var newUser = new User
             {
+                Id = "-1",
                 FirstName = "Markus",
                 LastName = "Christen",
                 Email = "markus.christen@hsr.ch",
@@ -59,7 +60,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Get_SingleUserById_ReturnsUser()
         {
             // arrange & act
-            User = await _userRepository.Get(-1);
+            User = await _userRepository.Get("1");
 
             // assert
             Assert.Equal("David", User.FirstName);
@@ -73,19 +74,19 @@ namespace CoastlineServer.Repository.Testing
 
             // assert
             Assert.Equal(4, users.Count);
-            Assert.Contains(users, u => u.Id == -1);
+            Assert.Contains(users, u => u.Id == "1");
         }
 
         [Fact]
         public async Task Update_SingleUser()
         {
             // arrange
-            User = await _userRepository.Get(-1);
+            User = await _userRepository.Get("1");
             User.Biography = "This is a test";
 
             // act
             await _userRepository.Update(User);
-            var updatedUser = await _userRepository.Get(-1);
+            var updatedUser = await _userRepository.Get("1");
 
             // assert
             Assert.Equal(User.Biography, updatedUser.Biography);
@@ -95,7 +96,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Delete_SingleUser_ThrowsException()
         {
             // arrange
-            User = await _userRepository.Get(-2);
+            User = await _userRepository.Get("2");
 
             // act
             await _userRepository.Delete(User);
@@ -109,7 +110,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Get_SingleUserByInvalidId_ThrowsException()
         {
             // arrange
-            var invalidUserId = -500;
+            var invalidUserId = "-500";
 
             // act & assert
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
@@ -122,7 +123,7 @@ namespace CoastlineServer.Repository.Testing
             // arrange
             User = new User
             {
-                Id = 500,
+                Id = "-500",
                 FirstName = "Invalid",
                 LastName = "Invalid"
             };
@@ -139,7 +140,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var studyGroups = users.Single(u => u.Id == -1).StudyGroups;
+            var studyGroups = users.Single(u => u.Id == "1").StudyGroups;
 
             // assert
             Assert.NotEmpty(studyGroups);
@@ -152,7 +153,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var strengths = users.Single(u => u.Id == -1).Strengths;
+            var strengths = users.Single(u => u.Id == "1").Strengths;
 
             // assert
             Assert.NotEmpty(strengths);
@@ -165,7 +166,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var members = users.Single(u => u.Id == -1).Members;
+            var members = users.Single(u => u.Id == "1").Members;
 
             // assert
             Assert.NotEmpty(members);
@@ -178,7 +179,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var confirmations = users.Single(u => u.Id == -1).Confirmations;
+            var confirmations = users.Single(u => u.Id == "1").Confirmations;
 
             // assert
             Assert.NotEmpty(confirmations);

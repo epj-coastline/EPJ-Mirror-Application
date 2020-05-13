@@ -75,7 +75,6 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var studyGroupForCreationDto = new StudyGroupForCreationDto()
             {
                 Purpose = "Test studygroup",
-                UserId = -1,
                 ModuleId = -1
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
@@ -118,7 +117,6 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var studyGroupForCreationDto = new StudyGroupForCreationDto()
             {
                 Purpose = "",
-                UserId = -1,
                 ModuleId = -1
             };
             var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,

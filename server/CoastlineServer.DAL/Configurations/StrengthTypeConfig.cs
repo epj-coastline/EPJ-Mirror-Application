@@ -24,19 +24,19 @@ namespace CoastlineServer.DAL.Configurations
                 new Strength()
                 {
                     Id = -1,
-                    UserId = -1,
+                    UserId = "1",
                     ModuleId = -1
                 },
                 new Strength()
                 {
                     Id = -2,
-                    UserId = -2,
+                    UserId = "2",
                     ModuleId = -2
                 },
                 new Strength()
                 {
                     Id = -3,
-                    UserId = -3,
+                    UserId = "3",
                     ModuleId = -3
                 }
             );

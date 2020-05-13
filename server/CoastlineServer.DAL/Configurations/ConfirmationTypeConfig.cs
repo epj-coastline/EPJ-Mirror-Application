@@ -25,19 +25,19 @@ namespace CoastlineServer.DAL.Configurations
                 {
                     Id = -1,
                     StrengthId = -2,
-                    UserId = -1
+                    UserId = "1"
                 },
                 new Confirmation()
                 {
                     Id = -2,
                     StrengthId = -3,
-                    UserId = -2
+                    UserId = "2"
                 },
                 new Confirmation()
                 {
                     Id = -3,
                     StrengthId = -1,
-                    UserId = -3
+                    UserId = "3"
                 }
             );
         }

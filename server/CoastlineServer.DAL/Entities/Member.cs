@@ -9,7 +9,7 @@ namespace CoastlineServer.DAL.Entities
         public byte[] RowVersion { get; set; }
         public int StudyGroupId { get; set; }
         public StudyGroup StudyGroup { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
     }
 }

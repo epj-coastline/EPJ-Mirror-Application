@@ -15,6 +15,8 @@ services:
       - AllowedOrigin=http://localhost:8080
       - DatabaseMigrations=automatic
       - ConnectionStringCoastline=Server=db;Port=5432;Database=coastline;User Id=postgres;Password=mysecretpassword;
+      - Auth0Domain=dev-coastline.eu.auth0.com
+      - Auth0Audience=http://localhost:5000
   db:
     image: postgres
     container_name: cl-db

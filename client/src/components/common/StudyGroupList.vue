@@ -33,8 +33,7 @@
     methods: {
       formatDate(date: Date): string {
         const dateTimezoneZero = moment.tz(date, 'Africa/Dakar');
-        const dateSwiss = dateTimezoneZero.clone().tz('Europe/Zurich');
-        return dateSwiss.fromNow();
+        return moment(dateTimezoneZero).fromNow();
       },
     },
   })

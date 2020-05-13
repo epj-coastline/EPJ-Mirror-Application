@@ -7,7 +7,7 @@
         </md-button>
 
       <md-field :class="getValidationClass()" class="cl-field">
-        <md-textarea name="purpose" id="purpose" v-model="form.purpose" placeholder="Was ist der Zweck deiner Lerngruppe?" :disabled="sending" maxlength="140" required></md-textarea>
+        <md-textarea class="cl-textarea" name="purpose" id="purpose" v-model="form.purpose" placeholder="Was ist der Zweck deiner Lerngruppe?" :disabled="sending" maxlength="140" required></md-textarea>
       </md-field>
       <md-progress-bar class="cl-progress-bar" md-mode="indeterminate" v-if="sending" />
       <md-dialog-actions class="cl-dialog-actions">
@@ -67,11 +67,11 @@
         this.form.purpose = null;
       }
 
-      saveStudyGroup() {
+      async saveStudyGroup() {
+        this.sending = true;
         const purposeTmp = this.form.purpose;
         if (purposeTmp !== null) {
-          this.sending = true;
-          StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
+          await StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
           // Instead of this timeout, here you can call your API
           window.setTimeout(() => {
             this.sending = false;
@@ -132,4 +132,8 @@
     right: 8px;
     top: 16px;
   }
+  .cl-textarea{
+    height: 140px;
+  }
+
 </style>

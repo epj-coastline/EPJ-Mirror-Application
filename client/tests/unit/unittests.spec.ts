@@ -7,6 +7,7 @@ import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 import UserList from '@/components/common/UserList.vue';
 import { Module, validModule, validModules } from '@/services/Module';
+import StudyGroupService from '@/services/studyGroupService';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -277,5 +278,22 @@ describe('Study Group Array type checking', () => {
 
     const studyGroupsValidity = validStudyGroups(testStudyGroups);
     expect(studyGroupsValidity).to.be.equal(true);
+  });
+});
+
+describe('sort two dates in descending order', () => {
+  it('succeeds on same dates', () => {
+    const date1 = new Date('2020-05-07T14:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(date1, date1)).to.be.equal(0);
+  });
+  it('succeeds on different dates', () => {
+    const newer = new Date('2020-05-07T14:17:00.97696');
+    const older = new Date('2020-05-06T14:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(newer, older)).to.be.lessThan(0);
+  });
+  it('succeeds on same dates and different times', () => {
+    const newer = new Date('2020-05-07T14:17:00.97696');
+    const older = new Date('2020-05-07T13:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(newer, older)).to.be.lessThan(0);
   });
 });

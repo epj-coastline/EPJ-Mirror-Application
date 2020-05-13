@@ -48,7 +48,17 @@ class StudyGroupService {
           throw new Error('Study groups are invalid.');
         }
         return studyGroups;
+      })
+        .then((studyGroups) => {
+        studyGroups.sort((first: StudyGroup, second: StudyGroup) => this.compareDateDescending(first.creationDate, second.creationDate));
+        return studyGroups;
       });
+  }
+
+  public static compareDateDescending(date1: Date, date2: Date): number {
+    const first = new Date(date1);
+    const second = new Date(date2);
+    return second.getTime() - first.getTime();
   }
 
   static postStudyGroup(purpose: string, module: number) {

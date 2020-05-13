@@ -12,7 +12,7 @@ namespace CoastlineServer.DAL.Configurations
             builder.ToTable("StudyGroups").HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
             builder.Property(e => e.RowVersion).IsRowVersion();
-            builder.Property(e => e.Purpose).HasColumnType("VARCHAR(40)");
+            builder.Property(e => e.Purpose).HasColumnType("VARCHAR(140)");
             builder.HasOne(e => e.User)
                 .WithMany(e => e.StudyGroups)
                 .HasForeignKey(e => e.UserId)

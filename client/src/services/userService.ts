@@ -30,11 +30,14 @@ class UserService {
       });
   }
 
-  static getPerStrength(moduleId: number): Promise<Array<User>> {
+  static async getPerStrength(moduleId: number): Promise<Array<User>> {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/users?strength=${moduleId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

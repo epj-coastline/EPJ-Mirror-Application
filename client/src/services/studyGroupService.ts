@@ -30,11 +30,14 @@ class StudyGroupService {
       });
   }
 
-  static getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
+  static async getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups?module=${moduleId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {

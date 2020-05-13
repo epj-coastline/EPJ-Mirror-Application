@@ -70,13 +70,19 @@ class StudyGroupService {
     const moduleId = Number(module);
     const data = { purpose, userId, moduleId };
 
-    // ToDo: add Error handling
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
+    }).then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    }).catch((error) => {
+       console.log(error);
     });
   }
 }

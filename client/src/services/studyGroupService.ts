@@ -81,8 +81,6 @@ class StudyGroupService {
         throw Error(response.statusText);
       }
       return response;
-    }).catch((error) => {
-       console.log(error);
     });
   }
 }

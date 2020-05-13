@@ -14,7 +14,6 @@
         <md-button class="md-raised md-primary cl-button-submit" type="submit" :disabled="isDisable(this.form.purpose)">Lerngruppe erstellen</md-button>
       </md-dialog-actions>
     </form>
-    <md-snackbar :md-active.sync="studyGroupSaved">Die Lerngruppe {{ lastStudyGroup }} wurde erstellt</md-snackbar>
   </div>
 </template>
 

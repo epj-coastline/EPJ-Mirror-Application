@@ -23,7 +23,8 @@
   } from 'vue-property-decorator';
   import ProfileImage from '@/components/common/ProfileImage.vue';
   import { StudyGroup } from '@/services/StudyGroup';
-  import moment from 'moment';
+  // import moment from 'moment';
+  import moment from 'moment-timezone';
 
   @Component({
     components: {
@@ -31,8 +32,8 @@
     },
     methods: {
       formatDate(date: Date): string {
-        // ToDo: change time with local Timezone (& change unit tests)
-          return moment(date, 'YYYY-MM-DDTHH:mm:ss').add(2, 'hours').fromNow();
+        const dateTimezoneZero = moment.tz(date, 'Africa/Dakar');
+        return moment(dateTimezoneZero).fromNow();
       },
     },
   })

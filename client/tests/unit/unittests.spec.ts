@@ -7,6 +7,7 @@ import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 import UserList from '@/components/common/UserList.vue';
 import { Module, validModule, validModules } from '@/services/Module';
+import StudyGroupService from '@/services/studyGroupService';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -45,7 +46,7 @@ describe('StudyGroupList.vue', () => {
     if (node != null && node.textContent != null) {
       result = node.textContent;
     }
-    expect(result).to.be.equal('in 2 hours');
+    expect(result).to.be.equal('a few seconds ago');
   });
 
   it('renders study group information when passed', () => {
@@ -75,7 +76,7 @@ describe('StudyGroupList.vue', () => {
       propsData: { studyGroups: [studyGroup1, studyGroup2] },
     });
 
-    expect(wrapper.text()).to.be.equal('Alex Müller in 2 hours Lorem ipsum dolor sit amet Alex Müller in 2 hours sit amet');
+    expect(wrapper.text()).to.be.equal('Alex Müller a few seconds ago Lorem ipsum dolor sit amet Alex Müller a few seconds ago sit amet');
   });
 });
 
@@ -277,5 +278,22 @@ describe('Study Group Array type checking', () => {
 
     const studyGroupsValidity = validStudyGroups(testStudyGroups);
     expect(studyGroupsValidity).to.be.equal(true);
+  });
+});
+
+describe('sort two dates in descending order', () => {
+  it('succeeds on same dates', () => {
+    const date1 = new Date('2020-05-07T14:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(date1, date1)).to.be.equal(0);
+  });
+  it('succeeds on different dates', () => {
+    const newer = new Date('2020-05-07T14:17:00.97696');
+    const older = new Date('2020-05-06T14:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(newer, older)).to.be.lessThan(0);
+  });
+  it('succeeds on same dates and different times', () => {
+    const newer = new Date('2020-05-07T14:17:00.97696');
+    const older = new Date('2020-05-07T13:17:00.97696');
+    expect(StudyGroupService.compareDateDescending(newer, older)).to.be.lessThan(0);
   });
 });

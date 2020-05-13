@@ -257,7 +257,7 @@ namespace CoastlineServer.DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("VARCHAR(40)");
+                        .HasColumnType("VARCHAR(140)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

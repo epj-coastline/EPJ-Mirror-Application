@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoastlineServer.DAL.Entities;
@@ -68,6 +69,8 @@ namespace CoastlineServer.Service.Controllers
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
             var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Split('|')[1];
+            // studyGroup.UserId = userId;
             studyGroup.CreationDate = DateTime.UtcNow;
             var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
             var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);

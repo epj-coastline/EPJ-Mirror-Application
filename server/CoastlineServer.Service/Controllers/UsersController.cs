@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,8 @@ namespace CoastlineServer.Service.Controllers
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Split('|')[1];
+            // user.Id = userId;
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
 

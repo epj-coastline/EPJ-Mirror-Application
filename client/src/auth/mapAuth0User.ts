@@ -16,6 +16,10 @@ function convertToBooleanSafe(possibleBoolean: any): boolean {
   throw new Error('Conversion to boolean failed');
 }
 
+function stripeUserId(sub: string): string {
+  return sub.split('|')[1];
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapAuth0User(user: any): Auth0User {
   try {
@@ -26,6 +30,7 @@ function mapAuth0User(user: any): Auth0User {
       picture: convertToSTringSafe(user.picture),
       sub: convertToSTringSafe(user.sub),
       updatedAt: convertToSTringSafe(user.updated_at),
+      id: stripeUserId(convertToSTringSafe(user.sub)),
     };
   } catch {
     throw new Error('Mapping to Auth0User failed');

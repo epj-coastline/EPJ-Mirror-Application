@@ -14,9 +14,8 @@ describe('mapAuth0User', () => {
       // eslint-disable-next-line @typescript-eslint/camelcase
       updated_at: '2020-04-24T12:05:13.330Z',
     };
+    const expectedId = '5ea2cf4acd5dc90be8df47f3';
     const mappedUser = mapAuth0User(anyUser);
-    console.log(mappedUser.emailVerified);
-    console.info(mappedUser.emailVerified);
     expect(mappedUser).to.include({
       email: anyUser.email,
       emailVerified: anyUser.email_verified,
@@ -24,6 +23,7 @@ describe('mapAuth0User', () => {
       picture: anyUser.picture,
       sub: anyUser.sub,
       updatedAt: anyUser.updated_at,
+      id: expectedId,
     });
   });
   it('fails when a property has a wrong type', () => {

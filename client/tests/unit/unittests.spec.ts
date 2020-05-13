@@ -8,6 +8,7 @@ import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyG
 import UserList from '@/components/common/UserList.vue';
 import { Module, validModule, validModules } from '@/services/Module';
 import StudyGroupService from '@/services/studyGroupService';
+import StudyGroupCreateDialog from '@/components/common/StudyGroupCreateDialog.vue';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -136,6 +137,19 @@ describe('UserList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('XyAlex Müller InformatikHans Peters Informatik');
+  });
+});
+
+describe('StudyGroupCreateDialog.vue', () => {
+  it('renders dialog window when passed', () => {
+    const wrapper = shallowMount(StudyGroupCreateDialog, {
+      propsData: {
+        moduleId: 1,
+        moduleTitle: 'Xy',
+      },
+    });
+
+    expect(wrapper.text()).to.be.equal('Neue Lerngruppe für XyclearLerngruppe erstellen');
   });
 });
 

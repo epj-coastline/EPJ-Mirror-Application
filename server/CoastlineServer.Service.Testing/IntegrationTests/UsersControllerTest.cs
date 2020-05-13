@@ -121,11 +121,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
             // act
-            var response = await _client.SendAsync(deleteRequest);
+            var deleteResponse = await _client.SendAsync(deleteRequest);
 
 
             // assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, deleteResponse.StatusCode);
         }
 
         [Fact]

@@ -22,7 +22,7 @@ namespace CoastlineServer.Service.Testing.UnitTests
             // act
             IRestResponse response = client.Execute(request);
             var content = response.Content.Replace("\"", "").Split(':');
-            var accessToken = content[1];
+            var accessToken = content[1].Split(',')[0];
             var tokenType = content.Last();
 
             // assert

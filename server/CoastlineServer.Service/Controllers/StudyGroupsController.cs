@@ -28,6 +28,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<StudyGroupDto>>> GetStudyGroups(
             [FromQuery] StudyGroupResourceParameters studyGroupResourceParameters)
         {
@@ -49,6 +50,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet("{studyGroupId:int}", Name = "GetStudyGroup")]
+        [Authorize]
         public async Task<ActionResult<StudyGroupDto>> GetStudyGroup(int studyGroupId)
         {
             try
@@ -99,6 +101,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpOptions]
+        [Authorize]
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");

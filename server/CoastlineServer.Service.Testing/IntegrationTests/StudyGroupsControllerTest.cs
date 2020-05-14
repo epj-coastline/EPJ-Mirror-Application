@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using CoastlineServer.Service.Models;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace CoastlineServer.Service.Testing.IntegrationTests
@@ -16,18 +13,15 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task GetAll_ReturnsAllStudyGroups()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/studygroups/");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, "/studygroups/");
 
             // //act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var studyGroupDtos = JsonConvert.DeserializeObject<IEnumerable<StudyGroupDto>>(stringResponse);
+            var studyGroups = await GetRequestData<IEnumerable<StudyGroupDto>>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(studyGroupDtos, s => s.Id == -1);
+            Assert.Contains(studyGroups, s => s.Id == -1);
         }
 
         [Fact]
@@ -35,14 +29,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var studyGroupId = -1;
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/studygroups/{studyGroupId}");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups/{studyGroupId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var studyGroupDto = JsonConvert.DeserializeObject<StudyGroupDto>(stringResponse);
+            var studyGroupDto = await GetRequestData<StudyGroupDto>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -53,9 +44,8 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task Get_SingleStudyGroupByInvalidId_ReturnsNotFound()
         {
             // arrange
-            var studyGroupId = -500;
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/studygroups/{studyGroupId}");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var invalidStudyGroupId = -500;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups/{invalidStudyGroupId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
@@ -77,60 +67,51 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 DegreeProgram = "Testing",
                 StartDate = "HS20"
             };
-            var jStringContent = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postUserRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
+
+            var postRequestUser = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
+            var postResponseUser = await _client.SendAsync(postRequestUser);
+
+            try
             {
-                Content = jStringContent
-            };
-            postUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+                var studyGroupForCreationDto = new StudyGroupForCreationDto()
+                {
+                    Purpose = "Test study group",
+                    ModuleId = -1
+                };
 
-            var studyGroupForCreationDto = new StudyGroupForCreationDto()
+                var postRequestStudyGroup =
+                    CreateHttpRequest(HttpMethod.Post, "/studygroups/", studyGroupForCreationDto);
+
+                // act
+                var postResponseStudyGroup = await _client.SendAsync(postRequestStudyGroup);
+
+                var fetchedStudyGroup = await GetRequestData<StudyGroupDto>(postResponseStudyGroup);
+
+                // assert
+                Assert.Equal(HttpStatusCode.Created, postResponseStudyGroup.StatusCode);
+                Assert.Equal(studyGroupForCreationDto.Purpose, fetchedStudyGroup.Purpose);
+                Assert.NotNull(fetchedStudyGroup.Module);
+                Assert.NotNull(fetchedStudyGroup.User);
+
+                // arrange
+                var queryForStudyGroup = postResponseStudyGroup.Headers.Location.PathAndQuery;
+                var deleteRequestStudyGroup = CreateHttpRequest(HttpMethod.Delete, queryForStudyGroup);
+
+                // act
+                var deleteResponseStudyGroup = await _client.SendAsync(deleteRequestStudyGroup);
+
+                // assert
+                Assert.Equal(HttpStatusCode.OK, deleteResponseStudyGroup.StatusCode);
+            }
+            finally
             {
-                Purpose = "Test study group",
-                ModuleId = -1
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/")
-            {
-                Content = content
-            };
-            postRequest.Headers.Authorization = _authenticationHeader;
+                // clean up
+                var queryForUser = postResponseUser.Headers.Location.PathAndQuery;
+                var deleteRequestUser = CreateHttpRequest(HttpMethod.Delete, queryForUser);
 
-            // act
-            var postResponseUser = await _client.SendAsync(postUserRequest);
-            postResponseUser.EnsureSuccessStatusCode();
-
-            var postResponse = await _client.SendAsync(postRequest);
-            postResponse.EnsureSuccessStatusCode();
-            var stringResponse = await postResponse.Content.ReadAsStringAsync();
-            var responseDto = JsonConvert.DeserializeObject<StudyGroupDto>(stringResponse);
-
-            // assert
-            Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
-            Assert.Equal(studyGroupForCreationDto.Purpose, responseDto.Purpose);
-            Assert.NotNull(responseDto.Module);
-            Assert.NotNull(responseDto.User);
-
-            // arrange
-            var query = postResponse.Headers.Location.PathAndQuery;
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, query);
-            deleteRequest.Headers.Authorization = _authenticationHeader;
-
-            var queryForUser = postResponseUser.Headers.Location.PathAndQuery;
-            var deleteUserRequest = new HttpRequestMessage(HttpMethod.Delete, queryForUser);
-            deleteUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-
-            // act
-            var deleteResponse = await _client.SendAsync(deleteRequest);
-            deleteResponse.EnsureSuccessStatusCode();
-
-            var deleteUserResponse = await _client.SendAsync(deleteUserRequest);
-            deleteUserResponse.EnsureSuccessStatusCode();
-
-            // assert
-            Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
+                var deleteResponseUser = await _client.SendAsync(deleteRequestUser);
+                deleteResponseUser.EnsureSuccessStatusCode();
+            }
         }
 
         [Fact]
@@ -142,13 +123,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 Purpose = "",
                 ModuleId = -1
             };
-            var content = new StringContent(JsonConvert.SerializeObject(studyGroupForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/studygroups/")
-            {
-                Content = content
-            };
-            postRequest.Headers.Authorization = _authenticationHeader;
+            var postRequest = CreateHttpRequest(HttpMethod.Post, "/studygroups/", studyGroupForCreationDto);
 
             // act
             var response = await _client.SendAsync(postRequest);
@@ -162,8 +137,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var invalidStudyGroupId = -500;
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/studygroups/{invalidStudyGroupId}");
-            deleteRequest.Headers.Authorization = _authenticationHeader;
+            var deleteRequest = CreateHttpRequest(HttpMethod.Delete, $"/studygroups/{invalidStudyGroupId}");
 
             // act
             var response = await _client.SendAsync(deleteRequest);
@@ -176,26 +150,24 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task GetAll_Parameter_ReturnsStudyGroupsOfModule()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/studygroups?module=-1");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var moduleId = -1;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups?module={moduleId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var studyGroupDtos = JsonConvert.DeserializeObject<IEnumerable<StudyGroupDto>>(stringResponse);
+            var fetchedStudyGroups = await GetRequestData<IEnumerable<StudyGroupDto>>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(studyGroupDtos, s => s.ModuleId == -1);
+            Assert.Contains(fetchedStudyGroups, s => s.ModuleId == -1);
         }
 
         [Fact]
         public async Task GetAll_InvalidParameter_ReturnsNotFound()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/studygroups?module=abc");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var invalidModuleId = "abc";
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups?module={invalidModuleId}");
 
             // act
             var response = await _client.SendAsync(getRequest);

@@ -67,8 +67,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // arrange
             var query = postResponse.Headers.Location.PathAndQuery;
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, query);
-            deleteRequest.Headers.Authorization = _authenticationHeader;
+            var deleteRequest = CreateHttpRequest(HttpMethod.Delete, query);
 
             // act
             var deleteResponse = await _client.SendAsync(deleteRequest);

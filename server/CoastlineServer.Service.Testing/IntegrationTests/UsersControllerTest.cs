@@ -35,14 +35,14 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(userDtos, u => u.Id == "1");
+            Assert.Contains(userDtos, u => u.Id == "1fo9wW1Ul6I");
         }
 
         [Fact]
         public async Task Get_SingleUserById_ReturnsUser()
         {
             // arrange
-            var userId ="1";
+            var userId ="1fo9wW1Ul6I";
 
             // act
             var response = await _client.GetAsync($"/users/{userId}");

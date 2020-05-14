@@ -63,7 +63,7 @@ namespace CoastlineServer.Repository.Testing
             User = await _userRepository.Get("1fo9wW1Ul6I");
 
             // assert
-            Assert.Equal("David", User.FirstName);
+            Assert.Equal("Mathias", User.FirstName);
         }
 
         [Fact]

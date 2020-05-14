@@ -1,40 +1,24 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using CoastlineServer.Service.Models;
-using CoastlineServer.Service.Testing.TestHelper;
-using Microsoft.AspNetCore.Mvc.Testing;
+using System.Text;
 using Newtonsoft.Json;
 using Xunit;
+using CoastlineServer.Service.Models;
+
 
 namespace CoastlineServer.Service.Testing.IntegrationTests
 {
-    public class UsersControllerTest
+    public class UsersControllerTest : ControllerBaseTest
     {
-        private readonly HttpClient _client;
-        private readonly string _accessToken;
-        private readonly AuthenticationHeaderValue _authenticationHeader;
-
-
-        public UsersControllerTest()
-        {
-            var appFactory = new WebApplicationFactory<Startup>();
-            _client = appFactory.CreateClient();
-            _accessToken = Auth0Helper.GetAccessToken();
-            _authenticationHeader = new AuthenticationHeaderValue("Bearer", _accessToken);
-
-        }
-
         [Fact]
         public async Task GetAll_ReturnsAllUsers()
         {
             // arrange
             var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users/");
             getRequest.Headers.Authorization = _authenticationHeader;
-            
+
             // //act
             var response = await _client.SendAsync(getRequest);
             response.EnsureSuccessStatusCode();
@@ -50,7 +34,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task Get_SingleUserById_ReturnsUser()
         {
             // arrange
-            var userId ="1fo9wW1Ul6I";
+            var userId = "1fo9wW1Ul6I";
             var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{userId}");
             getRequest.Headers.Authorization = _authenticationHeader;
 
@@ -112,7 +96,6 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         [Fact]
         public async Task Get_SingleUserByInvalidId_ReturnsNotFound()
         {
-            
             // arrange
             var invalidUserId = -500;
             var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{invalidUserId}");
@@ -164,7 +147,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // act
             var postResponse = await _client.SendAsync(postRequest);
-            
+
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, postResponse.StatusCode);
         }
@@ -175,7 +158,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // arrange
             var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=-1");
             getRequest.Headers.Authorization = _authenticationHeader;
-            
+
             // act
             var response = await _client.SendAsync(getRequest);
             response.EnsureSuccessStatusCode();
@@ -193,7 +176,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // arrange
             var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=abc");
             getRequest.Headers.Authorization = _authenticationHeader;
-            
+
             // act
             var response = await _client.SendAsync(getRequest);
 

@@ -19,41 +19,41 @@ namespace CoastlineServer.DAL.Configurations
                 new User()
                 {
                     Id = "1fo9wW1Ul6I",
-                    FirstName = "David",
-                    LastName = "Luthiger",
+                    FirstName = "Mathias",
+                    LastName = "Muench",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS18",
-                    Email = "david.luthiger@hsr.ch",
+                    Email = "mathias.muench@hsr.ch",
                     StartDate = "HS18"
                 },
                 new User()
                 {
                     Id = "2GqPPUoB4R7",
-                    FirstName = "Fabian",
-                    LastName = "Germann",
+                    FirstName = "",
+                    LastName = "Fried",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS2018",
-                    Email = "fabian.germann@hsr.ch",
+                    Email = "tanja.fried@hsr.ch",
                     StartDate = "HS18"
                 },
                 new User()
                 {
                     Id = "3bPWlzE5nx1",
-                    FirstName = "Eliane",
-                    LastName = "Schmidli",
+                    FirstName = "Tom",
+                    LastName = "Eisenhauer",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS2018",
-                    Email = "eliane.schmidli@hsr.ch",
+                    Email = "tom.eisenhauer@hsr.ch",
                     StartDate = "HS18"
                 },
                 new User()
                 {
                     Id = "4mNQjXctF0q",
-                    FirstName = "Yves",
-                    LastName = "Boillat",
+                    FirstName = "Vanessa",
+                    LastName = "Becker",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS2018",
-                    Email = "yves.boillat@hsr.ch",
+                    Email = "vanessa.becker@hsr.ch",
                     StartDate = "HS18"
                 });
         }

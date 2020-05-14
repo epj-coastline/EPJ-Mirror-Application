@@ -81,6 +81,12 @@ Run integration tests or check the created database via DataGrip / pgAdmin.
 * [EF Core CLI Tools]( https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
 * [EF Core Migrations]( https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
 
+## Create migration
+
+```
+ dotnet ef migrations add InitialCreate --project ../CoastlineServer.DAL/
+```
+
 ## Test Projects
 
 - For integration and unit tests open the `Testing` folder, hit right-click on a test project and run tests.

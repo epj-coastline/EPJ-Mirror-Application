@@ -18,7 +18,7 @@ namespace CoastlineServer.DAL.Configurations
             builder.HasData(
                 new User()
                 {
-                    Id = "1",
+                    Id = "1fo9wW1Ul6I",
                     FirstName = "David",
                     LastName = "Luthiger",
                     DegreeProgram = "Informatik",
@@ -28,7 +28,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = "2",
+                    Id = "2GqPPUoB4R7",
                     FirstName = "Fabian",
                     LastName = "Germann",
                     DegreeProgram = "Informatik",
@@ -38,7 +38,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = "3",
+                    Id = "3bPWlzE5nx1",
                     FirstName = "Eliane",
                     LastName = "Schmidli",
                     DegreeProgram = "Informatik",
@@ -48,7 +48,7 @@ namespace CoastlineServer.DAL.Configurations
                 },
                 new User()
                 {
-                    Id = "4",
+                    Id = "4mNQjXctF0q",
                     FirstName = "Yves",
                     LastName = "Boillat",
                     DegreeProgram = "Informatik",

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CoastlineServer.Service.Models
+﻿namespace CoastlineServer.Service.Models
 {
     public class ModuleDto
     {

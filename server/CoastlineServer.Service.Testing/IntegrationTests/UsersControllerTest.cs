@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text;
-using Newtonsoft.Json;
 using Xunit;
 using CoastlineServer.Service.Models;
 
@@ -16,18 +14,16 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task GetAll_ReturnsAllUsers()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users/");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, "/users/");
+            int numberOfUsersInSeedData = 4;
 
-            // //act
+            // act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
+            var users = await GetRequestData<ICollection<UserDto>>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains(userDtos, u => u.Id == "1fo9wW1Ul6I");
+            Assert.Equal(users.Count, numberOfUsersInSeedData);
         }
 
         [Fact]
@@ -35,18 +31,15 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var userId = "1fo9wW1Ul6I";
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{userId}");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users/{userId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var userDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
+            var user = await GetRequestData<UserDto>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(userId, userDto.Id);
+            Assert.Equal(userId, user.Id);
         }
 
         [Fact]
@@ -62,23 +55,15 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 DegreeProgram = "Testing",
                 StartDate = "HS20"
             };
-            var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
-            {
-                Content = content
-            };
-            postRequest.Headers.Authorization = _authenticationHeader;
+            var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
 
             // act
             var postResponse = await _client.SendAsync(postRequest);
-            postResponse.EnsureSuccessStatusCode();
-            var stringResponse = await postResponse.Content.ReadAsStringAsync();
-            var responseDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
+            var userDto = await GetRequestData<UserDto>(postResponse);
 
             // assert
             Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
-            Assert.Equal(userForCreationDto.FirstName, responseDto.FirstName);
+            Assert.Equal(userForCreationDto.FirstName, userDto.FirstName);
 
             // arrange
             var query = postResponse.Headers.Location.PathAndQuery;
@@ -98,124 +83,115 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var insertedUser = await InsertUser();
-            
-            var userForUpdate = new UserDto()
+            try
             {
-                Id = insertedUser.Id,
-                FirstName = "Marcus",
-                LastName = "Christen",
-                Email = "markus.christen@hsr.ch",
-                Biography = "this is a test",
-                DegreeProgram = "Testing",
-                StartDate = "HS20"
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
-                "application/json");
-            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{userForUpdate.Id}")
+                var userForUpdate = new UserDto()
+                {
+                    Id = insertedUser.Id,
+                    FirstName = "Marcus",
+                    LastName = "Christen",
+                    Email = "markus.christen@hsr.ch",
+                    Biography = "this is a test",
+                    DegreeProgram = "Testing",
+                    StartDate = "HS20"
+                };
+                var requestUri = $"/users/{userForUpdate.Id}";
+
+                var putRequest = CreateHttpRequest(HttpMethod.Put, requestUri, userForUpdate);
+                var getRequest = CreateHttpRequest(HttpMethod.Get, requestUri);
+
+                // act
+                var putResponse = await _client.SendAsync(putRequest);
+                var getResponse = await _client.SendAsync(getRequest);
+
+                var fetchedUser = await GetRequestData<UserDto>(getResponse);
+
+                // assert
+                Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+                Assert.Equal(userForUpdate.FirstName, fetchedUser.FirstName);
+            }
+            finally
             {
-                Content = content
-            };
-            putRequest.Headers.Authorization = _authenticationHeader;
-            
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{userForUpdate.Id}");
-            getRequest.Headers.Authorization = _authenticationHeader;
-            
-            // act
-            var putResponse = await _client.SendAsync(putRequest);
-            putResponse.EnsureSuccessStatusCode();
-            
-            var getResponse = await _client.SendAsync(getRequest);
-            getResponse.EnsureSuccessStatusCode();
-            var stringGetResponse = await getResponse.Content.ReadAsStringAsync();
-            var getResponseUserDtos = JsonConvert.DeserializeObject<UserDto>(stringGetResponse);
-            
-            // assert
-            Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
-            Assert.Equal(userForUpdate.FirstName, getResponseUserDtos.FirstName);
-            
-            // clean up
-            await DeleteUser(insertedUser.Id);
+                // clean up
+                await DeleteUser(insertedUser.Id);
+            }
         }
-        
+
         [Fact]
         public async Task Update_IdMismatch_ReturnsBadRequest()
         {
             // arrange
             var insertedUser = await InsertUser();
-
-            string wrongUserId = "abc";
-            
-            var userForUpdate = new UserDto()
+            try
             {
-                Id = insertedUser.Id,
-                FirstName = "Marcus",
-                LastName = "Christen",
-                Email = "markus.christen@hsr.ch",
-                Biography = "this is a test",
-                DegreeProgram = "Testing",
-                StartDate = "HS20"
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
-                "application/json");
-            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{wrongUserId}")
+                var wrongUserId = "abc";
+
+                var userForUpdate = new UserDto()
+                {
+                    Id = insertedUser.Id,
+                    FirstName = "Marcus",
+                    LastName = "Christen",
+                    Email = "markus.christen@hsr.ch",
+                    Biography = "this is a test",
+                    DegreeProgram = "Testing",
+                    StartDate = "HS20"
+                };
+
+                var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{wrongUserId}", userForUpdate);
+
+                // act
+                var putResponse = await _client.SendAsync(putRequest);
+
+                // assert
+                Assert.Equal(HttpStatusCode.BadRequest, putResponse.StatusCode);
+            }
+            finally
             {
-                Content = content
-            };
-            putRequest.Headers.Authorization = _authenticationHeader;
-
-            // act
-            var putResponse = await _client.SendAsync(putRequest);
-
-            // assert
-            Assert.Equal(HttpStatusCode.BadRequest, putResponse.StatusCode);
-
-            // clean up
-            await DeleteUser(insertedUser.Id);
+                // clean up
+                await DeleteUser(insertedUser.Id);
+            }
         }
-        
-       [Fact]
-        public async Task Update_SingleUserWithWrongId_ReturnsForbidden()
+
+        [Fact]
+        public async Task Update_WithWrongId_ReturnsForbidden()
         {
             // arrange
             var insertedUser = await InsertUser();
-
-            string wrongUserId = "abc";
-            
-            var userForUpdate = new UserDto()
+            try
             {
-                Id = wrongUserId,
-                FirstName = "Marcus",
-                LastName = "Christen",
-                Email = "markus.christen@hsr.ch",
-                Biography = "this is a test",
-                DegreeProgram = "Testing",
-                StartDate = "HS20"
-            };
-            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
-                "application/json");
-            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{wrongUserId}")
+                var wrongUserId = "abc";
+
+                var userForUpdate = new UserDto()
+                {
+                    Id = wrongUserId,
+                    FirstName = "Marcus",
+                    LastName = "Christen",
+                    Email = "markus.christen@hsr.ch",
+                    Biography = "this is a test",
+                    DegreeProgram = "Testing",
+                    StartDate = "HS20"
+                };
+
+                var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{wrongUserId}", userForUpdate);
+
+                // act
+                var putResponse = await _client.SendAsync(putRequest);
+
+                // assert
+                Assert.Equal(HttpStatusCode.Forbidden, putResponse.StatusCode);
+            }
+            finally
             {
-                Content = content
-            };
-            putRequest.Headers.Authorization = _authenticationHeader;
-
-            // act
-            var putResponse = await _client.SendAsync(putRequest);
-
-            // assert
-            Assert.Equal(HttpStatusCode.Forbidden, putResponse.StatusCode);
-
-            // clean up
-            await DeleteUser(insertedUser.Id);
+                // clean up
+                await DeleteUser(insertedUser.Id);
+            }
         }
-        
+
         [Fact]
         public async Task Update_NonExistingUser_ReturnsConflict()
         {
             // arrange
             var insertedUser = await InsertUser();
-            
-            // clean up
             await DeleteUser(insertedUser.Id);
 
             var userForUpdate = new UserDto()
@@ -228,13 +204,8 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 DegreeProgram = "Testing",
                 StartDate = "HS20"
             };
-            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
-                "application/json");
-            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{insertedUser.Id}")
-            {
-                Content = content
-            };
-            putRequest.Headers.Authorization = _authenticationHeader;
+
+            var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{insertedUser.Id}", userForUpdate);
 
             // act
             var putResponse = await _client.SendAsync(putRequest);
@@ -248,8 +219,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var invalidUserId = -500;
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{invalidUserId}");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users/{invalidUserId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
@@ -262,13 +232,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task Delete_SingleUserByInvalidId_ReturnsNotFound()
         {
             // arrange
-            var invalidStudyGroupId = -500;
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/users/{invalidStudyGroupId}");
-            deleteRequest.Headers.Authorization = _authenticationHeader;
+            var invalidUserId = -500;
+            var deleteRequest = CreateHttpRequest(HttpMethod.Delete, $"/users/{invalidUserId}");
 
             // act
             var deleteResponse = await _client.SendAsync(deleteRequest);
-
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, deleteResponse.StatusCode);
@@ -287,13 +255,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 DegreeProgram = "Testing",
                 StartDate = "HS2020"
             };
-            var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
-            {
-                Content = content
-            };
-            postRequest.Headers.Authorization = _authenticationHeader;
+            var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
 
             // act
             var postResponse = await _client.SendAsync(postRequest);
@@ -306,26 +268,24 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task GetAll_Parameter_ReturnsUsersWithStrengthInModule()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=-1");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var moduleId = -1;
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users?strength={moduleId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
-            var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
+            var users = await GetRequestData<IEnumerable<UserDto>>(response);
 
             // assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.NotEmpty(userDtos);
+            Assert.NotEmpty(users);
         }
 
         [Fact]
         public async Task GetAllUsers_InvalidParameter_ReturnsNotFound()
         {
             // arrange
-            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=abc");
-            getRequest.Headers.Authorization = _authenticationHeader;
+            var invalidModuleId = "abc";
+            var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users?strength={invalidModuleId}");
 
             // act
             var response = await _client.SendAsync(getRequest);
@@ -345,25 +305,16 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 DegreeProgram = "Testing",
                 StartDate = "HS20"
             };
-            var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
-                "application/json");
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
-            {
-                Content = content
-            };
-            postRequest.Headers.Authorization = _authenticationHeader;
-            
+            var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
             var postResponse = await _client.SendAsync(postRequest);
             postResponse.EnsureSuccessStatusCode();
-            var stringResponse = await postResponse.Content.ReadAsStringAsync();
-            return  JsonConvert.DeserializeObject<UserDto>(stringResponse);
+            return await GetRequestData<UserDto>(postResponse);
         }
 
         private async Task DeleteUser(string userId)
         {
-            var deleteUserRequest = new HttpRequestMessage(HttpMethod.Delete, $"/users/{userId}");
-            deleteUserRequest.Headers.Authorization = _authenticationHeader;
-            var deleteResponse = await _client.SendAsync(deleteUserRequest);
+            var deleteUserRequest = CreateHttpRequest(HttpMethod.Delete, $"/users/{userId}");
+            await _client.SendAsync(deleteUserRequest);
         }
     }
 }

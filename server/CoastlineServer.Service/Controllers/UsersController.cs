@@ -28,6 +28,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
             [FromQuery] UserResourceParameters userResourceParameters)
         {
@@ -49,6 +50,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet("{userId}", Name = "GetUser")]
+        [Authorize]
         public async Task<ActionResult<UserDto>> GetUser(string userId)
         {
             try
@@ -97,6 +99,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpOptions]
+        [Authorize]
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");

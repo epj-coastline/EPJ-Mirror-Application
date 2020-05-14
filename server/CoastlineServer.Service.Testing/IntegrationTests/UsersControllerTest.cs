@@ -16,19 +16,27 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
     {
         private readonly HttpClient _client;
         private readonly string _accessToken;
+        private readonly AuthenticationHeaderValue _authenticationHeader;
+
 
         public UsersControllerTest()
         {
             var appFactory = new WebApplicationFactory<Startup>();
             _client = appFactory.CreateClient();
             _accessToken = Auth0Helper.GetAccessToken();
+            _authenticationHeader = new AuthenticationHeaderValue("Bearer", _accessToken);
+
         }
 
         [Fact]
         public async Task GetAll_ReturnsAllUsers()
         {
-            // arrange & act
-            var response = await _client.GetAsync("/users/");
+            // arrange
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users/");
+            getRequest.Headers.Authorization = _authenticationHeader;
+            
+            // //act
+            var response = await _client.SendAsync(getRequest);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
@@ -43,9 +51,11 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         {
             // arrange
             var userId ="1";
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{userId}");
+            getRequest.Headers.Authorization = _authenticationHeader;
 
             // act
-            var response = await _client.GetAsync($"/users/{userId}");
+            var response = await _client.SendAsync(getRequest);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDto = JsonConvert.DeserializeObject<UserDto>(stringResponse);
@@ -74,7 +84,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             {
                 Content = content
             };
-            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            postRequest.Headers.Authorization = _authenticationHeader;
 
             // act
             var postResponse = await _client.SendAsync(postRequest);
@@ -89,7 +99,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // arrange
             var query = postResponse.Headers.Location.PathAndQuery;
             var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, query);
-            deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            deleteRequest.Headers.Authorization = _authenticationHeader;
 
             // act
             var deleteResponse = await _client.SendAsync(deleteRequest);
@@ -102,11 +112,14 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         [Fact]
         public async Task Get_SingleUserByInvalidId_ReturnsNotFound()
         {
+            
             // arrange
             var invalidUserId = -500;
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{invalidUserId}");
+            getRequest.Headers.Authorization = _authenticationHeader;
 
             // act
-            var response = await _client.GetAsync($"/users/{invalidUserId}");
+            var response = await _client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -118,7 +131,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // arrange
             var invalidStudyGroupId = -500;
             var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/users/{invalidStudyGroupId}");
-            deleteRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            deleteRequest.Headers.Authorization = _authenticationHeader;
 
             // act
             var deleteResponse = await _client.SendAsync(deleteRequest);
@@ -147,7 +160,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             {
                 Content = content
             };
-            postRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            postRequest.Headers.Authorization = _authenticationHeader;
 
             // act
             var postResponse = await _client.SendAsync(postRequest);
@@ -159,8 +172,12 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         [Fact]
         public async Task GetAll_Parameter_ReturnsUsersWithStrengthInModule()
         {
-            // arrange & act
-            var response = await _client.GetAsync("/users?strength=-1");
+            // arrange
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=-1");
+            getRequest.Headers.Authorization = _authenticationHeader;
+            
+            // act
+            var response = await _client.SendAsync(getRequest);
             response.EnsureSuccessStatusCode();
             var stringResponse = await response.Content.ReadAsStringAsync();
             var userDtos = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(stringResponse);
@@ -173,8 +190,12 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         [Fact]
         public async Task GetAllUsers_InvalidParameter_ReturnsNotFound()
         {
-            // arrange & act
-            var response = await _client.GetAsync("/users?strength=abc");
+            // arrange
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, "/users?strength=abc");
+            getRequest.Headers.Authorization = _authenticationHeader;
+            
+            // act
+            var response = await _client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

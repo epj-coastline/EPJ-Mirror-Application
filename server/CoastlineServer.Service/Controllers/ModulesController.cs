@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CoastlineServer.Repository;
 using CoastlineServer.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoastlineServer.Service.Controllers
@@ -22,6 +23,8 @@ namespace CoastlineServer.Service.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules()
         {
             var modules = await _moduleRepository.GetAll();

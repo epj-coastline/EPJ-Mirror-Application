@@ -9,6 +9,7 @@ using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace CoastlineServer.Service.Controllers
 {
@@ -69,8 +70,7 @@ namespace CoastlineServer.Service.Controllers
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
-            user.Id = userId;
+            user.Id = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
 
@@ -78,6 +78,36 @@ namespace CoastlineServer.Service.Controllers
             {
                 userId = userDto.Id
             }, userDto);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ Authorize]
+        public async Task<ActionResult<UserDto>> UpdateUser(String id, UserDto userDto)
+        {
+            if (id != userDto.Id)
+            {
+                return BadRequest();
+            }
+            if (id != this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6))
+            {
+                return Forbid();
+            }
+            var user = _mapper.Map<User>(userDto);
+            try
+            {
+                await _userRepository.Update(user);
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
+            return NoContent();
+
         }
 
         [HttpDelete("{userId}")]

@@ -9,11 +9,12 @@ namespace CoastlineServer.Repository
             CoastlineContext context, T entity)
             where T : class
         {
-            T dbEntity = (T) context.Entry(entity)
-                .GetDatabaseValues()
-                .ToObject();
-
-            return new OptimisticConcurrencyException<T>($"Update {typeof(T).Name}: Concurrency-Fehler", dbEntity);
+            var dbValues = context.Entry(entity)
+                .GetDatabaseValues();
+            return dbValues == null
+                ? new OptimisticConcurrencyException<T>($"Update {typeof(T).Name}: entity not found")
+                : new OptimisticConcurrencyException<T>($"Update {typeof(T).Name}: concurrency error",
+                    (T) dbValues.ToObject());
         }
     }
 }

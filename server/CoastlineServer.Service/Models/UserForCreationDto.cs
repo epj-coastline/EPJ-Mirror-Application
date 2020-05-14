@@ -10,7 +10,7 @@ namespace CoastlineServer.Service.Models
         [Required, EmailAddress(ErrorMessage = "Enter valid Email address")]
         public string Email { get; set; }
 
-        [StringLength(40)] public string Biography { get; set; }
+        [StringLength(140)] public string Biography { get; set; }
         [Required] public string DegreeProgram { get; set; }
         [Required, StringLength(4)] public string StartDate { get; set; }
     }

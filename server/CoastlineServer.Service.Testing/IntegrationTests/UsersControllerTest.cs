@@ -94,6 +94,156 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
+        public async Task Update_SingleUser_ReturnsNoContent()
+        {
+            // arrange
+            var insertedUser = await InsertUser();
+            
+            var userForUpdate = new UserDto()
+            {
+                Id = insertedUser.Id,
+                FirstName = "Marcus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
+                "application/json");
+            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{userForUpdate.Id}")
+            {
+                Content = content
+            };
+            putRequest.Headers.Authorization = _authenticationHeader;
+            
+            var getRequest = new HttpRequestMessage(HttpMethod.Get, $"/users/{userForUpdate.Id}");
+            getRequest.Headers.Authorization = _authenticationHeader;
+            
+            // act
+            var putResponse = await _client.SendAsync(putRequest);
+            putResponse.EnsureSuccessStatusCode();
+            
+            var getResponse = await _client.SendAsync(getRequest);
+            getResponse.EnsureSuccessStatusCode();
+            var stringGetResponse = await getResponse.Content.ReadAsStringAsync();
+            var getResponseUserDtos = JsonConvert.DeserializeObject<UserDto>(stringGetResponse);
+            
+            // assert
+            Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+            Assert.Equal(userForUpdate.FirstName, getResponseUserDtos.FirstName);
+            
+            // clean up
+            await DeleteUser(insertedUser.Id);
+        }
+        
+        [Fact]
+        public async Task Update_IdMismatch_ReturnsBadRequest()
+        {
+            // arrange
+            var insertedUser = await InsertUser();
+
+            string wrongUserId = "abc";
+            
+            var userForUpdate = new UserDto()
+            {
+                Id = insertedUser.Id,
+                FirstName = "Marcus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
+                "application/json");
+            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{wrongUserId}")
+            {
+                Content = content
+            };
+            putRequest.Headers.Authorization = _authenticationHeader;
+
+            // act
+            var putResponse = await _client.SendAsync(putRequest);
+
+            // assert
+            Assert.Equal(HttpStatusCode.BadRequest, putResponse.StatusCode);
+
+            // clean up
+            await DeleteUser(insertedUser.Id);
+        }
+        
+       [Fact]
+        public async Task Update_SingleUserWithWrongId_ReturnsForbidden()
+        {
+            // arrange
+            var insertedUser = await InsertUser();
+
+            string wrongUserId = "abc";
+            
+            var userForUpdate = new UserDto()
+            {
+                Id = wrongUserId,
+                FirstName = "Marcus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
+                "application/json");
+            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{wrongUserId}")
+            {
+                Content = content
+            };
+            putRequest.Headers.Authorization = _authenticationHeader;
+
+            // act
+            var putResponse = await _client.SendAsync(putRequest);
+
+            // assert
+            Assert.Equal(HttpStatusCode.Forbidden, putResponse.StatusCode);
+
+            // clean up
+            await DeleteUser(insertedUser.Id);
+        }
+        
+        [Fact]
+        public async Task Update_NonExistingUser_ReturnsConflict()
+        {
+            // arrange
+            var insertedUser = await InsertUser();
+            
+            // clean up
+            await DeleteUser(insertedUser.Id);
+
+            var userForUpdate = new UserDto()
+            {
+                Id = insertedUser.Id,
+                FirstName = "Marcus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(userForUpdate), Encoding.UTF8,
+                "application/json");
+            var putRequest = new HttpRequestMessage(HttpMethod.Put, $"/users/{insertedUser.Id}")
+            {
+                Content = content
+            };
+            putRequest.Headers.Authorization = _authenticationHeader;
+
+            // act
+            var putResponse = await _client.SendAsync(putRequest);
+
+            // assert
+            Assert.Equal(HttpStatusCode.Conflict, putResponse.StatusCode);
+        }
+
+        [Fact]
         public async Task Get_SingleUserByInvalidId_ReturnsNotFound()
         {
             // arrange
@@ -182,6 +332,38 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        private async Task<UserDto> InsertUser()
+        {
+            var userForCreationDto = new UserForCreationDto()
+            {
+                FirstName = "Markus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
+                "application/json");
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
+            {
+                Content = content
+            };
+            postRequest.Headers.Authorization = _authenticationHeader;
+            
+            var postResponse = await _client.SendAsync(postRequest);
+            postResponse.EnsureSuccessStatusCode();
+            var stringResponse = await postResponse.Content.ReadAsStringAsync();
+            return  JsonConvert.DeserializeObject<UserDto>(stringResponse);
+        }
+
+        private async Task DeleteUser(string userId)
+        {
+            var deleteUserRequest = new HttpRequestMessage(HttpMethod.Delete, $"/users/{userId}");
+            deleteUserRequest.Headers.Authorization = _authenticationHeader;
+            var deleteResponse = await _client.SendAsync(deleteUserRequest);
         }
     }
 }

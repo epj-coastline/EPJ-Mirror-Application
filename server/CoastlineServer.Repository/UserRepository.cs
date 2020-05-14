@@ -88,7 +88,7 @@ namespace CoastlineServer.Repository
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (DbUpdateConcurrencyException)
             {
                 throw CreateOptimisticConcurrencyException(_context, user);
             }

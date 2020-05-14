@@ -169,10 +169,10 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "Biography", "DegreeProgram", "Email", "FirstName", "LastName", "StartDate" },
                 values: new object[,]
                 {
-                    { "1", "Start HS18", "Informatik", "david.luthiger@hsr.ch", "David", "Luthiger", "HS18" },
-                    { "2", "Start HS2018", "Informatik", "fabian.germann@hsr.ch", "Fabian", "Germann", "HS18" },
-                    { "3", "Start HS2018", "Informatik", "eliane.schmidli@hsr.ch", "Eliane", "Schmidli", "HS18" },
-                    { "4", "Start HS2018", "Informatik", "yves.boillat@hsr.ch", "Yves", "Boillat", "HS18" }
+                    { "1fo9wW1Ul6I", "Start HS18", "Informatik", "david.luthiger@hsr.ch", "David", "Luthiger", "HS18" },
+                    { "2GqPPUoB4R7", "Start HS2018", "Informatik", "fabian.germann@hsr.ch", "Fabian", "Germann", "HS18" },
+                    { "3bPWlzE5nx1", "Start HS2018", "Informatik", "eliane.schmidli@hsr.ch", "Eliane", "Schmidli", "HS18" },
+                    { "4mNQjXctF0q", "Start HS2018", "Informatik", "yves.boillat@hsr.ch", "Yves", "Boillat", "HS18" }
                 });
 
             migrationBuilder.InsertData(
@@ -180,9 +180,9 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "ModuleId", "UserId" },
                 values: new object[,]
                 {
-                    { -1, -1, "1" },
-                    { -2, -2, "2" },
-                    { -3, -3, "3" }
+                    { -1, -1, "1fo9wW1Ul6I" },
+                    { -2, -2, "2GqPPUoB4R7" },
+                    { -3, -3, "3bPWlzE5nx1" }
                 });
 
             migrationBuilder.InsertData(
@@ -190,11 +190,11 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "CreationDate", "ModuleId", "Purpose", "UserId" },
                 values: new object[,]
                 {
-                    { -1, new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), -1, "Integrale An2I", "1" },
-                    { -2, new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), -2, "Rekursion AD1", "2" },
-                    { -3, new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), -3, "EF Core MsTe", "3" },
-                    { -4, new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), -4, "Tests schreiben C++", "4" },
-                    { -5, new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), -4, "Algorithmen in C++", "4" }
+                    { -1, new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), -1, "Integrale An2I", "1fo9wW1Ul6I" },
+                    { -2, new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), -2, "Rekursion AD1", "2GqPPUoB4R7" },
+                    { -3, new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), -3, "EF Core MsTe", "3bPWlzE5nx1" },
+                    { -4, new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), -4, "Tests schreiben C++", "4mNQjXctF0q" },
+                    { -5, new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), -4, "Algorithmen in C++", "4mNQjXctF0q" }
                 });
 
             migrationBuilder.InsertData(
@@ -202,9 +202,9 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "StrengthId", "UserId" },
                 values: new object[,]
                 {
-                    { -3, -1, "3" },
-                    { -1, -2, "1" },
-                    { -2, -3, "2" }
+                    { -3, -1, "3bPWlzE5nx1" },
+                    { -1, -2, "3bPWlzE5nx1" },
+                    { -2, -3, "3bPWlzE5nx1" }
                 });
 
             migrationBuilder.InsertData(
@@ -212,12 +212,12 @@ namespace CoastlineServer.DAL.Migrations
                 columns: new[] { "Id", "AccessionDate", "StudyGroupId", "UserId" },
                 values: new object[,]
                 {
-                    { -1, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -1, "1" },
-                    { -2, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -2, "2" },
-                    { -6, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -3, "1" },
-                    { -3, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -4, "3" },
-                    { -4, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -4, "4" },
-                    { -5, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -5, "4" }
+                    { -1, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -1, "1fo9wW1Ul6I" },
+                    { -2, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -2, "2GqPPUoB4R7" },
+                    { -6, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -3, "1fo9wW1Ul6I" },
+                    { -3, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -4, "3bPWlzE5nx1" },
+                    { -4, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -4, "4mNQjXctF0q" },
+                    { -5, new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified), -5, "4mNQjXctF0q" }
                 });
 
             migrationBuilder.CreateIndex(

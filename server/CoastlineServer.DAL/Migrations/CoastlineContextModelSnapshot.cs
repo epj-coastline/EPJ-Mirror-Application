@@ -50,19 +50,19 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -1,
                             StrengthId = -2,
-                            UserId = "1"
+                            UserId = "3bPWlzE5nx1"
                         },
                         new
                         {
                             Id = -2,
                             StrengthId = -3,
-                            UserId = "2"
+                            UserId = "3bPWlzE5nx1"
                         },
                         new
                         {
                             Id = -3,
                             StrengthId = -1,
-                            UserId = "3"
+                            UserId = "3bPWlzE5nx1"
                         });
                 });
 
@@ -101,42 +101,42 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -1,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -1,
-                            UserId = "1"
+                            UserId = "1fo9wW1Ul6I"
                         },
                         new
                         {
                             Id = -2,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -2,
-                            UserId = "2"
+                            UserId = "2GqPPUoB4R7"
                         },
                         new
                         {
                             Id = -3,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -4,
-                            UserId = "3"
+                            UserId = "3bPWlzE5nx1"
                         },
                         new
                         {
                             Id = -4,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -4,
-                            UserId = "4"
+                            UserId = "4mNQjXctF0q"
                         },
                         new
                         {
                             Id = -5,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -5,
-                            UserId = "4"
+                            UserId = "4mNQjXctF0q"
                         },
                         new
                         {
                             Id = -6,
                             AccessionDate = new DateTime(2020, 3, 11, 18, 22, 50, 0, DateTimeKind.Unspecified),
                             StudyGroupId = -3,
-                            UserId = "1"
+                            UserId = "1fo9wW1Ul6I"
                         });
                 });
 
@@ -227,19 +227,19 @@ namespace CoastlineServer.DAL.Migrations
                         {
                             Id = -1,
                             ModuleId = -1,
-                            UserId = "1"
+                            UserId = "1fo9wW1Ul6I"
                         },
                         new
                         {
                             Id = -2,
                             ModuleId = -2,
-                            UserId = "2"
+                            UserId = "2GqPPUoB4R7"
                         },
                         new
                         {
                             Id = -3,
                             ModuleId = -3,
-                            UserId = "3"
+                            UserId = "3bPWlzE5nx1"
                         });
                 });
 
@@ -282,7 +282,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -1,
                             Purpose = "Integrale An2I",
-                            UserId = "1"
+                            UserId = "1fo9wW1Ul6I"
                         },
                         new
                         {
@@ -290,7 +290,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -2,
                             Purpose = "Rekursion AD1",
-                            UserId = "2"
+                            UserId = "2GqPPUoB4R7"
                         },
                         new
                         {
@@ -298,7 +298,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -3,
                             Purpose = "EF Core MsTe",
-                            UserId = "3"
+                            UserId = "3bPWlzE5nx1"
                         },
                         new
                         {
@@ -306,7 +306,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
                             Purpose = "Tests schreiben C++",
-                            UserId = "4"
+                            UserId = "4mNQjXctF0q"
                         },
                         new
                         {
@@ -314,7 +314,7 @@ namespace CoastlineServer.DAL.Migrations
                             CreationDate = new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
                             Purpose = "Algorithmen in C++",
-                            UserId = "4"
+                            UserId = "4mNQjXctF0q"
                         });
                 });
 
@@ -353,7 +353,7 @@ namespace CoastlineServer.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "1fo9wW1Ul6I",
                             Biography = "Start HS18",
                             DegreeProgram = "Informatik",
                             Email = "david.luthiger@hsr.ch",
@@ -363,7 +363,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = "2",
+                            Id = "2GqPPUoB4R7",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "fabian.germann@hsr.ch",
@@ -373,7 +373,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = "3",
+                            Id = "3bPWlzE5nx1",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "eliane.schmidli@hsr.ch",
@@ -383,7 +383,7 @@ namespace CoastlineServer.DAL.Migrations
                         },
                         new
                         {
-                            Id = "4",
+                            Id = "4mNQjXctF0q",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
                             Email = "yves.boillat@hsr.ch",

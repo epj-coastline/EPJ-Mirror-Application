@@ -83,6 +83,23 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         public async Task PostDelete_SingleStudyGroup_ReturnsNoContent()
         {
             // arrange
+            var userForCreationDto = new UserForCreationDto()
+            {
+                FirstName = "Markus",
+                LastName = "Christen",
+                Email = "markus.christen@hsr.ch",
+                Biography = "this is a test",
+                DegreeProgram = "Testing",
+                StartDate = "HS20"
+            };
+            var jStringContent = new StringContent(JsonConvert.SerializeObject(userForCreationDto), Encoding.UTF8,
+                "application/json");
+            var postUserRequest = new HttpRequestMessage(HttpMethod.Post, "/users/")
+            {
+                Content = jStringContent
+            };
+            postUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+
             var studyGroupForCreationDto = new StudyGroupForCreationDto()
             {
                 Purpose = "Test study group",
@@ -97,6 +114,9 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             postRequest.Headers.Authorization = _authenticationHeader;
 
             // act
+            var postResponseUser = await _client.SendAsync(postUserRequest);
+            postResponseUser.EnsureSuccessStatusCode();
+
             var postResponse = await _client.SendAsync(postRequest);
             postResponse.EnsureSuccessStatusCode();
             var stringResponse = await postResponse.Content.ReadAsStringAsync();
@@ -113,9 +133,16 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, query);
             deleteRequest.Headers.Authorization = _authenticationHeader;
 
+            var queryForUser = postResponseUser.Headers.Location.PathAndQuery;
+            var deleteUserRequest = new HttpRequestMessage(HttpMethod.Delete, queryForUser);
+            deleteUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+
             // act
             var deleteResponse = await _client.SendAsync(deleteRequest);
             deleteResponse.EnsureSuccessStatusCode();
+
+            var deleteUserResponse = await _client.SendAsync(deleteUserRequest);
+            deleteUserResponse.EnsureSuccessStatusCode();
 
             // assert
             Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
@@ -140,7 +167,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 
             // act
             var response = await _client.SendAsync(postRequest);
-            
+
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }

@@ -60,7 +60,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Get_SingleUserById_ReturnsUser()
         {
             // arrange & act
-            User = await _userRepository.Get("1");
+            User = await _userRepository.Get("1fo9wW1Ul6I");
 
             // assert
             Assert.Equal("David", User.FirstName);
@@ -74,19 +74,19 @@ namespace CoastlineServer.Repository.Testing
 
             // assert
             Assert.Equal(4, users.Count);
-            Assert.Contains(users, u => u.Id == "1");
+            Assert.Contains(users, u => u.Id == "1fo9wW1Ul6I");
         }
 
         [Fact]
         public async Task Update_SingleUser()
         {
             // arrange
-            User = await _userRepository.Get("1");
+            User = await _userRepository.Get("1fo9wW1Ul6I");
             User.Biography = "This is a test";
 
             // act
             await _userRepository.Update(User);
-            var updatedUser = await _userRepository.Get("1");
+            var updatedUser = await _userRepository.Get("1fo9wW1Ul6I");
 
             // assert
             Assert.Equal(User.Biography, updatedUser.Biography);
@@ -96,7 +96,7 @@ namespace CoastlineServer.Repository.Testing
         public async Task Delete_SingleUser_ThrowsException()
         {
             // arrange
-            User = await _userRepository.Get("2");
+            User = await _userRepository.Get("2GqPPUoB4R7");
 
             // act
             await _userRepository.Delete(User);
@@ -140,7 +140,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var studyGroups = users.Single(u => u.Id == "1").StudyGroups;
+            var studyGroups = users.Single(u => u.Id == "1fo9wW1Ul6I").StudyGroups;
 
             // assert
             Assert.NotEmpty(studyGroups);
@@ -153,7 +153,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var strengths = users.Single(u => u.Id == "1").Strengths;
+            var strengths = users.Single(u => u.Id == "1fo9wW1Ul6I").Strengths;
 
             // assert
             Assert.NotEmpty(strengths);
@@ -166,7 +166,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var members = users.Single(u => u.Id == "1").Members;
+            var members = users.Single(u => u.Id == "1fo9wW1Ul6I").Members;
 
             // assert
             Assert.NotEmpty(members);
@@ -179,7 +179,7 @@ namespace CoastlineServer.Repository.Testing
             var users = await _userRepository.GetAll();
 
             // act
-            var confirmations = users.Single(u => u.Id == "1").Confirmations;
+            var confirmations = users.Single(u => u.Id == "3bPWlzE5nx1").Confirmations;
 
             // assert
             Assert.NotEmpty(confirmations);

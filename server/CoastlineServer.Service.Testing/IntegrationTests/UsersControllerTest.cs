@@ -43,7 +43,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
-        public async Task PostDelete_SingleUser_ReturnsNoContent()
+        public async Task InsertDelete_SingleUser_ReturnsNoContent()
         {
             // arrange
             var userForCreationDto = new UserForCreationDto()
@@ -242,7 +242,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_SingleInvalidUser_ReturnsBadRequest()
+        public async Task Insert_SingleInvalidUser_ReturnsBadRequest()
         {
             // arrange
             var userForCreationDto = new UserForCreationDto()
@@ -280,7 +280,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
-        public async Task GetAllUsers_InvalidParameter_ReturnsNotFound()
+        public async Task GetAll_InvalidParameter_ReturnsNotFound()
         {
             // arrange
             var invalidModuleId = "abc";

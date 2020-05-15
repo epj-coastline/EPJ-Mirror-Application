@@ -55,7 +55,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
-        public async Task PostDelete_SingleStudyGroup_ReturnsNoContent()
+        public async Task InsertDelete_SingleStudyGroup_ReturnsNoContent()
         {
             // arrange
             var userForCreationDto = new UserForCreationDto()
@@ -115,7 +115,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_InvalidStudyGroup_ReturnsBadRequest()
+        public async Task Insert_InvalidStudyGroup_ReturnsBadRequest()
         {
             // arrange
             var studyGroupForCreationDto = new StudyGroupForCreationDto()

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoastlineServer.DAL.Migrations
 {
     [DbContext(typeof(CoastlineContext))]
-    [Migration("20200514103812_InitialCreate")]
+    [Migration("20200515110800_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,7 +283,7 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -1,
                             CreationDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -1,
-                            Purpose = "Integrale An2I",
+                            Purpose = "Integral lösen mit Wolfram Alpha",
                             UserId = "1fo9wW1Ul6I"
                         },
                         new
@@ -291,7 +291,7 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -2,
                             CreationDate = new DateTime(2020, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -2,
-                            Purpose = "Rekursion AD1",
+                            Purpose = "Möchtest jemand das Thema Rekursion aus verganger Übung vertiefen?",
                             UserId = "2GqPPUoB4R7"
                         },
                         new
@@ -299,7 +299,7 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -3,
                             CreationDate = new DateTime(2020, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -3,
-                            Purpose = "EF Core MsTe",
+                            Purpose = "Austausch zum Code-First Ansatz mit EF Core für das MsTe-Testat",
                             UserId = "3bPWlzE5nx1"
                         },
                         new
@@ -307,7 +307,7 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -4,
                             CreationDate = new DateTime(2020, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
-                            Purpose = "Tests schreiben C++",
+                            Purpose = "Ich würde gerne die Prüfung 2018 besprechen, da es keine Musterlösung gibt. Hat jemand Interesse?",
                             UserId = "4mNQjXctF0q"
                         },
                         new
@@ -315,8 +315,8 @@ namespace CoastlineServer.DAL.Migrations
                             Id = -5,
                             CreationDate = new DateTime(2020, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModuleId = -4,
-                            Purpose = "Algorithmen in C++",
-                            UserId = "4mNQjXctF0q"
+                            Purpose = "Hat jemand lust, ein paar Aufgaben zum Thema Dynamic Dispatching zu lösen?",
+                            UserId = "3bPWlzE5nx1"
                         });
                 });
 
@@ -358,9 +358,9 @@ namespace CoastlineServer.DAL.Migrations
                             Id = "1fo9wW1Ul6I",
                             Biography = "Start HS18",
                             DegreeProgram = "Informatik",
-                            Email = "mathias.muench@hsr.ch",
+                            Email = "mathias.mueller@hsr.ch",
                             FirstName = "Mathias",
-                            LastName = "Muench",
+                            LastName = "Müller",
                             StartDate = "HS18"
                         },
                         new
@@ -368,9 +368,9 @@ namespace CoastlineServer.DAL.Migrations
                             Id = "2GqPPUoB4R7",
                             Biography = "Start HS2018",
                             DegreeProgram = "Informatik",
-                            Email = "tanja.fried@hsr.ch",
-                            FirstName = "",
-                            LastName = "Fried",
+                            Email = "tanja.zurbriggen@hsr.ch",
+                            FirstName = "Tanja",
+                            LastName = "Zurbriggen",
                             StartDate = "HS18"
                         },
                         new

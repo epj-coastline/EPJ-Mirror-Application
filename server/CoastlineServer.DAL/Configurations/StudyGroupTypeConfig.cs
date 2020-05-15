@@ -26,7 +26,7 @@ namespace CoastlineServer.DAL.Configurations
                 new StudyGroup()
                 {
                     Id = -1,
-                    Purpose = "Integrale An2I",
+                    Purpose = "Integral lösen mit Wolfram Alpha",
                     CreationDate = new DateTime(2020, 1, 1),
                     UserId = "1fo9wW1Ul6I",
                     ModuleId = -1
@@ -34,7 +34,7 @@ namespace CoastlineServer.DAL.Configurations
                 new StudyGroup()
                 {
                     Id = -2,
-                    Purpose = "Rekursion AD1",
+                    Purpose = "Möchtest jemand das Thema Rekursion aus verganger Übung vertiefen?",
                     CreationDate = new DateTime(2020, 2, 16),
                     UserId = "2GqPPUoB4R7",
                     ModuleId = -2
@@ -42,7 +42,7 @@ namespace CoastlineServer.DAL.Configurations
                 new StudyGroup()
                 {
                     Id = -3,
-                    Purpose = "EF Core MsTe",
+                    Purpose = "Austausch zum Code-First Ansatz mit EF Core für das MsTe-Testat",
                     CreationDate = new DateTime(2020, 3, 13),
                     UserId = "3bPWlzE5nx1",
                     ModuleId = -3
@@ -50,7 +50,8 @@ namespace CoastlineServer.DAL.Configurations
                 new StudyGroup()
                 {
                     Id = -4,
-                    Purpose = "Tests schreiben C++",
+                    Purpose =
+                        "Ich würde gerne die Prüfung 2018 besprechen, da es keine Musterlösung gibt. Hat jemand Interesse?",
                     CreationDate = new DateTime(2020, 4, 3),
                     UserId = "4mNQjXctF0q",
                     ModuleId = -4
@@ -58,9 +59,9 @@ namespace CoastlineServer.DAL.Configurations
                 new StudyGroup()
                 {
                     Id = -5,
-                    Purpose = "Algorithmen in C++",
+                    Purpose = "Hat jemand lust, ein paar Aufgaben zum Thema Dynamic Dispatching zu lösen?",
                     CreationDate = new DateTime(2020, 4, 16),
-                    UserId = "4mNQjXctF0q",
+                    UserId = "3bPWlzE5nx1",
                     ModuleId = -4
                 }
             );

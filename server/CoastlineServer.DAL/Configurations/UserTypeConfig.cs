@@ -20,20 +20,20 @@ namespace CoastlineServer.DAL.Configurations
                 {
                     Id = "1fo9wW1Ul6I",
                     FirstName = "Mathias",
-                    LastName = "Muench",
+                    LastName = "Müller",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS18",
-                    Email = "mathias.muench@hsr.ch",
+                    Email = "mathias.mueller@hsr.ch",
                     StartDate = "HS18"
                 },
                 new User()
                 {
                     Id = "2GqPPUoB4R7",
-                    FirstName = "",
-                    LastName = "Fried",
+                    FirstName = "Tanja",
+                    LastName = "Zurbriggen",
                     DegreeProgram = "Informatik",
                     Biography = "Start HS2018",
-                    Email = "tanja.fried@hsr.ch",
+                    Email = "tanja.zurbriggen@hsr.ch",
                     StartDate = "HS18"
                 },
                 new User()

@@ -48,6 +48,7 @@ class StudyGroupService {
     // const userId = user.sub;
     const userId = -3;
     // ---- * ----
+
     const numberMuduleId = Number(moduleId);
     const data: StudyGroupForCreation = { purpose, userId, moduleId: numberMuduleId };
 

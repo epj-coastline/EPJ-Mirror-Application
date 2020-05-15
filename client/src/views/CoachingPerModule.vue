@@ -37,7 +37,7 @@
     @Prop()
     moduleId!: string; // moduleId from URL
 
-    private moduleTitle = this.module ? this.module.token : 'Modul lädt...';
+    private moduleTitle = this.module ? `Modul ${this.module.token}` : 'Modul lädt...';
 
     private students: Array<User> = [];
 

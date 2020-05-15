@@ -23,7 +23,6 @@
   } from 'vue-property-decorator';
   import ProfileImage from '@/components/common/ProfileImage.vue';
   import { StudyGroup } from '@/services/StudyGroup';
-  // import moment from 'moment';
   import moment from 'moment-timezone';
 
   @Component({

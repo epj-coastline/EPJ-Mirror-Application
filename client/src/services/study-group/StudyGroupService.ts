@@ -1,8 +1,8 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
-import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
+import { StudyGroup, validStudyGroups } from '@/services/study-group/StudyGroup';
 import { getAuthService } from '@/auth/authServiceFactory';
-import { Auth0User } from '@/auth/interfaces';
+import StudyGroupForCreation from '@/services/study-group/StudyGroupForCreation';
 
 class StudyGroupService {
   static getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
@@ -40,7 +40,7 @@ class StudyGroupService {
     return second.getTime() - first.getTime();
   }
 
-  static postStudyGroup(purpose: string, module: number) {
+  static postStudyGroup(purpose: string, moduleId: string) {
     // ---- * ----
     // Todo: Remove this, and send token
     const authService = getAuthService();
@@ -49,8 +49,8 @@ class StudyGroupService {
     const userId = -3;
     // ---- * ----
 
-    const moduleId = Number(module);
-    const data = { purpose, userId, moduleId };
+    const numberMuduleId = Number(moduleId);
+    const data: StudyGroupForCreation = { purpose, userId, moduleId: numberMuduleId };
 
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'POST',

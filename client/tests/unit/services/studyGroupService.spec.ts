@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
-import StudyGroupService from '@/services/studyGroupService';
+import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/study-group/StudyGroup';
+import StudyGroupService from '@/services/study-group/StudyGroupService';
 
 
 describe('Study Group type checking', () => {

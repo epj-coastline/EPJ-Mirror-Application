@@ -14,7 +14,7 @@
     <StudyGroupCreateDialog :moduleId="moduleId"
                             :module-title="moduleTitle"
                             v-on:closeCreateDialog="closeStudyGroupCrateDialog"
-                            v-if="studyGroupCreation"/>
+                            v-if="showStudyGroupCreation"/>
   </div>
 </template>
 
@@ -25,9 +25,9 @@
   import Header from '@/components/layout/Header.vue';
   import { Module } from '@/services/Module';
   import StudyGroupList from '@/components/common/StudyGroupList.vue';
-  import { StudyGroup } from '@/services/StudyGroup';
+  import { StudyGroup } from '@/services/study-group/StudyGroup';
   import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-  import StudyGroupService from '@/services/studyGroupService';
+  import StudyGroupService from '@/services/study-group/StudyGroupService';
   import ModuleService from '@/services/moduleService';
   import StudyGroupCreateDialog from '@/components/common/StudyGroupCreateDialog.vue';
   import EmptyList from '@/components/common/EmptyList.vue';
@@ -55,7 +55,7 @@
 
     private dataIsLoaded = false;
 
-    private studyGroupCreation = false;
+    private showStudyGroupCreation = false;
 
     private showEmptyList = false;
 
@@ -92,11 +92,11 @@
     }
 
     private openStudyGroupCreateDialog() {
-      this.studyGroupCreation = true;
+      this.showStudyGroupCreation = true;
     }
 
     public closeStudyGroupCrateDialog() {
-      this.studyGroupCreation = false;
+      this.showStudyGroupCreation = false;
       this.loadData();
     }
   }

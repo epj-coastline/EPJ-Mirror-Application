@@ -17,13 +17,13 @@
                       required>
         </md-textarea>
       </md-field>
-      <md-dialog-actions class="cl-dialog-actions">
+      <md-card-actions class="cl-dialog-actions">
         <md-button  class="md-raised md-primary cl-button-submit"
                     type="submit"
                     :disabled="isDisabled(this.purpose)">
           Lerngruppe erstellen
         </md-button>
-      </md-dialog-actions>
+      </md-card-actions>
     </form>
   </div>
 </template>

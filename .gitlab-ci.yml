@@ -435,10 +435,19 @@ deploy_production:
       "jwt_configuration": {
         "alg": "RS256",
         "lifetime_in_seconds": 36000,
-        "secret_encoded": false,
-        "skip_consent_for_verifiable_first_party_clients": true,
+        "secret_encoded": false
       },
       "custom_login_page_on":false}' https://dev-coastline.eu.auth0.com/api/v2/clients
+
+      curl -H "Authorization: Bearer $auth0AccessToken" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "coastline-review-'$CI_COMMIT_REF_SLUG'",
+        "identifier": "https://'$API_URL_REVIEW'",
+        "signing_alg": "RS256",
+        "skip_consent_for_verifiable_first_party_clients": true,
+      }' https://dev-coastline.eu.auth0.com/api/v2/resource-servers
   }
 
 before_script:

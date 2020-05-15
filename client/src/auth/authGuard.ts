@@ -1,5 +1,6 @@
 import { NavigationGuard } from 'vue-router';
 import { getAuthService } from '@/auth/authServiceFactory';
+import UserService from '@/services/userService';
 
 const authGuard: NavigationGuard = async (to, from, next) => {
   const authService = getAuthService();
@@ -19,6 +20,11 @@ const authGuard: NavigationGuard = async (to, from, next) => {
     if (authService.isAuthenticated) {
       next();
     }
+  }
+  try {
+    await UserService.checkAndAddUserToBackend();
+  } catch {
+    // ERROR
   }
 };
 

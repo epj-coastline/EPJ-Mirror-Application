@@ -12,7 +12,7 @@
       </md-button>
     </div>
     <StudyGroupCreateDialog :moduleId="moduleId"
-                            :module-title="moduleTitle"
+                            :module-title="this.module.token"
                             v-on:closeCreateDialog="closeStudyGroupCrateDialog"
                             v-if="showStudyGroupCreation"/>
   </div>

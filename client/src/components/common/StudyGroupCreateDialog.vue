@@ -1,5 +1,6 @@
 <template>
   <div class="cl-dialog">
+    <md-progress-bar class="cl-progress-bar" md-mode="indeterminate" v-if="sending" />
     <form class="cl-form" novalidate @submit.prevent="validatePurpose">
       <h3 class="md-title cl-dialog-header">Neue Lerngruppe für {{moduleTitle}}</h3>
       <md-button class="md-icon-button cl-dialog-header cl-button-clear" @click="closeDialog" :disabled="sending">
@@ -16,7 +17,6 @@
                       required>
         </md-textarea>
       </md-field>
-      <md-progress-bar class="cl-progress-bar" md-mode="indeterminate" v-if="sending" />
       <md-dialog-actions class="cl-dialog-actions">
         <md-button  class="md-raised md-primary cl-button-submit"
                     type="submit"
@@ -73,11 +73,11 @@
         const purposeTmp = this.purpose;
         if (purposeTmp !== null) {
           const postStudyGroup = StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
-          const wait = new Promise((resolve, reject) => {
+          const wait = new Promise((resolve) => {
             setTimeout(resolve, 1500);
           });
 
-          Promise.all([postStudyGroup, wait]).then((values) => {
+          Promise.all([postStudyGroup, wait]).then(() => {
             this.sending = false;
             this.closeDialog();
           });
@@ -103,7 +103,7 @@
       }
     }
 
-    isDisabled(purpose: any) {
+    isDisabled(purpose: string) {
       return this.sending || !purpose;
     }
 
@@ -157,5 +157,11 @@
     position: absolute;
     right: 8px;
     top: 16px;
+  }
+  .md-progress-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
   }
 </style>

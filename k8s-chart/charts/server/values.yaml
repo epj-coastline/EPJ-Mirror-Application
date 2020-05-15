@@ -9,6 +9,8 @@ config:
   database_migrations: manuel
   allowed_hosts: "*"
   allowed_origin: coastline.app
+  auth0_domain: coastline-app.eu.auth0.com
+  auth0_audience: http://api.coastline.app
 service:
   port: 80
 ingress:

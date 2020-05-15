@@ -28,7 +28,6 @@
               <md-field :class="getValidationClass('degreeProgram')">
                 <label for="degreeProgram">Studiengang</label>
                 <md-select name="degreeProgram" id="degreeProgram" v-model="form.degreeProgram" md-dense :disabled="sending">
-                  <md-option></md-option>
                   <md-option value="Bauingenieurwesen">Bauingenieurwesen</md-option>
                   <md-option value="Elektrotechnik">Elektrotechnik</md-option>
                   <md-option value="Erneuerbare Energien und Umwelttechnik">Erneuerbare Energien und Umwelttechnik</md-option>
@@ -47,7 +46,6 @@
               <md-field :class="getValidationClass('startDate')">
                 <label for="startDate">Start</label>
                 <md-select name="startDate" id="startDate" v-model="form.startDate" md-dense :disabled="sending">
-                  <md-option></md-option>
                   <md-option value="FS2016">FS2016</md-option>
                   <md-option value="HS2016">HS2016</md-option>
                   <md-option value="FS2017">FS2017</md-option>
@@ -62,10 +60,6 @@
               </md-field>
             </div>
           </div>
-          <md-field>
-            <label>Bio</label>
-            <md-textarea class="cl-no-textarea-resize" v-model="form.biography" maxlength="140"></md-textarea>
-          </md-field>
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />

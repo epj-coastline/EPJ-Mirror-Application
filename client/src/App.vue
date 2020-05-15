@@ -26,6 +26,12 @@
     opacity: 0;
   }
 
+  // Global material overwrites
+  .md-select-menu {
+    left: 24px!important;
+    min-width: calc(100vw - 48px)!important;
+  }
+
 </style>
 <script lang="ts">
   import BottomNavigation from '@/components/layout/BottomNavigation.vue';

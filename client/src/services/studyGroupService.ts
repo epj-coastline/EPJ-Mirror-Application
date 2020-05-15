@@ -49,9 +49,6 @@ class StudyGroupService {
     const userId = -3;
     // ---- * ----
 
-    if (!purpose) {
-      throw new Error('Purpose is invalid.');
-    }
     const moduleId = Number(module);
     const data = { purpose, userId, moduleId };
 

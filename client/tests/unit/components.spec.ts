@@ -43,7 +43,7 @@ describe('StudyGroupList.vue', () => {
     if (node != null && node.textContent != null) {
       result = node.textContent;
     }
-    expect(result).to.be.equal('a few seconds ago');
+    expect(result).to.be.equal('vor ein paar Sekunden');
   });
 
   it('renders study group information when passed', () => {
@@ -73,7 +73,7 @@ describe('StudyGroupList.vue', () => {
       propsData: { studyGroups: [studyGroup1, studyGroup2] },
     });
 
-    expect(wrapper.text()).to.be.equal('Alex Müller a few seconds ago Lorem ipsum dolor sit amet Alex Müller a few seconds ago sit amet');
+    expect(wrapper.text()).to.be.equal('Alex Müller vor ein paar Sekunden Lorem ipsum dolor sit amet Alex Müller vor ein paar Sekunden sit amet');
   });
 });
 

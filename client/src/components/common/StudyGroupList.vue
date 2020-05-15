@@ -32,7 +32,7 @@
     methods: {
       formatDate(date: Date): string {
         const dateTimezoneZero = moment.tz(date, 'Africa/Dakar');
-        return moment(dateTimezoneZero).fromNow();
+        return moment(dateTimezoneZero).locale('de').fromNow();
       },
     },
   })
@@ -58,6 +58,7 @@
     border: 1px solid rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14);
+    word-wrap: break-word;
   }
   .cl-headline6 {
     font-family: Roboto;

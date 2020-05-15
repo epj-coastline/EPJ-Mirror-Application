@@ -67,11 +67,7 @@
         }
         this.studyGroups = await StudyGroupService.getPerModuleId(this.moduleIdAsNumber);
 
-        if (this.studyGroups.length === 0) {
-          this.showEmptyList = true;
-        } else {
-          this.showEmptyList = false;
-        }
+        this.showEmptyList = this.studyGroups.length === 0;
       } catch {
         await this.$router.push('/studygroups');
       } finally {

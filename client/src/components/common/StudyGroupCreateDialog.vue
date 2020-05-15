@@ -71,12 +71,12 @@
       this.sending = true;
       try {
         if (this.purpose.length > 0) {
-          const postStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
+          const requestPostStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
           const wait = new Promise((resolve) => {
             setTimeout(resolve, 1500);
           });
 
-          Promise.all([postStudyGroup, wait]).then(() => {
+          Promise.all([requestPostStudyGroup, wait]).then(() => {
             this.sending = false;
             this.closeDialog();
           });
@@ -144,8 +144,8 @@
   }
 
   .cl-dialog-actions {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .cl-button-submit {

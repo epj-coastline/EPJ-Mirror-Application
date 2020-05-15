@@ -1,7 +1,7 @@
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { StudyGroup, validStudyGroups } from '@/services/study-group/StudyGroup';
-import { getAuthService } from '@/auth/authServiceFactory';
+// import { getAuthService } from '@/auth/authServiceFactory';
 import StudyGroupForCreation from '@/services/study-group/StudyGroupForCreation';
 
 class StudyGroupService {
@@ -43,8 +43,8 @@ class StudyGroupService {
   static postStudyGroup(purpose: string, moduleId: string) {
     // ---- * ----
     // Todo: Remove this, and send token
-    const authService = getAuthService();
-    const { user } = authService;
+    // const authService = getAuthService();
+    // const { user } = authService;
     // const userId = user.sub;
     const userId = -3;
     // ---- * ----

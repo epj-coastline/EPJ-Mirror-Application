@@ -86,17 +86,19 @@ namespace CoastlineServer.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [ Authorize]
+        [Authorize]
         public async Task<ActionResult<UserDto>> UpdateUser(String id, UserDto userDto)
         {
             if (id != userDto.Id)
             {
                 return BadRequest();
             }
+
             if (id != this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6))
             {
                 return Forbid();
             }
+
             var user = _mapper.Map<User>(userDto);
             try
             {
@@ -106,8 +108,8 @@ namespace CoastlineServer.Service.Controllers
             {
                 return Conflict();
             }
-            return NoContent();
 
+            return NoContent();
         }
 
         [HttpDelete("{userId}")]

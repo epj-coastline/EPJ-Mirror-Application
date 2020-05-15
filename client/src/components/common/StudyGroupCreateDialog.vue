@@ -38,7 +38,7 @@
     maxLength,
     required,
   } from 'vuelidate/lib/validators';
-  import StudyGroupService from '@/services/studyGroupService';
+  import StudyGroupService from '@/services/study-group/StudyGroupService';
 
   @Component({
     mixins: [validationMixin],
@@ -54,14 +54,14 @@
     @Prop({
       required: true,
     })
-    moduleId!: number;
+    moduleId!: string;
 
     @Prop({
       required: true,
     })
     moduleTitle!: string;
 
-    private purpose = null;
+    private purpose = '';
 
     private sending = false;
 
@@ -70,9 +70,8 @@
     saveStudyGroup() {
       this.sending = true;
       try {
-        const purposeTmp = this.purpose;
-        if (purposeTmp !== null) {
-          const postStudyGroup = StudyGroupService.postStudyGroup(purposeTmp, this.moduleId);
+        if (this.purpose.length > 0) {
+          const postStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
           const wait = new Promise((resolve) => {
             setTimeout(resolve, 1500);
           });
@@ -104,12 +103,12 @@
     }
 
     isDisabled(purpose: string) {
-      return this.sending || !purpose;
+      return this.sending || purpose.length === 0;
     }
 
     clearForm() {
       this.$v.$reset();
-      this.purpose = null;
+      this.purpose = '';
     }
 
     closeDialog() {

@@ -69,7 +69,7 @@ namespace CoastlineServer.Repository.Testing
 
             // assert
             Assert.NotNull(creator);
-            Assert.Equal(-1, creator.Id);
+            Assert.Equal("1fo9wW1Ul6I", creator.Id);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace CoastlineServer.Repository.Testing
             {
                 CreationDate = new DateTime(2020, 04, 16),
                 Purpose = "test studygroup",
-                UserId = -1,
+                UserId = "1fo9wW1Ul6I",
                 ModuleId = -2
             };
 
@@ -150,7 +150,7 @@ namespace CoastlineServer.Repository.Testing
             {
                 Id = 500,
                 Purpose = "Invalid",
-                UserId = -1
+                UserId = "1"
             };
 
             // act & assert

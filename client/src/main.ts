@@ -14,7 +14,7 @@ const auth0Client = new Auth0Client({
   domain: Configuration.CONFIG.auth0.domain,
   // eslint-disable-next-line @typescript-eslint/camelcase
   client_id: Configuration.CONFIG.auth0.clientId,
-  // audience: Configuration.CONFIG.auth0.audience,
+  audience: Configuration.CONFIG.auth0.audience,
   // eslint-disable-next-line @typescript-eslint/camelcase
   redirect_uri: Configuration.CONFIG.auth0.redirectUri,
 });

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoastlineServer.Service.Controllers
 {
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Route("[controller]")]
     public class StudyGroupsController : ControllerBase
     {
@@ -25,6 +28,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<StudyGroupDto>>> GetStudyGroups(
             [FromQuery] StudyGroupResourceParameters studyGroupResourceParameters)
         {
@@ -46,6 +50,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet("{studyGroupId:int}", Name = "GetStudyGroup")]
+        [Authorize]
         public async Task<ActionResult<StudyGroupDto>> GetStudyGroup(int studyGroupId)
         {
             try
@@ -61,10 +66,13 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<StudyGroupDto>> CreateStudyGroup(
             StudyGroupForCreationDto studyGroupForCreationDto)
         {
             var studyGroup = _mapper.Map<StudyGroup>(studyGroupForCreationDto);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
+            studyGroup.UserId = userId;
             studyGroup.CreationDate = DateTime.UtcNow;
             var studyGroupEntity = await _studyGroupRepository.Insert(studyGroup);
             var studyGroupDto = _mapper.Map<StudyGroupDto>(studyGroupEntity);
@@ -76,6 +84,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpDelete("{studyGroupId:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int studyGroupId)
         {
             try
@@ -92,6 +101,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpOptions]
+        [Authorize]
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");

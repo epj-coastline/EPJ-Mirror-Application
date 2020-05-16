@@ -7,6 +7,7 @@ import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 import UserList from '@/components/common/UserList.vue';
 import { Module, validModule, validModules } from '@/services/Module';
+import EditUserData from '@/components/common/EditUserData.vue';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -22,7 +23,7 @@ describe('ProfileImage.vue', () => {
 describe('StudyGroupList.vue', () => {
   it('renders formatted date when passed', () => {
     const creator1 = {
-      id: 2,
+      id: 'usfitns',
       firstName: 'Alex',
       lastName: 'Müller',
       email: 'alex@hsr.ch',
@@ -31,7 +32,7 @@ describe('StudyGroupList.vue', () => {
       startDate: 'HS18',
     };
     const studyGroup = {
-      id: 1,
+      id: 'uizsgdfsuzdf',
       purpose: 'Lorem ipsum dolor sit amet',
       creationDate: new Date(),
       user: creator1,
@@ -50,7 +51,7 @@ describe('StudyGroupList.vue', () => {
 
   it('renders study group information when passed', () => {
     const creator1 = {
-      id: 2,
+      id: '87dsfn9s',
       firstName: 'Alex',
       lastName: 'Müller',
       email: 'alex@hsr.ch',
@@ -109,7 +110,7 @@ describe('ModuleList.vue', () => {
 describe('UserList.vue', () => {
   it('renders users with information when passed', () => {
     const user1 = {
-      id: 2,
+      id: '8s7dzfns87df',
       firstName: 'Alex',
       lastName: 'Müller',
       email: 'alex@hsr.ch',
@@ -118,7 +119,7 @@ describe('UserList.vue', () => {
       startDate: 'HS18',
     };
     const user2 = {
-      id: 3,
+      id: 's7znfs',
       firstName: 'Hans',
       lastName: 'Peters',
       email: 'hans@hsr.ch',
@@ -138,10 +139,30 @@ describe('UserList.vue', () => {
   });
 });
 
+
+describe('EditUserData.vue', () => {
+  it('renders structure correct', () => {
+    const user: User = {
+      id: 'usfitns',
+      firstName: 'Alex',
+      lastName: 'Müller',
+      email: 'alex@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+
+    const wrapper = shallowMount(EditUserData, {
+      propsData: { user },
+    });
+    expect(wrapper.text()).to.be.equal('VornameDer Vorname ist zu langNachnameDer Nachname ist zu langStudiengangBauingenieurwesenElektrotechnikErneuerbare Energien und UmwelttechnikInformatikLandschaftsarchitekturMaschinentechnik | InnovationStadt-, Verkehrs- und RaumplanungWirtschaftsingenieurwesenDer Studiengang wird benötigtStartFS16HS16FS17HS17FS18HS18FS19HS19FS20Das Startdatum wird benötigtSpeichern');
+  });
+});
+
 describe('User type checking', () => {
   it('succeeds on correct data', () => {
     const testUser: User = {
-      id: 12,
+      id: 's897dfnsf',
       firstName: 'Sebi',
       lastName: 'Hueber',
       email: 'seb@yolo.com',
@@ -159,7 +180,7 @@ describe('User array type checking', () => {
   it('succeeds on correct data', () => {
     const testUsers: Array<User> = [
       {
-        id: 12,
+        id: '23d4',
         firstName: 'Sebi',
         lastName: 'Hueber',
         email: 'seb@yolo.com',
@@ -168,7 +189,7 @@ describe('User array type checking', () => {
         startDate: 'HS18',
       },
       {
-        id: 14,
+        id: '13e',
         firstName: 'Sebastian',
         lastName: 'Peter',
         email: 'seb@yovfvlo.com',
@@ -186,7 +207,7 @@ describe('User array type checking', () => {
 describe('Module type checking', () => {
   it('succeeds on correct data', () => {
     const testModule: Module = {
-      id: 12,
+      id: 23,
       token: 'Infsi3',
       name: 'Informationssicherheit 3',
       responsibility: 'Informatik',
@@ -202,13 +223,13 @@ describe('Module Array type checking', () => {
   it('succeeds on correct data', () => {
     const testModules: Array<Module> = [
       {
-        id: 12,
+        id: 43,
         token: 'Infsi3',
         name: 'Informationssicherheit 3',
         responsibility: 'Informatik',
       },
       {
-        id: 1,
+        id: 23,
         token: 'Cpp',
         name: 'C++ 3',
         responsibility: 'Informatik',
@@ -223,11 +244,11 @@ describe('Module Array type checking', () => {
 describe('Study Group type checking', () => {
   it('succeeds on correct data', () => {
     const testStudyGroup: StudyGroup = {
-      id: 12,
+      id: 23,
       purpose: 'none',
       creationDate: new Date(41241234124),
       user: {
-        id: 12,
+        id: 'ao9fnm',
         firstName: 'Sebi',
         lastName: 'Hueber',
         email: 'seb@yolo.com',
@@ -246,11 +267,11 @@ describe('Study Group Array type checking', () => {
   it('succeeds on correct data', () => {
     const testStudyGroups: Array<StudyGroup> = [
       {
-        id: 12,
+        id: 43,
         purpose: 'none',
         creationDate: new Date(41241234124),
         user: {
-          id: 12,
+          id: '7sdfnta8st',
           firstName: 'Sebi',
           lastName: 'Hueber',
           email: 'seb@yolo.com',
@@ -260,11 +281,11 @@ describe('Study Group Array type checking', () => {
         },
       },
       {
-        id: 22,
+        id: 54,
         purpose: 'ne',
         creationDate: new Date(41241224),
         user: {
-          id: 14,
+          id: 's87z9dfn',
           firstName: 'Seba',
           lastName: 'Hur',
           email: 'seb@ycdcdolo.com',

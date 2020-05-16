@@ -1,14 +1,17 @@
 using System;
+using System.Linq;
 using AutoMapper;
+using CoastlineServer.DAL.Context;
+using CoastlineServer.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using CoastlineServer.DAL.Context;
-using CoastlineServer.Repository;
-using Newtonsoft.Json;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 namespace CoastlineServer.Service
 {
@@ -24,6 +27,15 @@ namespace CoastlineServer.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = $"https://{Configuration["Auth0Domain"]}/";
+                options.Audience = Configuration["Auth0Audience"];
+            });
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<UserRepository>();
@@ -46,6 +58,17 @@ namespace CoastlineServer.Service
                         Url = "http://epj.pages.ifs.hsr.ch/2020/coastline/documentation/"
                     };
                 };
+                config.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description =
+                        "Type into the text box: Bearer {your JWT token}.\n" +
+                        "Go to the following URL and copy the token in the response box.\n" +
+                        "https://manage.auth0.com/dashboard/eu/dev-coastline/apis/5eb2dba963d57c33285f6f67/test"
+                });
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
         }
 
@@ -72,6 +95,7 @@ namespace CoastlineServer.Service
                     .AllowCredentials();
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Register the Swagger generator and the Swagger UI middlewares

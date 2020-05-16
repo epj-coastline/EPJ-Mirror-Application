@@ -56,7 +56,7 @@ namespace CoastlineServer.Repository
             return await collection.Include(u => u.Strengths).ToListAsync();
         }
 
-        public async Task<User> Get(int primaryKey)
+        public async Task<User> Get(string primaryKey)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace CoastlineServer.Repository
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (DbUpdateConcurrencyException)
             {
                 throw CreateOptimisticConcurrencyException(_context, user);
             }

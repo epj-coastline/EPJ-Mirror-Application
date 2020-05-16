@@ -7,6 +7,6 @@ namespace CoastlineServer.Service.Models
         public int Id { get; set; }
         public DateTime AccessionDate { get; set; }
         public int StudyGroupId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

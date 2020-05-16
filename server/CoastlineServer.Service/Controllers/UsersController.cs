@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoastlineServer.Service.Controllers
 {
@@ -25,6 +28,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
             [FromQuery] UserResourceParameters userResourceParameters)
         {
@@ -45,8 +49,9 @@ namespace CoastlineServer.Service.Controllers
             }
         }
 
-        [HttpGet("{userId:int}", Name = "GetUser")]
-        public async Task<ActionResult<UserDto>> GetUser(int userId)
+        [HttpGet("{userId}", Name = "GetUser")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetUser(string userId)
         {
             try
             {
@@ -61,9 +66,11 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto userForCreationDto)
         {
             var user = _mapper.Map<User>(userForCreationDto);
+            user.Id = this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6);
             var userEntity = await _userRepository.Insert(user);
             var userDto = _mapper.Map<UserDto>(userEntity);
 
@@ -73,8 +80,41 @@ namespace CoastlineServer.Service.Controllers
             }, userDto);
         }
 
-        [HttpDelete("{userId:int}")]
-        public async Task<IActionResult> DeleteUser(int userId)
+        [HttpPut("{id}")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(string id, UserDto userDto)
+        {
+            if (id != userDto.Id)
+            {
+                return BadRequest();
+            }
+
+            if (id != this.User.FindFirst(ClaimTypes.NameIdentifier).Value.Substring(6))
+            {
+                return Forbid();
+            }
+
+            var user = _mapper.Map<User>(userDto);
+            try
+            {
+                await _userRepository.Update(user);
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{userId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser(string userId)
         {
             try
             {
@@ -90,6 +130,7 @@ namespace CoastlineServer.Service.Controllers
         }
 
         [HttpOptions]
+        [Authorize]
         public IActionResult GetAuthorsOptions()
         {
             Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");

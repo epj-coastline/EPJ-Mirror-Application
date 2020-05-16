@@ -67,10 +67,10 @@ If errors occur the CLI tools version might be outdated or not installed. To ins
 dotnet tool install --global dotnet-ef
 ```
 
-Navigate to the `CoastlineServer.DAL` and Update the database for creating first schema.
+Navigate to the `CoastlineServer.Service` and Update the database for creating first schema.
 
 ```c#
-cd CoastlineServer.DAL 
+cd CoastlineServer.Service 
 dotnet ef database update InitialCreate --project ../CoastlineServer.DAL
 ```
 
@@ -80,6 +80,12 @@ Run integration tests or check the created database via DataGrip / pgAdmin.
 
 * [EF Core CLI Tools]( https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
 * [EF Core Migrations]( https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
+
+## Create migration
+
+```
+ dotnet ef migrations add InitialCreate --project ../CoastlineServer.DAL/
+```
 
 ## Test Projects
 

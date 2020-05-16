@@ -6,3 +6,5 @@ data:
   database-migrations: {{ .Values.config.database_migrations }}
   allowed-hosts: "{{ .Values.config.allowed_hosts }}"
   allowed-origin: "{{ .Values.config.allowed_origin }}"
+  auth0-domain: "{{ .Values.config.auth0_domain }}"
+  auth0-audience: "{{ .Values.config.auth0_audience }}"

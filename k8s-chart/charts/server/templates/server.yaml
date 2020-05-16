@@ -38,6 +38,16 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-{{ .Chart.Name }}-config
                   key: allowed-origin
+            - name: Auth0Domain
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: auth0-domain
+            - name: Auth0Audience
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-{{ .Chart.Name }}-config
+                  key: auth0-audience
             - name: ConnectionStringCoastline
               valueFrom:
                 secretKeyRef:

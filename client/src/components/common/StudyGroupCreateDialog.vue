@@ -69,23 +69,21 @@
 
     saveStudyGroup() {
       this.sending = true;
-      try {
-        if (this.purpose.length > 0) {
-          const requestPostStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
-          const wait = new Promise((resolve) => {
-            setTimeout(resolve, 1500);
-          });
+      if (this.purpose.length > 0) {
+        const requestPostStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
+        const wait = new Promise((resolve) => {
+          setTimeout(resolve, 1500);
+        });
 
-          Promise.all([requestPostStudyGroup, wait]).then(() => {
-            this.sending = false;
-            this.closeDialog();
-          });
-        } else {
-          throw Error('The study group could not be created.');
-        }
-      } catch {
-        this.closeDialog();
-        this.$router.push('/studygroups');
+        Promise.all([requestPostStudyGroup, wait]).then(() => {
+          this.sending = false;
+          this.closeDialog();
+        }).catch(() => {
+          this.closeDialog();
+          this.$router.push('/studygroups');
+        });
+      } else {
+        throw Error('The study group could not be created.');
       }
     }
 

@@ -26,18 +26,21 @@ variables:
   # - GCP_SA_PROD
   # - COASTLINE_DATABASE_PASSWORD_DEV
   # - COASTLINE_DATABASE_PASSWORD_PROD
+  # - SONARQUBE_LOGIN
 
   # Docker registry repositories
   CLIENT_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/client-builder
   CLIENT_REPOSITORY: $CI_REGISTRY_IMAGE/client
   SERVER_BUILDER_REPOSITORY: $CI_REGISTRY_IMAGE/server-builder
   SERVER_REPOSITORY: $CI_REGISTRY_IMAGE/server
+  SONARQUBE_REPOSITORY: $CI_REGISTRY_IMAGE/sonarqube-server
 
   #  Docker files
   CLIENT_CONTEXT: ./client
   CLIENT_DOCKER_FILE: $CLIENT_CONTEXT/prod.dockerfile
   SERVER_CONTEXT: ./server
   SERVER_DOCKER_FILE: $SERVER_CONTEXT/prod.dockerfile
+  SONARQUBE_SERVER_DOCKER_FILE: $SERVER_CONTEXT/sonarqube.dockerfile
 
   # Environment identifiers are user for database name and helm release name
   ENVIRONMENT_ID_STAGING: coastline-staging
@@ -128,6 +131,15 @@ build_server:
     - buildServerImage
   extends: .server_changes
 
+build_sonarqube_server:
+  stage: build
+  image: docker:19
+  tags:
+    - docker
+  script:
+    - buildSonarqubeServerImage
+  extends: .server_changes
+
 ########################################################################################################################
 # Stage: Test
 ########################################################################################################################
@@ -161,6 +173,38 @@ server_unit_tests:
   extends: .server_changes
   needs:
     - build_server
+
+sonarqube_server:
+  stage: test
+  image: $SONARQUBE_REPOSITORY:$CI_COMMIT_REF_SLUG
+  variables:
+    GIT_STRATEGY: none
+    POSTGRES_DB: $CI_COMMIT_SHORT_SHA
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: "mysecretpassword"
+    POSTGRES_HOST_AUTH_METHOD: trust
+  services:
+    - postgres:11-alpine
+  script:
+    - cd /src
+    - dotnet sonarscanner begin
+      /k:"coastline-server"
+      /v:"$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHORT_SHA"
+      /d:sonar.login="$SONARQUBE_LOGIN"
+      /d:sonar.exclusions="**/obj/**, **/bin/**, **Migrations/**, **/TestResults.trx, **/coverage.opencover.xml"
+      /d:sonar.links.homepage="https://sonarqube.coastline.app"
+      /d:sonar.host.url="https://sonarqube.coastline.app"
+      /d:sonar.cs.opencover.reportsPaths="CoastlineServer.Repository.Testing/coverage.opencover.xml,CoastlineServer.Service.Testing/coverage.opencover.xml"
+      /d:sonar.cs.vstest.reportsPaths="CoastlineServer.Repository.Testing/TestResults/TestResults.trx,CoastlineServer.Service.Testing/TestResults/TestResults.trx"
+    - ConnectionStringCoastline="Server=postgres;Port=5432;Database=$POSTGRES_DB;User Id=runner;Password=mysecretpassword;" dotnet test --logger "trx;LogFileName=TestResults.trx" /p:ExcludeByFile=\"**/Migrations/*.cs\" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+    - dotnet build -c Release -o /app/build
+    - dotnet sonarscanner end /d:sonar.login="$SONARQUBE_LOGIN"
+  extends: .server_changes
+  needs:
+    - build_sonarqube_server
+  rules:
+    # Only execute for master
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ########################################################################################################################
 # Stage: Review
@@ -372,6 +416,20 @@ deploy_production:
 
     docker push $SERVER_BUILDER_REPOSITORY:$CI_COMMIT_REF_SLUG
     docker push $SERVER_REPOSITORY:$CI_COMMIT_REF_SLUG
+  }
+
+  function buildSonarqubeServerImage() {
+    docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+    docker pull $SONARQUBE_REPOSITORY:$CI_COMMIT_REF_SLUG || docker pull $SONARQUBE_REPOSITORY:$CI_DEFAULT_BRANCH || true
+
+    docker build --pull \
+      --cache-from $SONARQUBE_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      --cache-from $SONARQUBE_REPOSITORY:$CI_DEFAULT_BRANCH \
+      -t $SONARQUBE_REPOSITORY:$CI_COMMIT_REF_SLUG \
+      -f $SONARQUBE_SERVER_DOCKER_FILE $SERVER_CONTEXT \
+
+      docker push $SONARQUBE_REPOSITORY:$CI_COMMIT_REF_SLUG
   }
 
   function gCloudConnectKubernetes() {

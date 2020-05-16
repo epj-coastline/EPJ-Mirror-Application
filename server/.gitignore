@@ -7,6 +7,8 @@
 [Oo]bj/
 _UpgradeReport_Files/
 [Pp]ackages/
+TestResults.trx
+coverage.opencover.xml
 
 Thumbs.db
 Desktop.ini

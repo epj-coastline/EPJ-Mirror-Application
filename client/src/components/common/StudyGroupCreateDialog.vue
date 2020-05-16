@@ -76,7 +76,6 @@
         });
 
         Promise.all([requestPostStudyGroup, wait]).then(() => {
-          this.sending = false;
           this.closeDialog();
         }).catch(() => {
           this.closeDialog();
@@ -110,6 +109,7 @@
     }
 
     closeDialog() {
+      this.sending = false;
       this.clearForm();
       this.$emit('closeCreateDialog');
     }

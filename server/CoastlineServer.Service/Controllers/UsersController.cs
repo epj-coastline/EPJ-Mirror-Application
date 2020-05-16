@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository;
 using CoastlineServer.Repository.Parameters;
 using CoastlineServer.Service.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoastlineServer.Service.Controllers
 {
@@ -87,7 +87,7 @@ namespace CoastlineServer.Service.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [Authorize]
-        public async Task<ActionResult<UserDto>> UpdateUser(String id, UserDto userDto)
+        public async Task<IActionResult> UpdateUser(string id, UserDto userDto)
         {
             if (id != userDto.Id)
             {

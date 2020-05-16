@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header :title="moduleTitle" :sub-title="numberOfStudents" back-button="true"/>
-    <UserList v-if="dataIsLoaded" :users="students" second-row-content="email"/>
+    <UserList v-if="dataIsLoaded && !showEmptyList" :users="students" second-row-content="email"/>
     <EmptyList v-if="showEmptyList" title="Noch keine Studierende"
                description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
     <LoadingSpinner v-if="!dataIsLoaded"/>

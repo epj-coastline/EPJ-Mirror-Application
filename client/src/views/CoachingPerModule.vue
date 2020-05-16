@@ -70,7 +70,7 @@
       const result = await ModuleService.getAll();
       const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
       if (foundModule) {
-        this.moduleTitle = foundModule.token;
+        this.moduleTitle = `Modul ${foundModule.token}`;
       }
     }
 

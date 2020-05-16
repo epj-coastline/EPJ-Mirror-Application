@@ -17,7 +17,7 @@ class UserService {
       },
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return Promise.resolve(response.json());
         }
         return Promise.resolve();
@@ -43,7 +43,7 @@ class UserService {
       },
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return Promise.resolve(response.json());
         }
         return Promise.reject;
@@ -151,7 +151,7 @@ class UserService {
       },
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return Promise.resolve(response.json());
         }
         return Promise.reject();

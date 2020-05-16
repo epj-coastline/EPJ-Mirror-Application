@@ -17,6 +17,24 @@ describe('ProfileImage.vue', () => {
     });
     expect(wrapper.text()).to.be.equal('HB');
   });
+
+  it('renders capital letters when passed', () => {
+    const firstName = 'hanspeter';
+    const lastName = 'burri';
+    const wrapper = shallowMount(ProfileImage, {
+      propsData: { firstName, lastName },
+    });
+    expect(wrapper.text()).to.be.equal('HB');
+  });
+
+  it('renders initial for firstname when passed', () => {
+    const firstName = 'hanspeter';
+    const lastName = '';
+    const wrapper = shallowMount(ProfileImage, {
+      propsData: { firstName, lastName },
+    });
+    expect(wrapper.text()).to.be.equal('H');
+  });
 });
 
 describe('StudyGroupList.vue', () => {

@@ -92,7 +92,7 @@ class UserService {
     const token = await authService.getTokenAsync();
     const user = {
       firstName: authService.user.nickname,
-      lastName: 'Nachname',
+      lastName: '',
       email: authService.user.email,
       biography: '',
       degreeProgram: 'Informatik',

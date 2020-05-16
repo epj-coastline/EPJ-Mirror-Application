@@ -18,13 +18,13 @@ const authGuard: NavigationGuard = async (to, from, next) => {
       throw new Error('Authentication has failed');
     }
     if (authService.isAuthenticated) {
+      try {
+        await UserService.checkAndAddUserToBackend();
+      } catch {
+        // ERROR
+      }
       next();
     }
-  }
-  try {
-    await UserService.checkAndAddUserToBackend();
-  } catch {
-    // ERROR
   }
 };
 

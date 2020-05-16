@@ -175,4 +175,14 @@
       right: 0;
       left: 0;
     }
+    .cl-user-data-form .md-error {
+      color: #B00020 !important;
+    }
+    .cl-user-data-form .md-field.md-theme-default.md-invalid label {
+      color: #B00020 !important;
+    }
+    .cl-user-data-form .md-field.md-theme-default.md-invalid:after {
+      color: #B00020 !important;
+      background-color: #B00020 !important;
+    }
   </style>

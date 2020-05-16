@@ -12,7 +12,6 @@
                 <span class="md-error" v-else-if="!$v.form.firstName.maxlength">Der Vorname ist zu lang</span>
               </md-field>
             </div>
-
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('lastName')">
                 <label for="last-name">Nachname</label>
@@ -59,14 +58,10 @@
               </div>
             </div>
           </md-card-content>
-
           <md-progress-bar md-mode="indeterminate" v-if="sending" />
-
           <md-button type="submit" class="md-primary md-raised cl-wide-button" :disabled="sending">Speichern</md-button>
         </md-card>
-
-        <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
-      </form>
+     </form>
     </div>
   </template>
 
@@ -78,27 +73,26 @@
   import UserService from '@/services/userService';
 
 
-    @Component({
-      mixins: [validationMixin],
-      validations: {
-        form: {
-          firstName: {
-            required,
-            maxLength: maxLength(20),
-          },
-          lastName: {
-            maxLength: maxLength(20),
-          },
-          startDate: {
-            required,
-          },
-          degreeProgram: {
-            required,
-          },
+  @Component({
+    mixins: [validationMixin],
+    validations: {
+      form: {
+        firstName: {
+          required,
+          maxLength: maxLength(20),
+        },
+        lastName: {
+          maxLength: maxLength(20),
+        },
+        startDate: {
+          required,
+        },
+        degreeProgram: {
+          required,
         },
       },
-    })
-
+    },
+  })
   export default class EditUserData extends Vue {
       @Prop({
         required: true,
@@ -107,11 +101,7 @@
 
       private form = this.user;
 
-      private userSaved = false;
-
       private sending = false;
-
-      private lastUser = '';
 
       getValidationClass(fieldName: string) {
         const field = this.$v.form[fieldName];
@@ -122,14 +112,6 @@
             };
           }
         return returnObject;
-      }
-
-      clearForm() {
-        this.$v.$reset();
-        this.form.firstName = '';
-        this.form.lastName = '';
-        this.form.degreeProgram = '';
-        this.form.startDate = '';
       }
 
       saveUser() {

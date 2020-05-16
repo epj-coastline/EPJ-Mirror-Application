@@ -7,6 +7,7 @@ import { User, validUser, validUsers } from '@/services/User';
 import { StudyGroup, validStudyGroup, validStudyGroups } from '@/services/StudyGroup';
 import UserList from '@/components/common/UserList.vue';
 import { Module, validModule, validModules } from '@/services/Module';
+import EditUserData from '@/components/common/EditUserData.vue';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -135,6 +136,26 @@ describe('UserList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('XyAlex Müller InformatikHans Peters Informatik');
+  });
+});
+
+
+describe('EditUserData.vue', () => {
+  it('renders structure correct', () => {
+    const user: User = {
+      id: 'usfitns',
+      firstName: 'Alex',
+      lastName: 'Müller',
+      email: 'alex@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+
+    const wrapper = shallowMount(EditUserData, {
+      propsData: { user },
+    });
+    expect(wrapper.text()).to.be.equal('VornameDer Vorname ist zu langNachnameDer Nachname ist zu langStudiengangBauingenieurwesenElektrotechnikErneuerbare Energien und UmwelttechnikInformatikLandschaftsarchitekturMaschinentechnik | InnovationStadt-, Verkehrs- und RaumplanungWirtschaftsingenieurwesenDer Studiengang wird benötigtStartFS16HS16FS17HS17FS18HS18FS19HS19FS20Das Startdatum wird benötigtSpeichern');
   });
 });
 

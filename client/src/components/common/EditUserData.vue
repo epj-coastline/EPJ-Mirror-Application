@@ -124,17 +124,18 @@
           startDate: this.form.startDate,
         };
 
-        try {
-          UserService.updateUser(dataObject).then(() => {
-            this.sending = false;
-            this.userUpdated();
-          }).catch(() => {
-            this.sending = false;
-          });
-        } catch {
+        const requestUpdateUser = UserService.updateUser(dataObject);
+        const wait = new Promise((resolve) => {
+          setTimeout(resolve, 1500);
+        });
+
+        Promise.all([requestUpdateUser, wait]).then(() => {
+          this.sending = false;
+          this.userUpdated();
+        }).catch(() => {
           this.sending = false;
           this.$router.push('/studygroups');
-        }
+        });
       }
 
       validateUser() {
@@ -173,5 +174,15 @@
       top: 0;
       right: 0;
       left: 0;
+    }
+    .cl-user-data-form .md-error {
+      color: #B00020 !important;
+    }
+    .cl-user-data-form .md-field.md-theme-default.md-invalid label {
+      color: #B00020 !important;
+    }
+    .cl-user-data-form .md-field.md-theme-default.md-invalid:after {
+      color: #B00020 !important;
+      background-color: #B00020 !important;
     }
   </style>

@@ -22,8 +22,8 @@
     Component, Prop, Vue,
   } from 'vue-property-decorator';
   import ProfileImage from '@/components/common/ProfileImage.vue';
-  import { StudyGroup } from '@/services/StudyGroup';
-  import moment from 'moment';
+  import { StudyGroup } from '@/services/study-group/StudyGroup';
+  import moment from 'moment-timezone';
 
   @Component({
     components: {
@@ -31,7 +31,8 @@
     },
     methods: {
       formatDate(date: Date): string {
-          return moment(date, 'YYYY-MM-DD').fromNow();
+        const dateTimezoneZero = moment.tz(date, 'Africa/Dakar');
+        return moment(dateTimezoneZero).locale('de').fromNow();
       },
     },
   })
@@ -50,16 +51,17 @@
   .cl-study-group-list .md-card {
     width: 100%;
     max-width: 400px;
-    margin: 8px 0px;
+    margin: 8px 0;
     display: inline-block;
     vertical-align: top;
     border-radius: 4px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.14);
+    word-wrap: break-word;
   }
   .cl-headline6 {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-style: normal;
     font-weight: 500;
     font-size: 20px;

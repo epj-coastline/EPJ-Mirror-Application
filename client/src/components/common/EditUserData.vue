@@ -124,17 +124,18 @@
           startDate: this.form.startDate,
         };
 
-        try {
-          UserService.updateUser(dataObject).then(() => {
-            this.sending = false;
-            this.userUpdated();
-          }).catch(() => {
-            this.sending = false;
-          });
-        } catch {
+        const requestUpdateUser = UserService.updateUser(dataObject);
+        const wait = new Promise((resolve) => {
+          setTimeout(resolve, 1500);
+        });
+
+        Promise.all([requestUpdateUser, wait]).then(() => {
+          this.sending = false;
+          this.userUpdated();
+        }).catch(() => {
           this.sending = false;
           this.$router.push('/studygroups');
-        }
+        });
       }
 
       validateUser() {

@@ -10,7 +10,7 @@ namespace CoastlineServer.DAL.Entities
         public string Purpose { get; set; }
         public DateTime CreationDate { get; set; }
         public byte[] RowVersion { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public int ModuleId { get; set; }
         public Module Module { get; set; }

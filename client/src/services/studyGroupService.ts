@@ -1,17 +1,21 @@
+import { getAuthService } from '@/auth/authServiceFactory';
 import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { StudyGroup, validStudyGroups } from '@/services/StudyGroup';
 
 class StudyGroupService {
-  static getAll(): Promise<Array<StudyGroup>> {
+  static async getAll(): Promise<Array<StudyGroup>> {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return Promise.resolve(response.json());
         }
         return Promise.resolve();
@@ -26,15 +30,18 @@ class StudyGroupService {
       });
   }
 
-  static getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
+  static async getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups?module=${moduleId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.ok) {
           return Promise.resolve(response.json());
         }
         return Promise.resolve();

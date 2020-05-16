@@ -10,6 +10,7 @@ namespace CoastlineServer.Repository
     public class ModuleRepository : RepositoryBase
     {
         private readonly CoastlineContext _context;
+
         public ModuleRepository(CoastlineContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -23,6 +24,4 @@ namespace CoastlineServer.Repository
                 .ToListAsync();
         }
     }
-    
-    
 }

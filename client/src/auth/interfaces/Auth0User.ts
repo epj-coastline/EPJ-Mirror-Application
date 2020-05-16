@@ -5,6 +5,7 @@ interface Auth0User {
     picture: string;
     sub: string;
     updatedAt: string;
+    id: string;
 }
 
 export default Auth0User;

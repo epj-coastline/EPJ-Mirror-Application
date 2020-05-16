@@ -190,7 +190,7 @@ sonarqube_server:
     - dotnet sonarscanner begin
       /k:"coastline-server"
       /v:"$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHORT_SHA"
-      /d:sonar.login="$SONAR_QUBE_LOGIN"
+      /d:sonar.login="$SONARQUBE_LOGIN"
       /d:sonar.exclusions="**/obj/**, **/bin/**, **Migrations/**, **/TestResults.trx, **/coverage.opencover.xml"
       /d:sonar.links.homepage="https://sonarqube.coastline.app"
       /d:sonar.host.url="https://sonarqube.coastline.app"

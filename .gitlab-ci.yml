@@ -1,5 +1,5 @@
 ########################################################################################################################
-# Coastline CI CD Pipeline :)
+# Coastline CI CD Pipeline
 ########################################################################################################################
 
 stages:
@@ -136,6 +136,9 @@ build_sonarqube_server:
   script:
     - buildSonarqubeServerImage
   extends: .server_changes
+  rules:
+    # Only execute for master
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ########################################################################################################################
 # Stage: Test

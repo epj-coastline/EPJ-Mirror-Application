@@ -190,7 +190,7 @@ sonarqube_server:
       /k:"coastline-server"
       /v:"$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHORT_SHA"
       /d:sonar.login="b5d0e996b406941d7a6890b3c1416f9a8ff2af1c"
-      /d:sonar.exclusions="**/obj/**, **/bin/**, **Migrations/**, **/TestResults.trx, **/coverage.opencover.xml"
+      /d:sonar.exclusions="**/obj/**, **/bin/**, **Migrations/**, **/coverage.opencover.xml"
       /d:sonar.links.homepage="https://sonarqube.coastline.app"
       /d:sonar.host.url="https://sonarqube.coastline.app"
       /d:sonar.cs.opencover.reportsPaths="CoastlineServer.Repository.Testing/coverage.opencover.xml,CoastlineServer.Service.Testing/coverage.opencover.xml"

@@ -43,22 +43,17 @@ class StudyGroupService {
     return second.getTime() - first.getTime();
   }
 
-  static postStudyGroup(purpose: string, moduleId: string) {
-    // ---- * ----
-    // Todo: Remove this, and send token
-    // const authService = getAuthService();
-    // const { user } = authService;
-    // const userId = user.sub;
-    const userId = -3;
-    // ---- * ----
-
-    const numberMuduleId = Number(moduleId);
-    const data: StudyGroupForCreation = { purpose, userId, moduleId: numberMuduleId };
+  static async postStudyGroup(purpose: string, moduleId: string) {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
+    const numberModuleId = Number(moduleId);
+    const data: StudyGroupForCreation = { purpose, moduleId: numberModuleId };
 
     return fetch(`${Configuration.CONFIG.backendHost}/studygroups`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     }).then((response) => {

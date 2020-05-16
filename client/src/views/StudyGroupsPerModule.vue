@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
-    <StudyGroupList v-if="dataIsLoaded" :study-groups="studyGroups"/>
+    <StudyGroupList v-if="dataIsLoaded && !showEmptyList" :study-groups="studyGroups"/>
     <EmptyList v-if="showEmptyList"
                title="Noch keine Lerngruppen"
                description="Es gibt noch keine Lerngruppen für dieses Modul. Erstelle hier die Erste."/>

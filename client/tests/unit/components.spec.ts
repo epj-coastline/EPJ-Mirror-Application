@@ -5,6 +5,8 @@ import StudyGroupList from '@/components/common/StudyGroupList.vue';
 import ModuleList from '@/components/common/ModuleList.vue';
 import UserList from '@/components/common/UserList.vue';
 import StudyGroupCreateDialog from '@/components/common/StudyGroupCreateDialog.vue';
+import { User } from '@/services/User';
+import EditUserData from '@/components/common/EditUserData.vue';
 
 describe('ProfileImage.vue', () => {
   it('renders Initials when passed', () => {
@@ -74,6 +76,25 @@ describe('StudyGroupList.vue', () => {
     });
 
     expect(wrapper.text()).to.be.equal('Alex Müller vor ein paar Sekunden Lorem ipsum dolor sit amet Alex Müller vor ein paar Sekunden sit amet');
+  });
+});
+
+describe('EditUserData.vue', () => {
+  it('renders structure correct', () => {
+    const user: User = {
+      id: 'usfitns',
+      firstName: 'Alex',
+      lastName: 'Müller',
+      email: 'alex@hsr.ch',
+      biography: 'hello',
+      degreeProgram: 'Informatik',
+      startDate: 'HS18',
+    };
+
+    const wrapper = shallowMount(EditUserData, {
+      propsData: { user },
+    });
+    expect(wrapper.text()).to.be.equal('VornameDer Vorname ist zu langNachnameDer Nachname ist zu langStudiengangBauingenieurwesenElektrotechnikErneuerbare Energien und UmwelttechnikInformatikLandschaftsarchitekturMaschinentechnik | InnovationStadt-, Verkehrs- und RaumplanungWirtschaftsingenieurwesenDer Studiengang wird benötigtStartFS16HS16FS17HS17FS18HS18FS19HS19FS20Das Startdatum wird benötigtSpeichern');
   });
 });
 

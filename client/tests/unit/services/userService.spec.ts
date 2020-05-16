@@ -5,7 +5,7 @@ import { User, validUser, validUsers } from '@/services/User';
 describe('User type checking', () => {
   it('succeeds on correct data', () => {
     const testUser: User = {
-      id: 12,
+      id: 's897dfnsf',
       firstName: 'Sebi',
       lastName: 'Hueber',
       email: 'seb@yolo.com',
@@ -23,7 +23,7 @@ describe('User array type checking', () => {
   it('succeeds on correct data', () => {
     const testUsers: Array<User> = [
       {
-        id: 12,
+        id: '23d4',
         firstName: 'Sebi',
         lastName: 'Hueber',
         email: 'seb@yolo.com',
@@ -32,7 +32,7 @@ describe('User array type checking', () => {
         startDate: 'HS18',
       },
       {
-        id: 14,
+        id: '13e',
         firstName: 'Sebastian',
         lastName: 'Peter',
         email: 'seb@yovfvlo.com',

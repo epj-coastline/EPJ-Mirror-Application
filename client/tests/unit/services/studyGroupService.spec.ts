@@ -10,7 +10,7 @@ describe('Study Group type checking', () => {
       purpose: 'none',
       creationDate: new Date(41241234124),
       user: {
-        id: 12,
+        id: 'ao9fnm',
         firstName: 'Sebi',
         lastName: 'Hueber',
         email: 'seb@yolo.com',
@@ -33,7 +33,7 @@ describe('Study Group Array type checking', () => {
         purpose: 'none',
         creationDate: new Date(41241234124),
         user: {
-          id: 12,
+          id: '7sdfnta8st',
           firstName: 'Sebi',
           lastName: 'Hueber',
           email: 'seb@yolo.com',
@@ -47,7 +47,7 @@ describe('Study Group Array type checking', () => {
         purpose: 'ne',
         creationDate: new Date(41241224),
         user: {
-          id: 14,
+          id: 's87z9dfn',
           firstName: 'Seba',
           lastName: 'Hur',
           email: 'seb@ycdcdolo.com',

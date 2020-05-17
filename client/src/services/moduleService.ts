@@ -1,27 +1,17 @@
-import Configuration from '@/Configuration';
 import { plainToClass } from 'class-transformer';
 import { Module, validModules } from '@/services/Module';
-import { getAuthService } from '@/auth/authServiceFactory';
+import FetchService from '@/services/fetchService';
 
 class ModuleService {
   static async getAll(): Promise<Array<Module>> {
-    const authService = getAuthService();
-    const token = await authService.getTokenAsync();
-    return fetch(`${Configuration.CONFIG.backendHost}/modules`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          return Promise.resolve(response.json());
-        }
-        return Promise.resolve();
-      })
-      .then((modules: typeof Module[]) => plainToClass(Module, modules,
-        { excludeExtraneousValues: true }))
+    const response = FetchService.get('modules');
+    return this.mapToModulesAndValidate(response);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async mapToModulesAndValidate(input: Promise<any>): Promise<Array<Module>> {
+    return input.then((modules: typeof Module[]) => plainToClass(Module, modules,
+      { excludeExtraneousValues: true }))
       .then((modules) => {
         if (!validModules(modules)) {
           throw new Error('Modules are invalid.');

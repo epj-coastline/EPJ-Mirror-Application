@@ -72,7 +72,7 @@
       if (this.purpose.length > 0) {
         const requestPostStudyGroup = StudyGroupService.postStudyGroup(this.purpose, this.moduleId);
         const wait = new Promise((resolve) => {
-          setTimeout(resolve, 1500);
+          setTimeout(resolve, 1000);
         });
 
         Promise.all([requestPostStudyGroup, wait]).then(() => {

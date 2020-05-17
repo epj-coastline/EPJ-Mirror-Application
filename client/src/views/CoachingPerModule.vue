@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="moduleTitle" :sub-title="numberOfStudents" back-button="true"/>
+    <Header :title="headerTitle" :sub-title="numberOfStudents" back-button="true"/>
     <UserList v-if="dataIsLoaded && !showEmptyList" :users="students" second-row-content="email"/>
     <EmptyList v-if="showEmptyList" title="Noch keine Studierende"
                description="Es gibt noch keine Studierende, welche dieses Modul zu ihren Stärken hinzugefügt haben."/>
@@ -37,13 +37,17 @@
     @Prop()
     moduleId!: string; // moduleId from URL
 
-    private moduleTitle = this.module ? `Modul ${this.module.token}` : 'Modul lädt...';
+    private moduleToken = this.module ? `${this.module.token}` : 'lädt...';
 
     private students: Array<User> = [];
 
     private dataIsLoaded = false;
 
     private showEmptyList = false;
+
+    get headerTitle() {
+      return this.module ? `Modul ${this.module.token}` : `Modul ${this.moduleToken}`;
+    }
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
@@ -70,7 +74,7 @@
       const result = await ModuleService.getAll();
       const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
       if (foundModule) {
-        this.moduleTitle = `Modul ${foundModule.token}`;
+        this.moduleToken = foundModule.token;
       }
     }
 

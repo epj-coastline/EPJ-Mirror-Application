@@ -126,7 +126,7 @@
 
         const requestUpdateUser = UserService.updateUser(dataObject);
         const wait = new Promise((resolve) => {
-          setTimeout(resolve, 1500);
+          setTimeout(resolve, 1000);
         });
 
         Promise.all([requestUpdateUser, wait]).then(() => {

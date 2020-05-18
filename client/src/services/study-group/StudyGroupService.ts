@@ -5,7 +5,7 @@ import FetchService from '@/services/fetchService';
 
 class StudyGroupService {
   static async getPerModuleId(moduleId: number): Promise<Array<StudyGroup>> {
-    const response = FetchService.get(`studygroups?module=${moduleId}`);
+    const response = FetchService.get<Array<StudyGroup>>(`studygroups?module=${moduleId}`);
     const studyGroups = this.mapToStudyGroupsAndValidate(response);
     return this.sortStudyGroups(studyGroups);
   }
@@ -31,9 +31,8 @@ class StudyGroupService {
     return second.getTime() - first.getTime();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static async mapToStudyGroupsAndValidate(input: Promise<any>): Promise<Array<StudyGroup>> {
-    return input.then((studyGroups: typeof StudyGroup[]) => plainToClass(StudyGroup, studyGroups,
+  static async mapToStudyGroupsAndValidate(input: Promise<Array<StudyGroup>>): Promise<Array<StudyGroup>> {
+    return input.then((studyGroups) => plainToClass(StudyGroup, studyGroups,
       { excludeExtraneousValues: true }))
       .then((studyGroups) => {
         if (!validStudyGroups(studyGroups)) {

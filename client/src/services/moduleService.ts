@@ -4,13 +4,12 @@ import FetchService from '@/services/fetchService';
 
 class ModuleService {
   static async getAll(): Promise<Array<Module>> {
-    const response = FetchService.get('modules');
+    const response = FetchService.get<Array<Module>>('modules');
     return this.mapToModulesAndValidate(response);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static async mapToModulesAndValidate(input: Promise<any>): Promise<Array<Module>> {
-    return input.then((modules: typeof Module[]) => plainToClass(Module, modules,
+  static async mapToModulesAndValidate(input: Promise<Array<Module>>): Promise<Array<Module>> {
+    return input.then((modules) => plainToClass(Module, modules,
       { excludeExtraneousValues: true }))
       .then((modules) => {
         if (!validModules(modules)) {

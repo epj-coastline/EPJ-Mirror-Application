@@ -2,19 +2,11 @@ import { getAuthService } from '@/auth/authServiceFactory';
 import Configuration from '@/Configuration';
 
 class FetchService {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static async get(path: string): Promise<any> {
-    const authService = getAuthService();
-    const token = await authService.getTokenAsync();
-
+  static async get<T>(path: string): Promise<T> {
     return fetch(`${Configuration.CONFIG.backendHost}/${path}`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
+      headers: await this.getHeaders(),
+    }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
         }
@@ -23,18 +15,11 @@ class FetchService {
   }
 
   static async post(path: string, data: object) {
-    const authService = getAuthService();
-    const token = await authService.getTokenAsync();
-
     return fetch(`${Configuration.CONFIG.backendHost}/${path}`, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: await this.getHeaders(),
       body: JSON.stringify(data),
-    })
-      .then((response) => {
+    }).then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
         }
@@ -43,23 +28,25 @@ class FetchService {
   }
 
   static async put(path: string, data: object) {
-    const authService = getAuthService();
-    const token = await authService.getTokenAsync();
-
     return fetch(`${Configuration.CONFIG.backendHost}/${path}`, {
       method: 'PUT',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: await this.getHeaders(),
       body: JSON.stringify(data),
-    })
-      .then((response) => {
+    }).then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
         }
         return response;
       });
+  }
+
+  static async getHeaders(): Promise<Headers> {
+    const authService = getAuthService();
+    const token = await authService.getTokenAsync();
+    const requestHeaders = new Headers();
+    requestHeaders.append('content-type', 'application/json');
+    requestHeaders.append('Authorization', `Bearer ${token}`);
+    return requestHeaders;
   }
 }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;

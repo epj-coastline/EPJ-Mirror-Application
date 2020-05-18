@@ -30,27 +30,19 @@ namespace CoastlineServer.Repository
 
         public async Task<List<User>> GetAll(UserResourceParameters userResourceParameters)
         {
-            if (userResourceParameters == null)
-            {
-                throw new ArgumentNullException(nameof(userResourceParameters));
-            }
-
-            if (string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            if (!CheckGetAllParameters(userResourceParameters))
             {
                 return await GetAll();
             }
-
+            
             var collection = _context.Users as IQueryable<User>;
 
-            if (!string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
             {
-                if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
-                {
-                    throw new KeyNotFoundException();
-                }
-
-                collection = collection.Where(u => u.Strengths.Any(s => s.ModuleId == moduleId));
+                throw new KeyNotFoundException();
             }
+
+            collection = collection.Where(u => u.Strengths.Any(s => s.ModuleId == moduleId));
 
             return await collection.Include(u => u.Strengths).ToListAsync();
         }
@@ -97,6 +89,21 @@ namespace CoastlineServer.Repository
         {
             _context.Entry(user).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
+        }
+        
+        private bool CheckGetAllParameters(UserResourceParameters userResourceParameters)
+        {
+            if (userResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(userResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

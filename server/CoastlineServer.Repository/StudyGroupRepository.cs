@@ -29,28 +29,21 @@ namespace CoastlineServer.Repository
 
         public async Task<List<StudyGroup>> GetAll(StudyGroupResourceParameters studyGroupResourceParameters)
         {
-            if (studyGroupResourceParameters == null)
-            {
-                throw new ArgumentNullException(nameof(studyGroupResourceParameters));
-            }
-
-            if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            if (!CheckGetAllParameters(studyGroupResourceParameters))
             {
                 return await GetAll();
             }
 
             var collection = _context.StudyGroups as IQueryable<StudyGroup>;
 
-            if (!string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
-            {
-                if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out var moduleId))
-                {
-                    throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
-                }
 
-                collection = collection
-                    .Where(s => s.ModuleId == moduleId);
+            if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out var moduleId))
+            {
+                throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
             }
+
+            collection = collection
+                .Where(s => s.ModuleId == moduleId);
 
             return await collection
                 .Include(s => s.User)
@@ -102,6 +95,21 @@ namespace CoastlineServer.Repository
         {
             _context.Entry(studyGroup).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
+        }
+        
+        private bool CheckGetAllParameters(StudyGroupResourceParameters studyGroupResourceParameters)
+        {
+            if (studyGroupResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(studyGroupResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

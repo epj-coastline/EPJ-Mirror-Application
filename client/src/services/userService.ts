@@ -45,8 +45,10 @@ class UserService {
 
   static newUserData(): object {
     const authService = getAuthService();
+    let nickName = authService.user.nickname;
+    nickName = nickName.length <= 20 ? nickName : nickName.substring(0, 20);
     return {
-      firstName: authService.user.nickname,
+      firstName: nickName,
       lastName: '',
       email: authService.user.email,
       biography: '',

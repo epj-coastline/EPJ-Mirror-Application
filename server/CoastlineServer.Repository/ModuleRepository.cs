@@ -7,18 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoastlineServer.Repository
 {
-    public class ModuleRepository
+    public class ModuleRepository : RepositoryBase
     {
-        private readonly CoastlineContext _context;
-
-        public ModuleRepository(CoastlineContext context)
+        public ModuleRepository(CoastlineContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<Module>> GetAll()
         {
-            return await _context.Modules
+            return await Context.Modules
                 .Include(m => m.StudyGroups)
                 .Include(m => m.Strengths)
                 .ToListAsync();

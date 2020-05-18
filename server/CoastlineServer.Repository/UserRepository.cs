@@ -9,18 +9,16 @@ using CoastlineServer.Repository.Parameters;
 
 namespace CoastlineServer.Repository
 {
-    public class UserRepository
+    public class UserRepository : RepositoryBase
     {
-        private readonly CoastlineContext _context;
 
-        public UserRepository(CoastlineContext context)
+        public UserRepository(CoastlineContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<User>> GetAll()
         {
-            return await _context.Users
+            return await Context.Users
                 .Include(u => u.StudyGroups)
                 .Include(u => u.Strengths)
                 .Include(u => u.Members)
@@ -35,7 +33,7 @@ namespace CoastlineServer.Repository
                 return await GetAll();
             }
             
-            var collection = _context.Users as IQueryable<User>;
+            var collection = Context.Users as IQueryable<User>;
 
             if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
             {
@@ -51,7 +49,7 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                return await _context.Users
+                return await Context.Users
                     .Include(u => u.StudyGroups)
                     .Include(u => u.Strengths)
                     .Include(u => u.Members)
@@ -66,8 +64,8 @@ namespace CoastlineServer.Repository
 
         public async Task<User> Insert(User user)
         {
-            _context.Entry(user).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+            Context.Entry(user).State = EntityState.Added;
+            await Context.SaveChangesAsync();
 
             return user;
         }
@@ -76,8 +74,8 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                Context.Entry(user).State = EntityState.Modified;
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -87,8 +85,8 @@ namespace CoastlineServer.Repository
 
         public async Task Delete(User user)
         {
-            _context.Entry(user).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            Context.Entry(user).State = EntityState.Deleted;
+            await Context.SaveChangesAsync();
         }
         
         private bool CheckGetAllParameters(UserResourceParameters userResourceParameters)

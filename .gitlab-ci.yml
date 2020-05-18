@@ -507,7 +507,6 @@ deploy_production:
         "name": "coastline-review-'$CI_COMMIT_REF_SLUG'",
         "identifier": "https://'$API_URL_REVIEW'",
         "signing_alg": "RS256",
-        "skip_consent_for_verifiable_first_party_clients": true,
       }' https://dev-coastline.eu.auth0.com/api/v2/resource-servers
   }
 

@@ -202,7 +202,7 @@ sonarqube_server:
   extends: .server_changes
   needs:
     - build_sonarqube_server
-  rules: 
+  rules:
     # Only execute for master
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 

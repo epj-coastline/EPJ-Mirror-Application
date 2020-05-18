@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoastlineServer.Repository
 {
-    public class StudyGroupRepository : RepositoryBase
+    public class StudyGroupRepository
     {
         private readonly CoastlineContext _context;
 
@@ -92,9 +92,9 @@ namespace CoastlineServer.Repository
                 _context.Entry(studyGroup).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw CreateOptimisticConcurrencyException(_context, studyGroup);
+                throw new ArgumentException(ex.Message, ex);
             }
         }
 

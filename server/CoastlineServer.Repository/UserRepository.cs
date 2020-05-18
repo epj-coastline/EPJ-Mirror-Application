@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
-using CoastlineServer.Repository.Exceptions;
 using CoastlineServer.Repository.Parameters;
 
 namespace CoastlineServer.Repository
 {
-    public class UserRepository : RepositoryBase
+    public class UserRepository
     {
         private readonly CoastlineContext _context;
 
@@ -88,9 +87,9 @@ namespace CoastlineServer.Repository
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw CreateOptimisticConcurrencyException(_context, user);
+                throw new ArgumentException(ex.Message, ex);
             }
         }
 

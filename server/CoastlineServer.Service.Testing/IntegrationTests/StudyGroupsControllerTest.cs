@@ -16,7 +16,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, "/studygroups/");
 
             // //act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var studyGroups = await GetRequestData<IEnumerable<StudyGroupDto>>(response);
 
             // assert
@@ -32,7 +32,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups/{studyGroupId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var studyGroupDto = await GetRequestData<StudyGroupDto>(response);
 
             // assert
@@ -48,7 +48,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups/{invalidStudyGroupId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -69,7 +69,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             };
 
             var postRequestUser = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
-            var postResponseUser = await _client.SendAsync(postRequestUser);
+            var postResponseUser = await Client.SendAsync(postRequestUser);
 
             try
             {
@@ -83,7 +83,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                     CreateHttpRequest(HttpMethod.Post, "/studygroups/", studyGroupForCreationDto);
 
                 // act
-                var postResponseStudyGroup = await _client.SendAsync(postRequestStudyGroup);
+                var postResponseStudyGroup = await Client.SendAsync(postRequestStudyGroup);
 
                 var fetchedStudyGroup = await GetRequestData<StudyGroupDto>(postResponseStudyGroup);
 
@@ -98,7 +98,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 var deleteRequestStudyGroup = CreateHttpRequest(HttpMethod.Delete, queryForStudyGroup);
 
                 // act
-                var deleteResponseStudyGroup = await _client.SendAsync(deleteRequestStudyGroup);
+                var deleteResponseStudyGroup = await Client.SendAsync(deleteRequestStudyGroup);
 
                 // assert
                 Assert.Equal(HttpStatusCode.OK, deleteResponseStudyGroup.StatusCode);
@@ -109,7 +109,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 var queryForUser = postResponseUser.Headers.Location.PathAndQuery;
                 var deleteRequestUser = CreateHttpRequest(HttpMethod.Delete, queryForUser);
 
-                var deleteResponseUser = await _client.SendAsync(deleteRequestUser);
+                var deleteResponseUser = await Client.SendAsync(deleteRequestUser);
                 deleteResponseUser.EnsureSuccessStatusCode();
             }
         }
@@ -126,7 +126,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var postRequest = CreateHttpRequest(HttpMethod.Post, "/studygroups/", studyGroupForCreationDto);
 
             // act
-            var response = await _client.SendAsync(postRequest);
+            var response = await Client.SendAsync(postRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -140,7 +140,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var deleteRequest = CreateHttpRequest(HttpMethod.Delete, $"/studygroups/{invalidStudyGroupId}");
 
             // act
-            var response = await _client.SendAsync(deleteRequest);
+            var response = await Client.SendAsync(deleteRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -154,7 +154,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups?module={moduleId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var fetchedStudyGroups = await GetRequestData<IEnumerable<StudyGroupDto>>(response);
 
             // assert
@@ -170,7 +170,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/studygroups?module={invalidModuleId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -183,7 +183,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/studygroups");
             
             // act
-            var response = await _client.SendAsync(optionsRequest);
+            var response = await Client.SendAsync(optionsRequest);
             
             // arrange
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

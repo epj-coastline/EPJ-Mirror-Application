@@ -17,7 +17,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, "/modules/");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var modules = await GetRequestData<IEnumerable<ModuleDto>>(response);
 
             // assert
@@ -31,7 +31,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/modules");
             
             // act
-            var response = await _client.SendAsync(optionsRequest);
+            var response = await Client.SendAsync(optionsRequest);
             
             // arrange
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

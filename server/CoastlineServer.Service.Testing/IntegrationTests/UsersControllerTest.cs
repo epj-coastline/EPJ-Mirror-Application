@@ -18,7 +18,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             int numberOfUsersInSeedData = 4;
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var users = await GetRequestData<ICollection<UserDto>>(response);
 
             // assert
@@ -34,7 +34,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users/{userId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var user = await GetRequestData<UserDto>(response);
 
             // assert
@@ -58,7 +58,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
 
             // act
-            var postResponse = await _client.SendAsync(postRequest);
+            var postResponse = await Client.SendAsync(postRequest);
             var userDto = await GetRequestData<UserDto>(postResponse);
 
             // assert
@@ -70,7 +70,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var deleteRequest = CreateHttpRequest(HttpMethod.Delete, query);
 
             // act
-            var deleteResponse = await _client.SendAsync(deleteRequest);
+            var deleteResponse = await Client.SendAsync(deleteRequest);
             deleteResponse.EnsureSuccessStatusCode();
 
             // assert
@@ -100,8 +100,8 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 var getRequest = CreateHttpRequest(HttpMethod.Get, requestUri);
 
                 // act
-                var putResponse = await _client.SendAsync(putRequest);
-                var getResponse = await _client.SendAsync(getRequest);
+                var putResponse = await Client.SendAsync(putRequest);
+                var getResponse = await Client.SendAsync(getRequest);
 
                 var fetchedUser = await GetRequestData<UserDto>(getResponse);
 
@@ -139,7 +139,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{wrongUserId}", userForUpdate);
 
                 // act
-                var putResponse = await _client.SendAsync(putRequest);
+                var putResponse = await Client.SendAsync(putRequest);
 
                 // assert
                 Assert.Equal(HttpStatusCode.BadRequest, putResponse.StatusCode);
@@ -174,7 +174,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{wrongUserId}", userForUpdate);
 
                 // act
-                var putResponse = await _client.SendAsync(putRequest);
+                var putResponse = await Client.SendAsync(putRequest);
 
                 // assert
                 Assert.Equal(HttpStatusCode.Forbidden, putResponse.StatusCode);
@@ -207,7 +207,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var putRequest = CreateHttpRequest(HttpMethod.Put, $"/users/{insertedUser.Id}", userForUpdate);
 
             // act
-            var putResponse = await _client.SendAsync(putRequest);
+            var putResponse = await Client.SendAsync(putRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.Conflict, putResponse.StatusCode);
@@ -221,7 +221,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users/{invalidUserId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -235,7 +235,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var deleteRequest = CreateHttpRequest(HttpMethod.Delete, $"/users/{invalidUserId}");
 
             // act
-            var deleteResponse = await _client.SendAsync(deleteRequest);
+            var deleteResponse = await Client.SendAsync(deleteRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, deleteResponse.StatusCode);
@@ -257,7 +257,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
 
             // act
-            var postResponse = await _client.SendAsync(postRequest);
+            var postResponse = await Client.SendAsync(postRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.BadRequest, postResponse.StatusCode);
@@ -271,7 +271,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users?strength={moduleId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
             var users = await GetRequestData<IEnumerable<UserDto>>(response);
 
             // assert
@@ -287,7 +287,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var getRequest = CreateHttpRequest(HttpMethod.Get, $"/users?strength={invalidModuleId}");
 
             // act
-            var response = await _client.SendAsync(getRequest);
+            var response = await Client.SendAsync(getRequest);
 
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -300,7 +300,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/users");
             
             // act
-            var response = await _client.SendAsync(optionsRequest);
+            var response = await Client.SendAsync(optionsRequest);
             
             // arrange
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -318,7 +318,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
                 StartDate = "HS20"
             };
             var postRequest = CreateHttpRequest(HttpMethod.Post, "/users/", userForCreationDto);
-            var postResponse = await _client.SendAsync(postRequest);
+            var postResponse = await Client.SendAsync(postRequest);
             postResponse.EnsureSuccessStatusCode();
             return await GetRequestData<UserDto>(postResponse);
         }
@@ -326,7 +326,7 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
         private async Task DeleteUser(string userId)
         {
             var deleteUserRequest = CreateHttpRequest(HttpMethod.Delete, $"/users/{userId}");
-            await _client.SendAsync(deleteUserRequest);
+            await Client.SendAsync(deleteUserRequest);
         }
     }
 }

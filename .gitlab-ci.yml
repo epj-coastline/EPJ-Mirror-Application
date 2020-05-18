@@ -200,6 +200,7 @@ sonarqube_server:
     - dotnet build -c Release -o /app/build
     - dotnet sonarscanner end /d:sonar.login="$SONARQUBE_LOGIN"
   extends: .server_changes
+  # rules include
   needs:
     - build_sonarqube_server
 

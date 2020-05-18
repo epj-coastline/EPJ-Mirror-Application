@@ -5,23 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
-using CoastlineServer.Repository.Exceptions;
 using CoastlineServer.Repository.Parameters;
 
 namespace CoastlineServer.Repository
 {
     public class UserRepository : RepositoryBase
     {
-        private readonly CoastlineContext _context;
 
-        public UserRepository(CoastlineContext context)
+        public UserRepository(CoastlineContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<User>> GetAll()
         {
-            return await _context.Users
+            return await Context.Users
                 .Include(u => u.StudyGroups)
                 .Include(u => u.Strengths)
                 .Include(u => u.Members)
@@ -31,27 +28,19 @@ namespace CoastlineServer.Repository
 
         public async Task<List<User>> GetAll(UserResourceParameters userResourceParameters)
         {
-            if (userResourceParameters == null)
-            {
-                throw new ArgumentNullException(nameof(userResourceParameters));
-            }
-
-            if (string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            if (!CheckGetAllParameters(userResourceParameters))
             {
                 return await GetAll();
             }
+            
+            var collection = Context.Users as IQueryable<User>;
 
-            var collection = _context.Users as IQueryable<User>;
-
-            if (!string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
             {
-                if (!int.TryParse(userResourceParameters.Strength.Trim(), out var moduleId))
-                {
-                    throw new KeyNotFoundException();
-                }
-
-                collection = collection.Where(u => u.Strengths.Any(s => s.ModuleId == moduleId));
+                throw new KeyNotFoundException();
             }
+
+            collection = collection.Where(u => u.Strengths.Any(s => s.ModuleId == moduleId));
 
             return await collection.Include(u => u.Strengths).ToListAsync();
         }
@@ -60,7 +49,7 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                return await _context.Users
+                return await Context.Users
                     .Include(u => u.StudyGroups)
                     .Include(u => u.Strengths)
                     .Include(u => u.Members)
@@ -75,8 +64,8 @@ namespace CoastlineServer.Repository
 
         public async Task<User> Insert(User user)
         {
-            _context.Entry(user).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+            Context.Entry(user).State = EntityState.Added;
+            await Context.SaveChangesAsync();
 
             return user;
         }
@@ -85,19 +74,34 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                Context.Entry(user).State = EntityState.Modified;
+                await Context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw CreateOptimisticConcurrencyException(_context, user);
+                throw new ArgumentException(ex.Message, ex);
             }
         }
 
         public async Task Delete(User user)
         {
-            _context.Entry(user).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            Context.Entry(user).State = EntityState.Deleted;
+            await Context.SaveChangesAsync();
+        }
+        
+        private bool CheckGetAllParameters(UserResourceParameters userResourceParameters)
+        {
+            if (userResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(userResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(userResourceParameters.Strength))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

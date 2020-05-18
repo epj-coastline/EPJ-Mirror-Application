@@ -10,16 +10,15 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
 {
     public class ControllerBaseTest
     {
-        protected readonly HttpClient _client;
-        protected readonly string _accessToken;
-        protected readonly AuthenticationHeaderValue _authenticationHeader;
+        protected readonly HttpClient Client;
+        private readonly AuthenticationHeaderValue _authenticationHeader;
 
-        public ControllerBaseTest()
+        protected ControllerBaseTest()
         {
             var appFactory = new WebApplicationFactory<Startup>();
-            _client = appFactory.CreateClient();
-            _accessToken = Auth0Helper.GetAccessToken();
-            _authenticationHeader = new AuthenticationHeaderValue("Bearer", _accessToken);
+            Client = appFactory.CreateClient();
+            var accessToken = Auth0Helper.GetAccessToken();
+            _authenticationHeader = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         protected HttpRequestMessage CreateHttpRequest(HttpMethod method, string requestUri, object content)

@@ -133,7 +133,7 @@ namespace CoastlineServer.Service.Controllers
         [Authorize]
         public IActionResult GetAuthorsOptions()
         {
-            Response.Headers.Add("Allow", "GET,POST,OPTIONS,DELETE");
+            Response.Headers.Add("Allow", "GET,POST,PUT,OPTIONS,DELETE");
 
             return Ok();
         }

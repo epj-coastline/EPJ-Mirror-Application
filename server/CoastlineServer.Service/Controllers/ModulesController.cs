@@ -31,5 +31,14 @@ namespace CoastlineServer.Service.Controllers
 
             return Ok(_mapper.Map<IEnumerable<ModuleDto>>(modules));
         }
+        
+        [HttpOptions]
+        [Authorize]
+        public IActionResult GetAuthorsOptions()
+        {
+            Response.Headers.Add("Allow", "GET");
+
+            return Ok();
+        }
     }
 }

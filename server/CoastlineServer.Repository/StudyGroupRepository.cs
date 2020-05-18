@@ -11,16 +11,13 @@ namespace CoastlineServer.Repository
 {
     public class StudyGroupRepository : RepositoryBase
     {
-        private readonly CoastlineContext _context;
-
-        public StudyGroupRepository(CoastlineContext context)
+        public StudyGroupRepository(CoastlineContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<StudyGroup>> GetAll()
         {
-            return await _context.StudyGroups
+            return await Context.StudyGroups
                 .Include(s => s.User)
                 .Include(s => s.Module)
                 .Include(s => s.Members)
@@ -29,28 +26,21 @@ namespace CoastlineServer.Repository
 
         public async Task<List<StudyGroup>> GetAll(StudyGroupResourceParameters studyGroupResourceParameters)
         {
-            if (studyGroupResourceParameters == null)
-            {
-                throw new ArgumentNullException(nameof(studyGroupResourceParameters));
-            }
-
-            if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            if (!CheckGetAllParameters(studyGroupResourceParameters))
             {
                 return await GetAll();
             }
 
-            var collection = _context.StudyGroups as IQueryable<StudyGroup>;
+            var collection = Context.StudyGroups as IQueryable<StudyGroup>;
 
-            if (!string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+
+            if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out var moduleId))
             {
-                if (!int.TryParse(studyGroupResourceParameters.Module.Trim(), out var moduleId))
-                {
-                    throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
-                }
-
-                collection = collection
-                    .Where(s => s.ModuleId == moduleId);
+                throw new KeyNotFoundException(nameof(studyGroupResourceParameters));
             }
+
+            collection = collection
+                .Where(s => s.ModuleId == moduleId);
 
             return await collection
                 .Include(s => s.User)
@@ -63,7 +53,7 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                return await _context.StudyGroups
+                return await Context.StudyGroups
                     .Include(s => s.User)
                     .Include(s => s.User)
                     .Include(s => s.Members)
@@ -77,10 +67,10 @@ namespace CoastlineServer.Repository
 
         public async Task<StudyGroup> Insert(StudyGroup studyGroup)
         {
-            _context.Entry(studyGroup).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+            Context.Entry(studyGroup).State = EntityState.Added;
+            await Context.SaveChangesAsync();
 
-            return await _context.StudyGroups.Include(s => s.User)
+            return await Context.StudyGroups.Include(s => s.User)
                 .Include(s => s.Module)
                 .SingleAsync(s => s.Id == studyGroup.Id);
         }
@@ -89,19 +79,34 @@ namespace CoastlineServer.Repository
         {
             try
             {
-                _context.Entry(studyGroup).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                Context.Entry(studyGroup).State = EntityState.Modified;
+                await Context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw CreateOptimisticConcurrencyException(_context, studyGroup);
+                throw new ArgumentException(ex.Message, ex);
             }
         }
 
         public async Task Delete(StudyGroup studyGroup)
         {
-            _context.Entry(studyGroup).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            Context.Entry(studyGroup).State = EntityState.Deleted;
+            await Context.SaveChangesAsync();
+        }
+
+        private bool CheckGetAllParameters(StudyGroupResourceParameters studyGroupResourceParameters)
+        {
+            if (studyGroupResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(studyGroupResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(studyGroupResourceParameters.Module))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

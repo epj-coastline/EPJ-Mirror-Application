@@ -6,6 +6,7 @@ using CoastlineServer.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,17 @@ namespace CoastlineServer.Service
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async httpContext =>
+                    {
+                        httpContext.Response.StatusCode = 500;
+                        await httpContext.Response.WriteAsync("An unexpected fault has happend. Try again later");
+                    });
+                });
             }
 
             if (Configuration["DatabaseMigrations"] == "automatic")

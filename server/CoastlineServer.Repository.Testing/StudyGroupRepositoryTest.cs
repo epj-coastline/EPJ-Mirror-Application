@@ -2,36 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CoastlineServer.DAL.Context;
 using CoastlineServer.DAL.Entities;
 using CoastlineServer.Repository.Parameters;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace CoastlineServer.Repository.Testing
 {
-    public class StudyGroupRepositoryTest : IDisposable
+    public class StudyGroupRepositoryTest : RepositoryBaseTest
     {
-        private SqliteConnection Connection { get; set; }
         private readonly StudyGroupRepository _studyGroupRepository;
         private StudyGroup StudyGroup { get; set; }
 
         public StudyGroupRepositoryTest()
         {
-            Connection = new SqliteConnection("DataSource=:memory:");
-            Connection.Open();
-            var options = new DbContextOptionsBuilder<CoastlineContext>()
-                .UseSqlite(Connection)
-                .Options;
-            var context = new CoastlineContext(options);
-            context.Database.EnsureCreatedAsync();
-            _studyGroupRepository = new StudyGroupRepository(context);
-        }
-
-        public void Dispose()
-        {
-            Connection.Close();
+            _studyGroupRepository = new StudyGroupRepository(Context);
         }
 
         [Fact]

@@ -136,9 +136,9 @@ build_sonarqube_server:
   script:
     - buildSonarqubeServerImage
   extends: .server_changes
-  #rules:
+  rules:
     # Only execute for master
-    #- if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ########################################################################################################################
 # Stage: Test
@@ -200,9 +200,11 @@ sonarqube_server:
     - dotnet build -c Release -o /app/build
     - dotnet sonarscanner end /d:sonar.login="$SONARQUBE_LOGIN"
   extends: .server_changes
-  # rules include
   needs:
     - build_sonarqube_server
+  rules: 
+    # Only execute for master
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ########################################################################################################################
 # Stage: Review

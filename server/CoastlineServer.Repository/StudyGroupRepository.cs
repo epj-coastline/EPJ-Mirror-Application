@@ -11,7 +11,6 @@ namespace CoastlineServer.Repository
 {
     public class StudyGroupRepository : RepositoryBase
     {
-
         public StudyGroupRepository(CoastlineContext context) : base(context)
         {
         }
@@ -94,7 +93,7 @@ namespace CoastlineServer.Repository
             Context.Entry(studyGroup).State = EntityState.Deleted;
             await Context.SaveChangesAsync();
         }
-        
+
         private bool CheckGetAllParameters(StudyGroupResourceParameters studyGroupResourceParameters)
         {
             if (studyGroupResourceParameters == null)

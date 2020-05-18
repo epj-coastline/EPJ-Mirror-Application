@@ -20,7 +20,7 @@ namespace CoastlineServer.Repository.Testing
             Context = new CoastlineContext(options);
             Context.Database.EnsureCreatedAsync();
         }
-        
+
         public void Dispose()
         {
             Connection.Close();

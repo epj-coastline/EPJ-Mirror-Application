@@ -175,5 +175,18 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             // assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+        
+        [Fact]
+        public async Task Options_ReturnsOk()
+        {
+            // arrange
+            var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/studygroups");
+            
+            // act
+            var response = await _client.SendAsync(optionsRequest);
+            
+            // arrange
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }

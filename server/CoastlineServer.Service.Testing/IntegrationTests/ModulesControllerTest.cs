@@ -24,5 +24,17 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(modules, m => m.Id == -1);
         }
+        [Fact]
+        public async Task Options_ReturnsOk()
+        {
+            // arrange
+            var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/modules");
+            
+            // act
+            var response = await _client.SendAsync(optionsRequest);
+            
+            // arrange
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }

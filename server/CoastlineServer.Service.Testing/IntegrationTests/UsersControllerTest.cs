@@ -293,6 +293,19 @@ namespace CoastlineServer.Service.Testing.IntegrationTests
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Options_ReturnsOk()
+        {
+            // arrange
+            var optionsRequest = CreateHttpRequest(HttpMethod.Options, "/users");
+            
+            // act
+            var response = await _client.SendAsync(optionsRequest);
+            
+            // arrange
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
         private async Task<UserDto> InsertUser()
         {
             var userForCreationDto = new UserForCreationDto()

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="moduleTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
+    <Header :title="headerTitle" sub-title="Wähle eine Lerngruppe." back-button="true"/>
     <StudyGroupList v-if="dataIsLoaded && !showEmptyList" :study-groups="studyGroups"/>
     <EmptyList v-if="showEmptyList"
                title="Noch keine Lerngruppen"
@@ -12,7 +12,7 @@
       </md-button>
     </div>
     <StudyGroupCreateDialog :moduleId="moduleId"
-                            :module-title="this.module.token"
+                            :module-title="this.moduleToken"
                             v-on:closeCreateDialog="closeStudyGroupCrateDialog"
                             v-if="showStudyGroupCreation"/>
   </div>
@@ -49,7 +49,7 @@
     @Prop()
     moduleId!: string; // moduleID from URL
 
-    private moduleTitle = this.module ? `Modul ${this.module.token}` : 'Modul lädt...';
+    private moduleToken = this.module ? `${this.module.token}` : 'lädt...';
 
     private studyGroups: Array<StudyGroup> = [];
 
@@ -58,6 +58,10 @@
     private showStudyGroupCreation = false;
 
     private showEmptyList = false;
+
+    get headerTitle() {
+      return this.module ? `Modul ${this.module.token}` : `Modul ${this.moduleToken}`;
+    }
 
     @Watch('$route', { immediate: true, deep: true })
     async loadData() {
@@ -79,7 +83,7 @@
       const result = await ModuleService.getAll();
       const foundModule = result.find((module) => module.id === this.moduleIdAsNumber);
       if (foundModule) {
-        this.moduleTitle = `Modul ${foundModule.token}`;
+        this.moduleToken = foundModule.token;
       }
     }
 

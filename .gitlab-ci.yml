@@ -53,7 +53,7 @@ variables:
 
   # Projects
   GCP_PROJECT_DEV: epj-coastline-development
-  GCP_PROJECT_PROD: epj-coastline-production
+  GCP_PROJECT_PROD: epj-coastline-production-3
 
   # Google Kubernetes Engine
   GKE_CLUSTER_NAME: coastline-gke # same for dev and prod

@@ -53,7 +53,7 @@ variables:
 
   # Projects
   GCP_PROJECT_DEV: epj-coastline-development
-  GCP_PROJECT_PROD: epj-coastline-production
+  GCP_PROJECT_PROD: epj-coastline-production-3
 
   # Google Kubernetes Engine
   GKE_CLUSTER_NAME: coastline-gke # same for dev and prod
@@ -351,6 +351,8 @@ deploy_production:
       --set client.config.auth0_client_id="$AUTH0_CLIENT_ID_PROD"
       --set client.config.auth0_audience="https://$API_URL_PRODUCTION"
       --set client.config.auth0_redirect_uri="https://$APP_URL_PRODUCTION"
+      --set client.resources.requests.cpu="40m"
+      --set client.resources.limits.cpu="40m"
       --set server.image.tag="$CI_COMMIT_REF_SLUG"
       --set server.ingress.host="$API_URL_PRODUCTION"
       --set server.config.database_migrations="automatic"
@@ -358,6 +360,8 @@ deploy_production:
       --set server.secret.coastline_database_uri="$CONNECTION_STRING_PROD"
       --set server.config.auth0_domain="$AUTH0_DOMAIN_PROD"
       --set server.config.auth0_audience="https://$API_URL_PRODUCTION"
+      --set server.resources.requests.cpu="200m"
+      --set server.resources.limits.cpu="200m"
       --wait
       --force
       --recreate-pods
